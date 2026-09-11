@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Commons — The Common Ground Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F2EDDE;
+    --paper-deep: #EAE3CE;
+    --ink: #24261F;
+    --ink-soft: #5B5C4F;
+    --forest: #1F3B2C;
+    --moss: #5C7A52;
+    --clay: #9C5B3C;
+    --sky: #3C6E8F;
+    --gold: #B47F26;
+    --plum: #6B4C6B;
+    --line: #D9D2BC;
+    --line-soft: #E4DFCC;
+    --card-bg: #FBF9F2;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body{
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3, .display { font-family: 'Fraunces', serif; }
+
+  a { color: inherit; }
+
+  /* ---------- Header ---------- */
+  header.site{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .wordmark{
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .wordmark .mark{
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .wordmark .tag{
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-family: 'Inter', sans-serif;
+  }
+  nav.site-links{
+    display: flex;
+    gap: 4px;
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+  .nav-tab{
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .nav-tab:hover{ background: var(--paper-deep); color: var(--ink); }
+  .nav-tab.active{ background: var(--forest); color: var(--paper); }
+
+  .tab-panel{ display: none; }
+  .tab-panel.active{ display: block; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position: relative;
+    overflow: hidden;
+    padding: 64px 40px 40px;
+    background: var(--paper);
+  }
+  .hero .contours{
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .hero-inner{
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+  }
+  .hero h1{
+    font-size: clamp(34px, 5vw, 54px);
+    font-weight: 600;
+    line-height: 1.08;
+    margin: 0 0 14px;
+    color: var(--forest);
+  }
+  .hero p.sub{
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 520px;
+    margin: 0 0 32px;
+  }
+
+  /* Natural language search */
+  .nl-search{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 6px;
+    display: flex;
+    gap: 6px;
+    max-width: 620px;
+  }
+  .nl-search input{
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    padding: 12px 14px;
+    color: var(--ink);
+  }
+  .nl-search input:focus{ outline: none; }
+  .nl-search button{
+    background: var(--forest);
+    color: var(--paper);
+    border: none;
+    border-radius: 3px;
+    padding: 0 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .nl-search button:hover{ background: #16291c; }
+  .nl-search button:disabled{ background: var(--ink-soft); cursor: default; }
+
+  .nl-examples{
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .nl-examples button{
+    background: none;
+    border: none;
+    color: var(--sky);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .ai-status{
+    max-width: 620px;
+    min-height: 20px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--forest);
+  }
+
+  /* ---------- Filter panel ---------- */
+  .filters-panel{
+    background: var(--card-bg);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 22px 40px;
+  }
+  .filters-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: flex-end;
+    max-width: 1100px;
+  }
+  .field{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label{
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+  .field input[type="text"], .field select{
+    border: 1px solid var(--line);
+    background: var(--paper);
+    border-radius: 3px;
+    padding: 9px 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    min-width: 170px;
+  }
+  .field input[type="text"]:focus, .field select:focus{
+    outline: 2px solid var(--sky);
+    outline-offset: 1px;
+  }
+
+  .chip-panel{
+    max-width: 1100px;
+    margin-top: 18px;
+  }
+  .chip-panel .chip-label{
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .chips{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip{
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    padding: 7px 13px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .chip:hover{ border-color: var(--moss); }
+  .chip.active{
+    background: var(--forest);
+    border-color: var(--forest);
+    color: var(--paper);
+  }
+  .chip.ai-picked:not(.active){
+    border-color: var(--sky);
+    box-shadow: 0 0 0 1px var(--sky) inset;
+  }
+
+  .clear-filters{
+    margin-top: 12px;
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 13px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* ---------- Results ---------- */
+  main{
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 40px 24px;
+  }
+  .results-head{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .results-head h2{
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .results-count{
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .event-list{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .event-card{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--moss);
+    border-radius: 2px;
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .event-main{ flex: 1; min-width: 240px; }
+  .event-title{
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .event-org{
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .event-tags{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .event-tags span{
+    font-size: 11.5px;
+    background: var(--paper-deep);
+    color: var(--ink-soft);
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .event-meta{
+    text-align: right;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    min-width: 150px;
+  }
+  .event-meta .when{
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .empty-state{
+    padding: 48px 20px;
+    text-align: center;
+    color: var(--ink-soft);
+    border: 1px dashed var(--line);
+    border-radius: 4px;
+  }
+  .empty-state strong{ display: block; color: var(--ink); font-size: 16px; margin-bottom: 6px; }
+
+  /* ---------- Discovery ---------- */
+  .discovery{
+    max-width: 1100px;
+    margin: 8px auto 48px;
+    padding: 24px 40px;
+    border-top: 1px solid var(--line);
+  }
+  .discovery h3{
+    font-size: 16px;
+    margin: 0 0 4px;
+    font-weight: 600;
+  }
+  .discovery p{
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin: 0 0 14px;
+  }
+  .rec-pills{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rec-pills button{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.15s ease;
+  }
+  .rec-pills button:hover{ border-color: var(--gold); }
+
+  /* ---------- Roadmap note ---------- */
+  .roadmap{
+    max-width: 1100px;
+    margin: 0 auto 60px;
+    padding: 24px 40px;
+  }
+  .roadmap summary{
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+  .roadmap-body{
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .roadmap-body div{
+    border-left: 2px solid var(--line);
+    padding-left: 12px;
+  }
+  .roadmap-body strong{ display: block; color: var(--ink); font-size: 13px; margin-bottom: 3px; }
+
+  footer.site{
+    border-top: 1px solid var(--line);
+    padding: 20px 40px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  /* ---------- Profile tab ---------- */
+  .profile-wrap, .cg-wrap, .give-wrap, .partners-wrap{
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px;
+  }
+  .profile-head{
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
+  .avatar{
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--forest);
+    color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .profile-head h2{ margin: 0 0 4px; font-size: 24px; }
+  .profile-sub{ margin: 0; font-size: 13px; color: var(--ink-soft); max-width: 420px; }
+  .copy-btn{
+    margin-left: auto;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 9px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .copy-btn:hover{ border-color: var(--forest); }
+
+  .stat-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .stat-card{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 16px 18px;
+  }
+  .stat-card .num{
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--forest);
+    display: block;
+  }
+  .stat-card .label{
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  .section-title{ font-size: 18px; margin: 8px 0 4px; }
+  .section-sub{ font-size: 13.5px; color: var(--ink-soft); margin: 0 0 16px; max-width: 620px; }
+
+  .badge-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  .badge{
+    border: 1px solid var(--line);
+    background: var(--card-bg);
+    border-radius: 4px;
+    padding: 14px;
+    text-align: center;
+    opacity: 0.45;
+    filter: grayscale(1);
+  }
+  .badge.earned{
+    opacity: 1;
+    filter: none;
+    border-color: var(--gold);
+    background: #FBF3E2;
+  }
+  .badge .icon{ font-size: 26px; display: block; margin-bottom: 6px; }
+  .badge .name{ font-weight: 600; font-size: 13px; margin-bottom: 3px; }
+  .badge .desc{ font-size: 11.5px; color: var(--ink-soft); }
+
+  .friends-table{
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+    font-size: 13.5px;
+  }
+  .friends-table th{
+    text-align: left;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .friends-table td{
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .friends-table tr.you td{ font-weight: 700; background: #EFF4EB; }
+  .invite-link{
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--sky);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* ---------- Common Ground tab ---------- */
+  .cg-intro{ font-size: 15px; color: var(--ink-soft); max-width: 680px; margin-bottom: 24px; }
+  .cg-quote{
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: var(--forest);
+    border-left: 3px solid var(--gold);
+    padding-left: 16px;
+    margin: 0 0 32px;
+  }
+
+  .pillar-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .pillar-card{
+    border: 1px solid var(--line);
+    background: var(--card-bg);
+    border-radius: 3px;
+    padding: 18px;
+    position: relative;
+  }
+  .pillar-card.active-pillar{
+    border-color: var(--forest);
+    background: #EFF4EB;
+  }
+  .pillar-num{
+    font-family: 'Fraunces', serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .pillar-card h4{ margin: 6px 0 2px; font-size: 16px; }
+  .pillar-line{
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--gold);
+    margin: 0 0 8px;
+  }
+  .pillar-card p:not(.pillar-line){ font-size: 13px; color: var(--ink-soft); margin: 0; }
+
+  .cg-values{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--moss);
+    padding: 18px 22px;
+    border-radius: 3px;
+    margin-bottom: 30px;
+  }
+  .cg-values h3{ margin: 0 0 10px; font-size: 15px; }
+  .cg-values ul{ margin: 0; padding-left: 18px; font-size: 14px; color: var(--ink-soft); }
+  .cg-values li{ margin-bottom: 6px; }
+
+  .cg-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 34px;
+  }
+  .cg-card{
+    border: 1px solid var(--line);
+    background: var(--card-bg);
+    border-radius: 3px;
+    padding: 16px;
+  }
+  .cg-card .tag{
+    display: inline-block;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--gold);
+    background: #FBF3E2;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+  }
+  .cg-card h4{ margin: 0 0 6px; font-size: 15px; }
+  .cg-card p{ margin: 0; font-size: 13px; color: var(--ink-soft); }
+  .cg-card.video{ text-align: center; }
+  .cg-card .play{
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--forest);
+    color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 10px;
+    font-size: 16px;
+  }
+
+  .cg-cta{
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .cg-cta p{ margin: 0; font-size: 14px; color: var(--ink-soft); }
+  .cg-cta-btn{
+    background: var(--forest);
+    color: var(--paper);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 13.5px;
+    cursor: pointer;
+  }
+
+  /* ---------- Give tab ---------- */
+  .give-intro{ font-size: 15px; color: var(--ink-soft); max-width: 620px; margin-bottom: 26px; }
+  .give-card{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 24px;
+    max-width: 460px;
+    margin-bottom: 34px;
+  }
+  .amount-pills{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .amount-pill{
+    border: 1px solid var(--line);
+    background: var(--paper);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .amount-pill.selected{ background: var(--forest); color: var(--paper); border-color: var(--forest); }
+  .custom-amount{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 8px 12px;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .custom-amount input{
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+  }
+  .custom-amount input:focus{ outline: none; }
+  .give-frequency{
+    display: flex;
+    gap: 18px;
+    font-size: 13.5px;
+    margin-bottom: 18px;
+    color: var(--ink-soft);
+  }
+  .give-btn{
+    width: 100%;
+    background: var(--forest);
+    color: var(--paper);
+    border: none;
+    padding: 13px;
+    border-radius: 3px;
+    font-weight: 700;
+    font-size: 14.5px;
+    cursor: pointer;
+  }
+  .give-fineprint{
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    text-align: center;
+    margin: 10px 0 0;
+  }
+  .give-breakdown{ max-width: 460px; }
+  .give-breakdown h3{ margin: 0 0 4px; font-size: 15px; }
+  .illustrative-note{ font-size: 12px; color: var(--ink-soft); margin: 0 0 14px; }
+  .breakdown-bars{ display: flex; flex-direction: column; gap: 10px; }
+  .bbar{ display: grid; grid-template-columns: 1fr 2fr auto; align-items: center; gap: 10px; font-size: 12.5px; color: var(--ink-soft); }
+  .bbar .bar{ background: var(--line-soft); border-radius: 999px; height: 8px; overflow: hidden; }
+  .bbar .bar div{ background: var(--moss); height: 100%; }
+
+  /* ---------- Partners tab ---------- */
+  .partners-intro{ font-size: 15px; color: var(--ink-soft); max-width: 620px; margin-bottom: 26px; }
+  .social-row{ display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 34px; }
+  .social-row a{
+    border: 1px solid var(--line);
+    background: var(--card-bg);
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .social-row a:hover{ border-color: var(--forest); }
+  .partner-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 12px;
+  }
+  .partner-card{
+    border: 1px solid var(--line);
+    background: var(--card-bg);
+    border-radius: 3px;
+    padding: 14px 16px;
+  }
+  .partner-card .name{ font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .partner-card .desc{ font-size: 12.5px; color: var(--ink-soft); margin-bottom: 8px; }
+  .partner-card a{ font-size: 12.5px; color: var(--sky); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ---------- Profile / tree counter bar ---------- */
+  .profile-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: var(--forest);
+    color: var(--paper);
+    padding: 10px 40px;
+    font-size: 13.5px;
+  }
+  .profile-bar .stats{
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+  .profile-bar .stats span strong{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    margin-right: 5px;
+  }
+  .profile-bar .note{
+    color: #C9D6C6;
+    font-size: 12px;
+  }
+
+  .event-meta{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .rsvp-btn{
+    background: var(--paper);
+    border: 1px solid var(--forest);
+    color: var(--forest);
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .rsvp-btn:hover{ background: var(--forest); color: var(--paper); }
+  .rsvp-btn.going{
+    background: var(--forest);
+    color: var(--paper);
+  }
+
+  /* Toast for tree-planting, badge, and other confirmations */
+  #toast{
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translate(-50%, 20px);
+    background: var(--forest);
+    color: var(--paper);
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-size: 13.5px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 20;
+    max-width: 90vw;
+  }
+  #toast.show{
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @media (max-width: 640px){
+    header.site, .hero, .filters-panel, main, .discovery, .roadmap{ padding-left: 20px; padding-right: 20px; }
+    nav.site-links{ display: none; }
+    .event-meta{ text-align: left; }
+    .field select, .field input[type="text"]{ min-width: 140px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wordmark">
+    <span class="mark">The Commons</span>
+    <span class="tag">The website home of The Common Ground Project</span>
+  </div>
+  <nav class="site-links">
+    <button class="nav-tab active" data-tab="browse" onclick="showTab('browse')">Browse</button>
+    <button class="nav-tab" data-tab="profile" onclick="showTab('profile')">Profile</button>
+    <button class="nav-tab" data-tab="common-ground" onclick="showTab('common-ground')">Common Ground Project</button>
+    <button class="nav-tab" data-tab="give" onclick="showTab('give')">Give</button>
+    <button class="nav-tab" data-tab="partners" onclick="showTab('partners')">Partners</button>
+  </nav>
+</header>
+
+<div class="profile-bar">
+  <div class="stats">
+    <span><strong id="rsvpCount">0</strong>events you're going to</span>
+    <span>🌳 <strong id="treeCount">0</strong>trees planted through Commons</span>
+  </div>
+  <div class="note">RSVP to an event to plant a real tree — simulated here, see code comments for the live API hookup</div>
+</div>
+
+<section class="hero tab-panel active" data-tab="browse">
+  <svg class="contours" viewBox="0 0 1200 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M-50,60 C 200,20 350,110 600,70 S 1000,20 1250,80" fill="none" stroke="#5C7A52" stroke-width="1.2"/>
+    <path d="M-50,110 C 220,70 380,160 620,120 S 1020,70 1250,130" fill="none" stroke="#5C7A52" stroke-width="1.2"/>
+    <path d="M-50,160 C 240,120 400,210 640,170 S 1040,120 1250,180" fill="none" stroke="#9C5B3C" stroke-width="1"/>
+    <path d="M-50,210 C 260,170 420,260 660,220 S 1060,170 1250,230" fill="none" stroke="#3C6E8F" stroke-width="1"/>
+    <path d="M-50,260 C 280,220 440,300 680,270 S 1080,220 1250,280" fill="none" stroke="#5C7A52" stroke-width="1"/>
+  </svg>
+  <div class="hero-inner">
+    <h1>Find environmental action near you.</h1>
+    <p class="sub">One search across tree plantings, trail crews, cleanups, birding walks and citizen science &mdash; pulled from the organizations already doing the work.</p>
+
+    <div class="nl-search">
+      <input type="text" id="nlInput" placeholder="Try: “I want to help wildlife this weekend” or “easy volunteer work near me”">
+      <button id="nlButton" onclick="runNaturalLanguageSearch()">Search</button>
+    </div>
+    <div class="nl-examples">
+      Try:
+      <button onclick="fillExample('I want to help wildlife this weekend')">help wildlife this weekend</button> &nbsp;&middot;&nbsp;
+      <button onclick="fillExample('Good environmental activities for kids')">activities for kids</button> &nbsp;&middot;&nbsp;
+      <button onclick="fillExample('Easy volunteer work near me, nothing physically demanding')">easy volunteer work</button>
+    </div>
+    <div class="ai-status" id="aiStatus"></div>
+  </div>
+</section>
+
+<section class="filters-panel tab-panel active" data-tab="browse">
+  <div class="filters-row">
+    <div class="field">
+      <label for="locationInput">Location</label>
+      <input type="text" id="locationInput" value="Burlington, VT" oninput="render()">
+    </div>
+    <div class="field">
+      <label for="dateSelect">Date</label>
+      <select id="dateSelect" onchange="render()">
+        <option value="any">Any time</option>
+        <option value="today">Today</option>
+        <option value="weekend">This weekend</option>
+        <option value="month">Next month</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="distanceSelect">Distance</label>
+      <select id="distanceSelect" onchange="render()">
+        <option value="any">Any distance</option>
+        <option value="10">Within 10 miles</option>
+        <option value="25">Within 25 miles</option>
+        <option value="50">Within 50 miles</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="chip-panel">
+    <div class="chip-label">Filter by activity</div>
+    <div class="chips" id="chipContainer"></div>
+    <button class="clear-filters" onclick="clearAllFilters()">Clear all filters</button>
+  </div>
+</section>
+
+<main id="results" class="tab-panel active" data-tab="browse">
+  <div class="results-head">
+    <h2 id="resultsHeading">Events</h2>
+    <div class="results-count" id="resultsCount"></div>
+  </div>
+  <div class="event-list" id="eventList"></div>
+</main>
+
+<section class="discovery tab-panel active" id="discovery" data-tab="browse">
+  <h3>Because you attended a river cleanup&hellip;</h3>
+  <p>You might like these next. (In the real product, this is built from your volunteer history &mdash; here it's a preview of the idea.)</p>
+  <div class="rec-pills">
+    <button onclick="applyRecommendation('Birding')">Bird banding</button>
+    <button onclick="applyRecommendation('Wildlife Surveys')">Beaver monitoring</button>
+    <button onclick="applyRecommendation('Habitat Restoration')">Native plant restoration</button>
+    <button onclick="applyRecommendation('Citizen Science')">Citizen science</button>
+  </div>
+</section>
+
+<section class="roadmap tab-panel active" id="roadmap" data-tab="browse">
+  <details>
+    <summary>How this prototype maps to the real system</summary>
+    <div class="roadmap-body">
+      <div><strong>1. Collectors</strong>This screen runs on 19 hand-written sample events. In production, collectors pull from APIs, RSS, calendars and permitted pages.</div>
+      <div><strong>2. Normalization</strong>Each source's format gets converted into the same shape: title, org, date, time, location, tags.</div>
+      <div><strong>3. Dedup + geocoding</strong>Duplicate listings get merged; addresses get turned into coordinates so radius search works for real.</div>
+      <div><strong>4. Search + AI</strong>The natural-language box above already calls Claude live to turn a sentence into filters &mdash; that part isn't mocked.</div>
+      <div><strong>5. Tree planting</strong>RSVPing plants a simulated tree. Swap <code>plantTreeForMilestone()</code> for a call to your own backend, which holds a real Ecologi/GoodAPI key.</div>
+    </div>
+  </details>
+</section>
+
+<section class="tab-panel" data-tab="profile" id="tab-profile">
+  <div class="profile-wrap">
+    <div class="profile-head">
+      <div class="avatar">Y</div>
+      <div>
+        <h2>Your profile</h2>
+        <p class="profile-sub">Stats reset when you reload this prototype &mdash; there's no login yet, just a preview of what the real feature tracks.</p>
+      </div>
+      <button class="copy-btn" onclick="copyVolunteerSummary()">Copy volunteer summary</button>
+    </div>
+
+    <div class="stat-grid" id="statGrid"></div>
+
+    <h3 class="section-title">Badges &amp; milestones</h3>
+    <p class="section-sub">Earn badges by attending events and hitting hour milestones. These look great on the volunteer summary above &mdash; handy for scholarship, internship, or college applications.</p>
+    <div class="badge-grid" id="badgeGrid"></div>
+
+    <h3 class="section-title">Friends</h3>
+    <p class="section-sub">Sample data for now &mdash; real friends and following require accounts, which aren't built yet.</p>
+    <div class="friends-panel">
+      <table class="friends-table" id="friendsTable"></table>
+      <a class="invite-link" id="inviteLink" href="#">Invite a friend</a>
+    </div>
+  </div>
+</section>
+
+<section class="tab-panel" data-tab="common-ground" id="tab-common-ground">
+  <div class="cg-wrap">
+    <h2>The Common Ground Project</h2>
+    <p class="cg-intro">The Northeast's forests are one of the great regrowth stories anywhere &mdash; a region that was once 80% deforested is now dense with young forest that sequesters carbon at some of the highest rates in the world. Most people living here don't know that. The Common Ground Project exists to help people see the place they live: how the forest around them works, why it matters, and how to take part in caring for it.</p>
+
+    <blockquote class="cg-quote">People protect what they know. They care for what they love.</blockquote>
+
+    <h3 class="section-title">Two pillars, one campaign</h3>
+    <p class="section-sub">The Commons &mdash; the site you're using right now &mdash; is the "Website" pillar, alongside "Media." (Panel and Education programming lives under Standing Trees, a partner nonprofit — their work will surface as content here, but sits outside this campaign's own structure.)</p>
+    <div class="pillar-grid">
+      <div class="pillar-card">
+        <span class="pillar-num">01</span>
+        <h4>Media</h4>
+        <p class="pillar-line">Help people see what's around them.</p>
+        <p>A social and YouTube campaign sharing science, stories, and people &mdash; countering confusion and building real investment in this place.</p>
+      </div>
+      <div class="pillar-card active-pillar">
+        <span class="pillar-num">02</span>
+        <h4>Website &mdash; The Commons</h4>
+        <p class="pillar-line">Help people find a way to participate.</p>
+        <p>This site: one search across events, education, media, and eventually jobs, internships, and community gardens &mdash; the pathway from awareness to action.</p>
+      </div>
+    </div>
+
+    <h3 class="section-title">Media &amp; articles</h3>
+    <p class="section-sub">Content from the Media pillar lands here as it's produced &mdash; Instagram, TikTok, and long-form YouTube pieces, plus written stories.</p>
+    <div class="cg-grid" id="articleGrid"></div>
+    <div class="cg-grid" id="videoGrid"></div>
+
+    <div class="cg-cta">
+      <p>If this mission resonates, the Give tab is where that turns into support.</p>
+      <button class="cg-cta-btn" onclick="showTab('give')">Go to Give</button>
+    </div>
+  </div>
+</section>
+
+<section class="tab-panel" data-tab="give" id="tab-give">
+  <div class="give-wrap">
+    <h2>Pay how much you feel</h2>
+    <p class="give-intro">The Commons stays free for volunteers and free for the small organizations it lists. If it's useful to you, any amount helps keep it running &mdash; there's no suggested "right" number.</p>
+
+    <div class="give-card">
+      <div class="amount-pills" id="amountPills"></div>
+      <div class="custom-amount" id="customAmountWrap" style="display:none;">
+        <span>$</span>
+        <input type="number" id="customAmount" min="1" placeholder="Enter an amount">
+      </div>
+      <div class="give-frequency">
+        <label><input type="radio" name="freq" value="once" checked> One time</label>
+        <label><input type="radio" name="freq" value="monthly"> Monthly</label>
+      </div>
+      <button class="give-btn" onclick="donateStub()">Continue</button>
+      <p class="give-fineprint" id="giveFineprint">This is a prototype &mdash; no payment will actually be processed.</p>
+    </div>
+
+    <div class="give-breakdown">
+      <h3>Where it would go</h3>
+      <p class="illustrative-note">Illustrative only, until real partner agreements are in place:</p>
+      <div class="breakdown-bars">
+        <div class="bbar"><span>Partner orgs &amp; tree planting</span><div class="bar"><div style="width:70%"></div></div><span>70%</span></div>
+        <div class="bbar"><span>Hosting &amp; development</span><div class="bar"><div style="width:20%"></div></div><span>20%</span></div>
+        <div class="bbar"><span>Keeping it free for small orgs</span><div class="bar"><div style="width:10%"></div></div><span>10%</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tab-panel" data-tab="partners" id="tab-partners">
+  <div class="partners-wrap">
+    <h2>Partners &amp; resources</h2>
+    <p class="partners-intro">The organizations doing the actual work, plus where to find us elsewhere. Placeholder links throughout &mdash; swap in real ones as partnerships are confirmed.</p>
+
+    <h3 class="section-title">Follow along</h3>
+    <div class="social-row" id="socialRow"></div>
+
+    <h3 class="section-title">Organizations &amp; resources</h3>
+    <div class="partner-grid" id="partnerGrid"></div>
+  </div>
+</section>
+
+<footer class="site">
+  The Commons is the website home of The Common Ground Project &mdash; a campaign to help people see, understand, and take part in the forests around them. Prototype data covers Chittenden, Washington and Addison counties, Vermont.
+</footer>
+
+<script>
+  const ACTIVITY_TAGS = [
+    "Tree Planting","Trail Work","Beach Cleanup","River Cleanup","Wildlife Surveys",
+    "Birding","Citizen Science","Gardening","Habitat Restoration","Climate Activism",
+    "Environmental Education","Hiking","Conservation","Photography","Volunteer",
+    "Paid Jobs","Internships","Family-friendly","Disabilities Accessible",
+    "Beginner Friendly","Community","Youth Programs"
+  ];
+
+  // Colors for the primary activity type; modifiers (Volunteer, Family-friendly, etc.) stay neutral.
+  const STRIPE_COLORS = {
+    "Tree Planting": "var(--forest)",
+    "Hiking": "var(--forest)",
+    "Conservation": "var(--forest)",
+    "Gardening": "var(--moss)",
+    "Habitat Restoration": "var(--moss)",
+    "Trail Work": "var(--clay)",
+    "Climate Activism": "var(--clay)",
+    "Paid Jobs": "var(--clay)",
+    "Internships": "var(--clay)",
+    "Beach Cleanup": "var(--sky)",
+    "River Cleanup": "var(--sky)",
+    "Wildlife Surveys": "var(--gold)",
+    "Birding": "var(--gold)",
+    "Citizen Science": "var(--gold)",
+    "Environmental Education": "var(--gold)",
+    "Youth Programs": "var(--gold)",
+    "Photography": "var(--plum)"
+  };
+
+  // Dates relative to "today" = Fri Sep 11 2026. Weekend = Sep 12-13. Next month = October.
+  const EVENTS = [
+    { title: "After-Work Trail Maintenance", org: "Green Mountain Club", town: "Burlington, VT", date: "2026-09-11", time: "4:30 PM", distance: 3, hours: 2, tags: ["Trail Work","Volunteer","Community"] },
+    { title: "Tree Planting", org: "Audubon Vermont", town: "Burlington, VT", date: "2026-09-12", time: "9:00 AM", distance: 2, hours: 3, tags: ["Tree Planting","Habitat Restoration","Beginner Friendly","Family-friendly"] },
+    { title: "Guided Bird Walk", org: "Green Mountain Club", town: "Huntington, VT", date: "2026-09-12", time: "8:00 AM", distance: 14, hours: 2.5, tags: ["Birding","Beginner Friendly"] },
+    { title: "Lake Cleanup", org: "Lake Champlain Committee", town: "Burlington, VT", date: "2026-09-12", time: "10:00 AM", distance: 3, hours: 2, tags: ["Beach Cleanup","Volunteer","Community"] },
+    { title: "Trail Maintenance", org: "Green Mountain Club", town: "Richmond, VT", date: "2026-09-12", time: "8:30 AM", distance: 15, hours: 4, tags: ["Trail Work","Conservation"] },
+    { title: "River Cleanup", org: "Friends of the Winooski River", town: "Winooski, VT", date: "2026-09-12", time: "9:00 AM", distance: 4, hours: 3, tags: ["River Cleanup","Volunteer","Beginner Friendly"] },
+    { title: "Organic Farm Volunteer Day", org: "NOFA Vermont", town: "Middlebury, VT", date: "2026-09-12", time: "9:00 AM", distance: 33, hours: 4, tags: ["Gardening","Volunteer","Beginner Friendly"] },
+    { title: "Beach Cleanup", org: "Lake Champlain Committee", town: "South Hero, VT", date: "2026-09-12", time: "9:30 AM", distance: 12, hours: 2.5, tags: ["Beach Cleanup","Volunteer","Community"] },
+    { title: "Pollinator Workshop", org: "University of Vermont", town: "Burlington, VT", date: "2026-09-13", time: "2:00 PM", distance: 1, hours: 1.5, tags: ["Environmental Education","Gardening","Family-friendly"] },
+    { title: "Native Plant Sale & Restoration Day", org: "Vermont Land Trust", town: "Shelburne, VT", date: "2026-09-13", time: "10:00 AM", distance: 9, hours: 3, tags: ["Habitat Restoration","Gardening","Community"] },
+    { title: "Wildlife Photography Walk", org: "Middlebury Area Land Trust", town: "Middlebury, VT", date: "2026-09-13", time: "7:30 AM", distance: 33, hours: 2, tags: ["Photography","Wildlife Surveys","Beginner Friendly"] },
+    { title: "Public Meeting: Winooski Watershed Plan", org: "Watersheds United Vermont", town: "Burlington, VT", date: "2026-09-15", time: "6:30 PM", distance: 2, hours: 1.5, tags: ["Community","Climate Activism"] },
+    { title: "Trail Crew Internship Info Session", org: "Catamount Trail Association", town: "Stowe, VT", date: "2026-09-16", time: "5:00 PM", distance: 32, hours: 1, tags: ["Internships","Trail Work","Paid Jobs"] },
+    { title: "AmeriCorps Conservation Crew Info Session", org: "AmeriCorps", town: "Waterbury, VT", date: "2026-09-17", time: "6:00 PM", distance: 28, hours: 1, tags: ["Paid Jobs","Internships","Conservation"] },
+    { title: "Accessible Nature Walk", org: "Audubon Vermont", town: "Huntington, VT", date: "2026-09-20", time: "10:00 AM", distance: 14, hours: 2, tags: ["Hiking","Disabilities Accessible","Family-friendly"] },
+    { title: "Youth Climate Rally", org: "VPIRG", town: "Montpelier, VT", date: "2026-09-26", time: "11:00 AM", distance: 38, hours: 2, tags: ["Climate Activism","Youth Programs","Community"] },
+    { title: "Fall Hike & Conservation Talk", org: "Green Mountain Club", town: "Bolton, VT", date: "2026-09-27", time: "9:00 AM", distance: 20, hours: 3, tags: ["Hiking","Conservation","Environmental Education"] },
+    { title: "Beaver Monitoring Citizen Science", org: "Vermont River Conservancy", town: "Jericho, VT", date: "2026-10-03", time: "9:00 AM", distance: 18, hours: 3, tags: ["Citizen Science","Wildlife Surveys","Conservation"] },
+    { title: "Family Bird Banding Morning", org: "Audubon Vermont", town: "Huntington, VT", date: "2026-10-10", time: "8:00 AM", distance: 14, hours: 2.5, tags: ["Birding","Family-friendly","Citizen Science"] }
+  ];
+
+  // Sample data seeding the new features below (badges, friends, articles, video,
+  // partners, socials). All clearly placeholder — swap for real content/data later.
+  const BADGES = [
+    { id: "first-event", icon: "🌱", name: "First Steps", desc: "Attend your first event", check: s => s.rsvpEvents.size >= 1 },
+    { id: "three-events", icon: "🌿", name: "Regular", desc: "Attend 3 events", check: s => s.rsvpEvents.size >= 3 },
+    { id: "ten-events", icon: "🌳", name: "Community Pillar", desc: "Attend 10 events", check: s => s.rsvpEvents.size >= 10 },
+    { id: "ten-hours", icon: "⏱️", name: "10 Hour Volunteer", desc: "Log 10 volunteer hours", check: s => totalHours(s) >= 10 },
+    { id: "25-hours", icon: "⏱️", name: "25 Hour Volunteer", desc: "Log 25 volunteer hours", check: s => totalHours(s) >= 25 },
+    { id: "cleanup-crew", icon: "🧤", name: "Cleanup Crew", desc: "2 beach or river cleanups", check: s => countByTag(s, ["Beach Cleanup","River Cleanup"]) >= 2 },
+    { id: "habitat-hero", icon: "🐝", name: "Habitat Hero", desc: "2 planting/restoration events", check: s => countByTag(s, ["Tree Planting","Habitat Restoration"]) >= 2 },
+    { id: "trail-blazer", icon: "🥾", name: "Trail Blazer", desc: "2 trail work events", check: s => countByTag(s, ["Trail Work"]) >= 2 },
+    { id: "birder", icon: "🐦", name: "Birder", desc: "2 birding events", check: s => countByTag(s, ["Birding"]) >= 2 },
+    { id: "tree-planter", icon: "🌲", name: "Tree Planter", desc: "Trigger your first Commons tree planting", check: s => s.treesPlanted >= 1 }
+  ];
+
+  const FRIENDS = [
+    { name: "Maya R.", hours: 34, events: 9 },
+    { name: "Theo K.", hours: 12, events: 4 },
+    { name: "Priya S.", hours: 58, events: 14 },
+    { name: "Sam O.", hours: 6, events: 2 }
+  ];
+
+  const ARTICLES = [
+    { tag: "Coming soon", title: "Why we started The Common Ground Project", teaser: "The story behind aggregating a fragmented volunteer ecosystem into one search." },
+    { tag: "Coming soon", title: "Meet the first 20 partner organizations", teaser: "Profiles of the groups whose events populate the very first data pool." },
+    { tag: "Coming soon", title: "What counts as environmental action?", teaser: "Where the line sits between volunteering, education, jobs, and activism." }
+  ];
+
+  const VIDEOS = [
+    { title: "The mission, in two minutes", note: "Add a real YouTube ID in the code to embed this." },
+    { title: "A day with a trail crew", note: "Placeholder — replace with a real video card." },
+    { title: "Why small orgs struggle with outreach", note: "Placeholder — replace with a real video card." }
+  ];
+
+  const PARTNER_ORGS = [
+    { name: "Standing Trees", desc: "Partner nonprofit running the Panel and Education programming that feeds content into this campaign." },
+    { name: "Audubon Vermont", desc: "Bird conservation, habitat protection, and environmental education across the state." },
+    { name: "Green Mountain Club", desc: "Maintains and protects the Long Trail and Vermont's hiking trail network." },
+    { name: "Lake Champlain Committee", desc: "Water quality advocacy and cleanup work on and around Lake Champlain." },
+    { name: "Vermont Land Trust", desc: "Conserves farmland, forests, and community land throughout Vermont." },
+    { name: "Vermont River Conservancy", desc: "Protects rivers, streams, and the land alongside them." },
+    { name: "VPIRG", desc: "Statewide advocacy on climate, consumer protection, and environmental policy." },
+    { name: "NOFA Vermont", desc: "Supports organic farming and sustainable agriculture across the state." },
+    { name: "Catamount Trail Association", desc: "Maintains Vermont's 300-mile cross-country ski trail." },
+    { name: "Sierra Club", desc: "National grassroots environmental organization with local chapters." },
+    { name: "The Nature Conservancy", desc: "Global land and water conservation, with active regional chapters." }
+  ];
+
+  const SOCIALS = [
+    { label: "Instagram", href: "#" },
+    { label: "X / Twitter", href: "#" },
+    { label: "Facebook", href: "#" },
+    { label: "YouTube", href: "#" },
+    { label: "Newsletter", href: "#" }
+  ];
+
+  const TODAY = new Date("2026-09-11T00:00:00");
+  const state = {
+    activeChips: new Set(),
+    aiChips: new Set(),
+    rsvpEvents: new Set(),   // event titles the user has RSVP'd to, this session
+    treesPlanted: 0,
+    earnedBadges: new Set(), // badge ids already earned, so we only toast once each
+    selectedAmount: null
+  };
+
+  function totalHours(s){
+    let sum = 0;
+    s.rsvpEvents.forEach(title => {
+      const ev = EVENTS.find(e => e.title === title);
+      if (ev) sum += ev.hours;
+    });
+    return sum;
+  }
+
+  function countByTag(s, tags){
+    let count = 0;
+    s.rsvpEvents.forEach(title => {
+      const ev = EVENTS.find(e => e.title === title);
+      if (ev && ev.tags.some(t => tags.includes(t))) count += 1;
+    });
+    return count;
+  }
+
+  function chipColorVar(tags){
+    for (const t of tags){ if (STRIPE_COLORS[t]) return STRIPE_COLORS[t]; }
+    return "var(--ink-soft)";
+  }
+
+  function buildChips(){
+    const container = document.getElementById('chipContainer');
+    container.innerHTML = '';
+    ACTIVITY_TAGS.forEach(tag => {
+      const btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.textContent = tag;
+      btn.dataset.tag = tag;
+      btn.onclick = () => {
+        if (state.activeChips.has(tag)) state.activeChips.delete(tag);
+        else state.activeChips.add(tag);
+        state.aiChips.delete(tag);
+        render();
+      };
+      container.appendChild(btn);
+    });
+  }
+
+  function dateInBucket(dateStr, bucket){
+    if (bucket === 'any') return true;
+    const d = new Date(dateStr + "T00:00:00");
+    if (bucket === 'today'){
+      return d.getTime() === TODAY.getTime();
+    }
+    if (bucket === 'weekend'){
+      // The upcoming Saturday/Sunday from TODAY
+      const day = TODAY.getDay(); // 5 = Friday
+      const satOffset = (6 - day + 7) % 7;
+      const sat = new Date(TODAY); sat.setDate(TODAY.getDate() + satOffset);
+      const sun = new Date(sat); sun.setDate(sat.getDate() + 1);
+      return d.getTime() === sat.getTime() || d.getTime() === sun.getTime();
+    }
+    if (bucket === 'month'){
+      const nextMonth = (TODAY.getMonth() + 1) % 12;
+      const nextMonthYear = TODAY.getMonth() === 11 ? TODAY.getFullYear() + 1 : TODAY.getFullYear();
+      return d.getMonth() === nextMonth && d.getFullYear() === nextMonthYear;
+    }
+    return true;
+  }
+
+  function formatDate(dateStr){
+    const d = new Date(dateStr + "T00:00:00");
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+
+  function filteredEvents(){
+    const dateBucket = document.getElementById('dateSelect').value;
+    const distanceBucket = document.getElementById('distanceSelect').value;
+
+    return EVENTS.filter(ev => {
+      if (state.activeChips.size > 0){
+        const hasTag = [...state.activeChips].some(t => ev.tags.includes(t));
+        if (!hasTag) return false;
+      }
+      if (!dateInBucket(ev.date, dateBucket)) return false;
+      if (distanceBucket !== 'any' && ev.distance > parseInt(distanceBucket, 10)) return false;
+      return true;
+    }).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  }
+
+  function render(){
+    // reflect chip active/ai state
+    document.querySelectorAll('.chip').forEach(btn => {
+      const tag = btn.dataset.tag;
+      btn.classList.toggle('active', state.activeChips.has(tag));
+      btn.classList.toggle('ai-picked', state.aiChips.has(tag));
+    });
+
+    const list = document.getElementById('eventList');
+    const events = filteredEvents();
+    const loc = document.getElementById('locationInput').value || 'your area';
+
+    document.getElementById('resultsHeading').textContent = `Events near ${loc}`;
+    document.getElementById('resultsCount').textContent = `${events.length} result${events.length === 1 ? '' : 's'}`;
+
+    list.innerHTML = '';
+    if (events.length === 0){
+      list.innerHTML = `<div class="empty-state"><strong>No events match those filters.</strong>Try widening the date range or distance, or clear a few activity filters.</div>`;
+      return;
+    }
+
+    events.forEach(ev => {
+      const card = document.createElement('div');
+      card.className = 'event-card';
+      card.style.borderLeftColor = chipColorVar(ev.tags);
+      card.innerHTML = `
+        <div class="event-main">
+          <div class="event-title">${ev.title}</div>
+          <div class="event-org">${ev.org} &mdash; ${ev.town}</div>
+          <div class="event-tags">${ev.tags.map(t => `<span>${t}</span>`).join('')}</div>
+        </div>
+        <div class="event-meta">
+          <div class="when">${formatDate(ev.date)}</div>
+          <div>${ev.time}</div>
+          <div>${ev.distance} mi away</div>
+          <button class="rsvp-btn ${state.rsvpEvents.has(ev.title) ? 'going' : ''}" onclick="toggleRSVP('${ev.title.replace(/'/g, "\\'")}')">
+            ${state.rsvpEvents.has(ev.title) ? "You're going" : "I'll be there"}
+          </button>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function clearAllFilters(){
+    state.activeChips.clear();
+    state.aiChips.clear();
+    document.getElementById('dateSelect').value = 'any';
+    document.getElementById('distanceSelect').value = 'any';
+    document.getElementById('aiStatus').textContent = '';
+    render();
+  }
+
+  function updateProfileBar(){
+    document.getElementById('rsvpCount').textContent = state.rsvpEvents.size;
+    document.getElementById('treeCount').textContent = state.treesPlanted;
+  }
+
+  function showToast(message){
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), 4200);
+  }
+
+  // --- Tree planting integration point --------------------------------
+  // This is stubbed for the prototype: it simulates a planting so you can
+  // see the UX and data flow without spending real money on every demo click.
+  //
+  // To make it real:
+  //   1. Sign up with a provider — Ecologi, GoodAPI, or Digital Humani all
+  //      have simple REST APIs and per-tree pricing.
+  //   2. Never call their API directly from this client-side file — that
+  //      would expose your API key to every visitor. Instead, have this
+  //      function call YOUR OWN backend endpoint (e.g. POST /api/plant-tree),
+  //      and have that backend hold the real key and call the provider.
+  //
+  //   Example of what your backend would do (Ecologi shown as one option):
+  //
+  //     await fetch("https://public.ecologi.com/trees", {
+  //       method: "POST",
+  //       headers: {
+  //         "Authorization": `Bearer ${process.env.ECOLOGI_API_KEY}`,
+  //         "Content-Type": "application/json"
+  //       },
+  //       body: JSON.stringify({ quantity: 1, source: reason })
+  //     });
+  //
+  //   Then return the confirmation (tree id, planting region, etc.) to the
+  //   frontend so showTreeToast() can display something real.
+  async function plantTreeForMilestone(reason){
+    // Simulated network delay so the interaction still feels like a real call.
+    await new Promise(res => setTimeout(res, 500));
+    state.treesPlanted += 1;
+    updateProfileBar();
+    const messages = {
+      'first-rsvp': `🌳 A tree was planted to mark your first RSVP on The Commons. (Simulated — plug in a real provider to make this live.)`,
+      'five-rsvps': `🌳 Another tree planted — that's 5 events you've committed to. (Simulated.)`
+    };
+    showToast(messages[reason] || `🌳 A tree was planted. (Simulated.)`);
+    renderProfile();
+  }
+
+  function toggleRSVP(title){
+    if (state.rsvpEvents.has(title)){
+      state.rsvpEvents.delete(title);
+      updateProfileBar();
+      render();
+      renderProfile();
+      return;
+    }
+    state.rsvpEvents.add(title);
+    updateProfileBar();
+    render();
+    renderProfile();
+
+    const count = state.rsvpEvents.size;
+    if (count === 1){
+      plantTreeForMilestone('first-rsvp');
+    } else if (count % 5 === 0){
+      plantTreeForMilestone('five-rsvps');
+    }
+  }
+
+  function applyRecommendation(tag){
+    state.activeChips.clear();
+    state.activeChips.add(tag);
+    render();
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function fillExample(text){
+    document.getElementById('nlInput').value = text;
+    runNaturalLanguageSearch();
+  }
+
+  // Lightweight local fallback if the API call fails (e.g. offline).
+  function localKeywordParse(query){
+    const q = query.toLowerCase();
+    const picked = new Set();
+    const has = (...words) => words.some(w => q.includes(w));
+
+    if (has('wildlife', 'animal', 'beaver', 'bird')) { picked.add('Wildlife Surveys'); picked.add('Birding'); }
+    if (has('kid', 'family', 'child')) { picked.add('Family-friendly'); }
+    if (has('easy', 'beginner', 'new to', 'first time')) { picked.add('Beginner Friendly'); }
+    if (has('clean', 'trash', 'litter')) { picked.add('Beach Cleanup'); picked.add('River Cleanup'); }
+    if (has('tree', 'plant')) { picked.add('Tree Planting'); }
+    if (has('trail', 'hike', 'hiking')) { picked.add('Trail Work'); picked.add('Hiking'); }
+    if (has('job', 'paid', 'career')) { picked.add('Paid Jobs'); }
+    if (has('intern')) { picked.add('Internships'); }
+    if (has('accessible', 'disability', 'wheelchair')) { picked.add('Disabilities Accessible'); }
+    if (has('learn', 'class', 'workshop', 'education')) { picked.add('Environmental Education'); }
+    if (has('climate', 'rally', 'activis')) { picked.add('Climate Activism'); }
+
+    let dateBucket = 'any';
+    if (has('today', 'tonight')) dateBucket = 'today';
+    else if (has('weekend')) dateBucket = 'weekend';
+    else if (has('next month', 'month')) dateBucket = 'month';
+
+    return { activities: [...picked], date: dateBucket, distance: 'any' };
+  }
+
+  async function callClaudeForFilters(query){
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 300,
+        system: `You convert a sentence about outdoor/environmental volunteering into search filters for a site called The Commons.
+Valid activity tags (use exact spelling, choose zero or more): ${JSON.stringify(ACTIVITY_TAGS)}.
+Valid "date" values: "today", "weekend", "month", "any".
+Valid "distance" values: 10, 25, 50, or "any".
+Respond with ONLY minified JSON in exactly this shape and nothing else, no markdown fences, no preamble:
+{"activities":[],"date":"any","distance":"any"}`,
+        messages: [{ role: "user", content: query }]
+      })
+    });
+    const data = await response.json();
+    const text = (data.content || []).map(b => b.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    const activities = (parsed.activities || []).filter(t => ACTIVITY_TAGS.includes(t));
+    const date = ['today','weekend','month','any'].includes(parsed.date) ? parsed.date : 'any';
+    const distance = [10,25,50].includes(parsed.distance) ? String(parsed.distance) : 'any';
+    return { activities, date, distance };
+  }
+
+  async function runNaturalLanguageSearch(){
+    const query = document.getElementById('nlInput').value.trim();
+    const statusEl = document.getElementById('aiStatus');
+    const button = document.getElementById('nlButton');
+    if (!query) return;
+
+    button.disabled = true;
+    statusEl.textContent = 'Reading your request…';
+
+    let result;
+    try {
+      result = await callClaudeForFilters(query);
+      statusEl.textContent = result.activities.length
+        ? `Understood as: ${result.activities.join(', ')}${result.date !== 'any' ? ' · ' + result.date : ''}`
+        : `Didn't find a specific activity match — showing broader results.`;
+    } catch (err){
+      result = localKeywordParse(query);
+      statusEl.textContent = result.activities.length
+        ? `(Offline fallback) Matched: ${result.activities.join(', ')}`
+        : `(Offline fallback) Couldn't parse that — try one of the examples above.`;
+    }
+
+    state.activeChips = new Set(result.activities);
+    state.aiChips = new Set(result.activities);
+    document.getElementById('dateSelect').value = result.date;
+    document.getElementById('distanceSelect').value = result.distance;
+    button.disabled = false;
+    render();
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ---------- Tab switching ----------
+  function showTab(tab){
+    document.querySelectorAll('.tab-panel').forEach(el => {
+      el.classList.toggle('active', el.dataset.tab === tab);
+    });
+    document.querySelectorAll('.nav-tab').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+    if (tab === 'profile') renderProfile();
+    if (tab === 'common-ground') renderCommonGround();
+    if (tab === 'give') renderGive();
+    if (tab === 'partners') renderPartners();
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+  }
+
+  // ---------- Profile tab ----------
+  function renderProfile(){
+    const hours = totalHours(state);
+    const stats = [
+      { num: state.rsvpEvents.size, label: "Events attended" },
+      { num: hours, label: "Hours volunteered" },
+      { num: state.treesPlanted, label: "Trees planted" },
+      { num: countByTag(state, ["Trail Work"]) * 1.5, label: "Approx. miles of trail" },
+      { num: new Set([...state.rsvpEvents].map(t => (EVENTS.find(e => e.title === t) || {}).org)).size, label: "Organizations supported" }
+    ];
+    document.getElementById('statGrid').innerHTML = stats.map(s => `
+      <div class="stat-card"><span class="num">${s.num}</span><span class="label">${s.label}</span></div>
+    `).join('');
+
+    const badgeGrid = document.getElementById('badgeGrid');
+    badgeGrid.innerHTML = BADGES.map(b => {
+      const earned = b.check(state);
+      if (earned && !state.earnedBadges.has(b.id)){
+        state.earnedBadges.add(b.id);
+        showToast(`🏅 Badge earned: ${b.name}`);
+      }
+      return `
+        <div class="badge ${earned ? 'earned' : ''}">
+          <span class="icon">${b.icon}</span>
+          <div class="name">${b.name}</div>
+          <div class="desc">${b.desc}</div>
+        </div>
+      `;
+    }).join('');
+
+    const combined = [...FRIENDS, { name: "You", hours, events: state.rsvpEvents.size, you: true }]
+      .sort((a, b) => b.hours - a.hours);
+    const table = document.getElementById('friendsTable');
+    table.innerHTML = `
+      <tr><th>Rank</th><th>Name</th><th>Hours</th><th>Events</th></tr>
+      ${combined.map((f, i) => `
+        <tr class="${f.you ? 'you' : ''}">
+          <td>${i + 1}</td><td>${f.name}</td><td>${f.hours}</td><td>${f.events}</td>
+        </tr>
+      `).join('')}
+    `;
+    document.getElementById('inviteLink').href =
+      `mailto:?subject=${encodeURIComponent("Join me on The Commons")}&body=${encodeURIComponent("I've been finding environmental volunteer events near me on The Commons — thought you'd like it too.")}`;
+  }
+
+  function copyVolunteerSummary(){
+    const hours = totalHours(state);
+    const orgs = [...new Set([...state.rsvpEvents].map(t => (EVENTS.find(e => e.title === t) || {}).org))].filter(Boolean);
+    const earned = BADGES.filter(b => state.earnedBadges.has(b.id)).map(b => b.name);
+    const summary = `Volunteer summary (via The Commons)
+Events attended: ${state.rsvpEvents.size}
+Hours volunteered: ${hours}
+Trees planted through the platform: ${state.treesPlanted}
+Organizations: ${orgs.join(', ') || 'None yet'}
+Badges earned: ${earned.join(', ') || 'None yet'}`;
+
+    navigator.clipboard.writeText(summary)
+      .then(() => showToast('Copied your volunteer summary to the clipboard.'))
+      .catch(() => showToast('Could not copy automatically — select and copy the text manually.'));
+  }
+
+  // ---------- Common Ground Project tab ----------
+  function renderCommonGround(){
+    document.getElementById('articleGrid').innerHTML = ARTICLES.map(a => `
+      <div class="cg-card">
+        <span class="tag">${a.tag}</span>
+        <h4>${a.title}</h4>
+        <p>${a.teaser}</p>
+      </div>
+    `).join('');
+
+    // To embed a real video once you have one, replace a VIDEOS entry's card
+    // below with an iframe, e.g.:
+    // <iframe width="100%" height="200" src="https://www.youtube.com/embed/VIDEO_ID"
+    //   title="..." frameborder="0" allowfullscreen></iframe>
+    document.getElementById('videoGrid').innerHTML = VIDEOS.map(v => `
+      <div class="cg-card video">
+        <div class="play">▶</div>
+        <h4>${v.title}</h4>
+        <p>${v.note}</p>
+      </div>
+    `).join('');
+  }
+
+  // ---------- Give tab ----------
+  function renderGive(){
+    const amounts = [5, 10, 25, 50];
+    document.getElementById('amountPills').innerHTML =
+      amounts.map(a => `<button class="amount-pill" data-amount="${a}" onclick="selectAmount(${a})">$${a}</button>`).join('') +
+      `<button class="amount-pill" data-amount="other" onclick="selectAmount('other')">Other</button>`;
+  }
+
+  function selectAmount(amount){
+    state.selectedAmount = amount;
+    document.querySelectorAll('.amount-pill').forEach(btn => {
+      btn.classList.toggle('selected', String(btn.dataset.amount) === String(amount));
+    });
+    document.getElementById('customAmountWrap').style.display = amount === 'other' ? 'flex' : 'none';
+  }
+
+  // --- Payment integration point ---------------------------------------
+  // Claude does not process real payments. This button is a stub so you can
+  // see the flow. To make it real, replace this function with a call to your
+  // own backend, which creates a Stripe Checkout Session (or similar) and
+  // redirects the browser there — never handle card details in this file.
+  //
+  //   const res = await fetch('/api/create-checkout-session', {
+  //     method: 'POST',
+  //     body: JSON.stringify({ amount: chosenAmountInCents, frequency })
+  //   });
+  //   const { url } = await res.json();
+  //   window.location.href = url; // hands off to Stripe's hosted checkout
+  function donateStub(){
+    let amount = state.selectedAmount;
+    if (amount === 'other'){
+      amount = document.getElementById('customAmount').value;
+    }
+    if (!amount){
+      showToast('Pick or enter an amount first.');
+      return;
+    }
+    const freq = document.querySelector('input[name="freq"]:checked').value;
+    showToast(`This is a prototype — $${amount} (${freq}) was not actually charged. Wire this button to a real checkout to accept it.`);
+  }
+
+  // ---------- Partners tab ----------
+  function renderPartners(){
+    document.getElementById('socialRow').innerHTML = SOCIALS.map(s =>
+      `<a href="${s.href}" target="_blank" rel="noopener">${s.label}</a>`
+    ).join('');
+    document.getElementById('partnerGrid').innerHTML = PARTNER_ORGS.map(p => `
+      <div class="partner-card">
+        <div class="name">${p.name}</div>
+        <div class="desc">${p.desc}</div>
+        <a href="#" target="_blank" rel="noopener">Visit (add real link)</a>
+      </div>
+    `).join('');
+  }
+
+  buildChips();
+  render();
+  updateProfileBar();
+</script>
+
+<div id="toast"></div>
+</body>
+</html>
