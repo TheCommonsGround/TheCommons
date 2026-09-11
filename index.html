@@ -121,6 +121,49 @@
     margin: 0 0 32px;
   }
 
+  .home-brand{
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .home-name{
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--forest);
+  }
+  .home-sub{
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .mission-line{
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--forest);
+    max-width: 560px;
+    line-height: 1.4;
+    margin: 0 0 30px;
+  }
+  .home-fields{ margin-bottom: 14px; }
+
+  .new-search-link{
+    display: inline-block;
+    margin: 24px 40px 0;
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    padding: 0;
+  }
+
   /* Natural language search */
   .nl-search{
     background: var(--card-bg);
@@ -155,22 +198,6 @@
   }
   .nl-search button:hover{ background: #16291c; }
   .nl-search button:disabled{ background: var(--ink-soft); cursor: default; }
-
-  .nl-examples{
-    margin-top: 10px;
-    font-size: 13px;
-    color: var(--ink-soft);
-  }
-  .nl-examples button{
-    background: none;
-    border: none;
-    color: var(--sky);
-    font-size: 13px;
-    cursor: pointer;
-    padding: 0;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
 
   .ai-status{
     max-width: 620px;
@@ -389,6 +416,19 @@
   .rec-pills button:hover{ border-color: var(--gold); }
 
   /* ---------- Roadmap note ---------- */
+  .bottom-search{
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    border-top: 1px solid var(--line);
+  }
+  .bottom-search h3{
+    font-size: 16px;
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+  .bottom-search .nl-search{ max-width: 620px; }
+
   .roadmap{
     max-width: 1100px;
     margin: 0 auto 60px;
@@ -416,10 +456,58 @@
 
   footer.site{
     border-top: 1px solid var(--line);
-    padding: 20px 40px;
+    padding: 32px 40px 24px;
     font-size: 12.5px;
     color: var(--ink-soft);
     text-align: center;
+  }
+  .footer-mission{
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--forest);
+    max-width: 560px;
+    margin: 0 auto 20px;
+    line-height: 1.5;
+  }
+  .footer-socials{
+    margin-bottom: 18px;
+  }
+  .footer-socials-label{
+    display: block;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .footer-social-row{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .footer-social-row a{
+    border: 1px solid var(--line);
+    background: var(--card-bg);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    text-decoration: none;
+    color: var(--ink-soft);
+  }
+  .footer-social-row a:hover{ border-color: var(--forest); color: var(--ink); }
+  .footer-tree-note{
+    max-width: 480px;
+    margin: 0 auto 14px;
+    font-size: 12px;
+  }
+  .footer-copy{
+    max-width: 560px;
+    margin: 14px auto 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--line-soft);
+    font-size: 11.5px;
   }
 
   /* ---------- Profile tab ---------- */
@@ -784,10 +872,6 @@
     font-weight: 600;
     margin-right: 5px;
   }
-  .profile-bar .note{
-    color: #C9D6C6;
-    font-size: 12px;
-  }
 
   .event-meta{
     display: flex;
@@ -849,7 +933,7 @@
 <header class="site">
   <div class="wordmark">
     <span class="mark">The Commons</span>
-    <span class="tag">The website home of The Common Ground Project</span>
+    <span class="tag">Home of The Common Ground Project</span>
   </div>
   <nav class="site-links">
     <button class="nav-tab active" data-tab="browse" onclick="showTab('browse')">Browse</button>
@@ -865,10 +949,9 @@
     <span><strong id="rsvpCount">0</strong>events you're going to</span>
     <span>🌳 <strong id="treeCount">0</strong>trees planted through Commons</span>
   </div>
-  <div class="note">RSVP to an event to plant a real tree — simulated here, see code comments for the live API hookup</div>
 </div>
 
-<section class="hero tab-panel active" data-tab="browse">
+<section class="hero tab-panel active" data-tab="browse" data-view="home" id="browseHome">
   <svg class="contours" viewBox="0 0 1200 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M-50,60 C 200,20 350,110 600,70 S 1000,20 1250,80" fill="none" stroke="#5C7A52" stroke-width="1.2"/>
     <path d="M-50,110 C 220,70 380,160 620,120 S 1020,70 1250,130" fill="none" stroke="#5C7A52" stroke-width="1.2"/>
@@ -878,86 +961,100 @@
   </svg>
   <div class="hero-inner">
     <h1>Find environmental action near you.</h1>
-    <p class="sub">One search across tree plantings, trail crews, cleanups, birding walks and citizen science &mdash; pulled from the organizations already doing the work.</p>
+    <p class="mission-line">Connect, explore, take action. Reimagining the barriers between us and the outdoors.</p>
+
+    <div class="home-fields">
+      <div class="field">
+        <label for="areaCodeInput">Your area code</label>
+        <input type="text" id="areaCodeInput" placeholder="e.g. 05401" inputmode="numeric" maxlength="10">
+      </div>
+    </div>
 
     <div class="nl-search">
-      <input type="text" id="nlInput" placeholder="Try: “I want to help wildlife this weekend” or “easy volunteer work near me”">
-      <button id="nlButton" onclick="runNaturalLanguageSearch()">Search</button>
+      <input type="text" id="heroQueryInput" placeholder="What are you looking for, and when? e.g. “tree planting this weekend”">
+      <button id="heroSearchBtn" onclick="submitHeroSearch()">Search</button>
     </div>
-    <div class="nl-examples">
-      Try:
-      <button onclick="fillExample('I want to help wildlife this weekend')">help wildlife this weekend</button> &nbsp;&middot;&nbsp;
-      <button onclick="fillExample('Good environmental activities for kids')">activities for kids</button> &nbsp;&middot;&nbsp;
-      <button onclick="fillExample('Easy volunteer work near me, nothing physically demanding')">easy volunteer work</button>
+  </div>
+</section>
+
+<div class="tab-panel" data-tab="browse" data-view="results" id="browseResults">
+  <button class="new-search-link" onclick="showHomeView()">&larr; New search</button>
+
+  <section class="filters-panel">
+    <div class="filters-row">
+      <div class="field">
+        <label for="locationInput">Location</label>
+        <input type="text" id="locationInput" value="Burlington, VT" oninput="render()">
+      </div>
+      <div class="field">
+        <label for="dateSelect">Date</label>
+        <select id="dateSelect" onchange="render()">
+          <option value="any">Any time</option>
+          <option value="today">Today</option>
+          <option value="weekend">This weekend</option>
+          <option value="month">Next month</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="distanceSelect">Distance</label>
+        <select id="distanceSelect" onchange="render()">
+          <option value="any">Any distance</option>
+          <option value="10">Within 10 miles</option>
+          <option value="25">Within 25 miles</option>
+          <option value="50">Within 50 miles</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="chip-panel">
+      <div class="chip-label">Filter by activity</div>
+      <div class="chips" id="chipContainer"></div>
+      <button class="clear-filters" onclick="clearAllFilters()">Clear all filters</button>
+    </div>
+  </section>
+
+  <main id="results">
+    <div class="results-head">
+      <h2 id="resultsHeading">Events</h2>
+      <div class="results-count" id="resultsCount"></div>
     </div>
     <div class="ai-status" id="aiStatus"></div>
-  </div>
-</section>
+    <div class="event-list" id="eventList"></div>
+  </main>
 
-<section class="filters-panel tab-panel active" data-tab="browse">
-  <div class="filters-row">
-    <div class="field">
-      <label for="locationInput">Location</label>
-      <input type="text" id="locationInput" value="Burlington, VT" oninput="render()">
+  <section class="discovery" id="discovery">
+    <h3>You may also like</h3>
+    <p>Because you attended a river cleanup&hellip; (in the real product, this is built from your volunteer history &mdash; here it's a preview of the idea.)</p>
+    <div class="rec-pills">
+      <button onclick="applyRecommendation('Birding')">Bird banding</button>
+      <button onclick="applyRecommendation('Wildlife Surveys')">Beaver monitoring</button>
+      <button onclick="applyRecommendation('Habitat Restoration')">Native plant restoration</button>
+      <button onclick="applyRecommendation('Citizen Science')">Citizen science</button>
     </div>
-    <div class="field">
-      <label for="dateSelect">Date</label>
-      <select id="dateSelect" onchange="render()">
-        <option value="any">Any time</option>
-        <option value="today">Today</option>
-        <option value="weekend">This weekend</option>
-        <option value="month">Next month</option>
-      </select>
+  </section>
+
+  <section class="bottom-search">
+    <h3>Search again</h3>
+    <div class="nl-search">
+      <input type="text" id="bottomQueryInput" placeholder="What are you looking for, and when?">
+      <button id="bottomSearchBtn" onclick="submitBottomSearch()">Search</button>
     </div>
-    <div class="field">
-      <label for="distanceSelect">Distance</label>
-      <select id="distanceSelect" onchange="render()">
-        <option value="any">Any distance</option>
-        <option value="10">Within 10 miles</option>
-        <option value="25">Within 25 miles</option>
-        <option value="50">Within 50 miles</option>
-      </select>
-    </div>
-  </div>
+    <div class="ai-status" id="bottomAiStatus"></div>
+  </section>
 
-  <div class="chip-panel">
-    <div class="chip-label">Filter by activity</div>
-    <div class="chips" id="chipContainer"></div>
-    <button class="clear-filters" onclick="clearAllFilters()">Clear all filters</button>
-  </div>
-</section>
-
-<main id="results" class="tab-panel active" data-tab="browse">
-  <div class="results-head">
-    <h2 id="resultsHeading">Events</h2>
-    <div class="results-count" id="resultsCount"></div>
-  </div>
-  <div class="event-list" id="eventList"></div>
-</main>
-
-<section class="discovery tab-panel active" id="discovery" data-tab="browse">
-  <h3>Because you attended a river cleanup&hellip;</h3>
-  <p>You might like these next. (In the real product, this is built from your volunteer history &mdash; here it's a preview of the idea.)</p>
-  <div class="rec-pills">
-    <button onclick="applyRecommendation('Birding')">Bird banding</button>
-    <button onclick="applyRecommendation('Wildlife Surveys')">Beaver monitoring</button>
-    <button onclick="applyRecommendation('Habitat Restoration')">Native plant restoration</button>
-    <button onclick="applyRecommendation('Citizen Science')">Citizen science</button>
-  </div>
-</section>
-
-<section class="roadmap tab-panel active" id="roadmap" data-tab="browse">
-  <details>
-    <summary>How this prototype maps to the real system</summary>
-    <div class="roadmap-body">
-      <div><strong>1. Collectors</strong>This screen runs on 19 hand-written sample events. In production, collectors pull from APIs, RSS, calendars and permitted pages.</div>
-      <div><strong>2. Normalization</strong>Each source's format gets converted into the same shape: title, org, date, time, location, tags.</div>
-      <div><strong>3. Dedup + geocoding</strong>Duplicate listings get merged; addresses get turned into coordinates so radius search works for real.</div>
-      <div><strong>4. Search + AI</strong>The natural-language box above already calls Claude live to turn a sentence into filters &mdash; that part isn't mocked.</div>
-      <div><strong>5. Tree planting</strong>RSVPing plants a simulated tree. Swap <code>plantTreeForMilestone()</code> for a call to your own backend, which holds a real Ecologi/GoodAPI key.</div>
-    </div>
-  </details>
-</section>
+  <section class="roadmap" id="roadmap">
+    <details>
+      <summary>How this prototype maps to the real system</summary>
+      <div class="roadmap-body">
+        <div><strong>1. Collectors</strong>This screen runs on 19 hand-written sample events. In production, collectors pull from APIs, RSS, calendars and permitted pages.</div>
+        <div><strong>2. Normalization</strong>Each source's format gets converted into the same shape: title, org, date, time, location, tags.</div>
+        <div><strong>3. Dedup + geocoding</strong>Duplicate listings get merged; addresses get turned into coordinates so radius search works for real.</div>
+        <div><strong>4. Search + AI</strong>The search box on the home screen already calls Claude live to turn a sentence into filters &mdash; that part isn't mocked.</div>
+        <div><strong>5. Tree planting</strong>RSVPing plants a simulated tree. Swap <code>plantTreeForMilestone()</code> for a call to your own backend, which holds a real Ecologi/GoodAPI key.</div>
+      </div>
+    </details>
+  </section>
+</div>
 
 <section class="tab-panel" data-tab="profile" id="tab-profile">
   <div class="profile-wrap">
@@ -1066,7 +1163,16 @@
 </section>
 
 <footer class="site">
-  The Commons is the website home of The Common Ground Project &mdash; a campaign to help people see, understand, and take part in the forests around them. Prototype data covers Chittenden, Washington and Addison counties, Vermont.
+  <p class="footer-mission" id="footerMission">Curiosity is where it starts &mdash; the more you notice about the wild right outside your door, the harder it is not to care about it.</p>
+
+  <div class="footer-socials">
+    <span class="footer-socials-label">Follow along (coming soon):</span>
+    <div class="footer-social-row" id="footerSocialRow"></div>
+  </div>
+
+  <p class="footer-tree-note">🌳 RSVP to an event to plant a real tree &mdash; simulated here, see code comments for the live API hookup.</p>
+
+  <p class="footer-copy">The Commons is the website home of The Common Ground Project &mdash; a campaign to help people see, understand, and take part in the forests around them. Prototype data covers Chittenden, Washington and Addison counties, Vermont.</p>
 </footer>
 
 <script>
@@ -1177,6 +1283,36 @@
     { label: "YouTube", href: "#" },
     { label: "Newsletter", href: "#" }
   ];
+
+  // Rotates once per calendar day (not on every reload) so it stays consistent
+  // for anyone visiting the same day, then cycles to the next one tomorrow.
+  const FOOTER_QUOTES = [
+    "Curiosity is where it starts — the more you notice about the wild right outside your door, the harder it is not to care about it.",
+    "People protect what they know. They care for what they love.",
+    "The forest outside your window is younger than you think, and still writing its story.",
+    "You don't have to travel far to find something worth protecting.",
+    "Every small action outdoors is a vote for the kind of place you want to live in.",
+    "The best time to learn the name of a tree is before you need a reason to save it.",
+    "Access to nature shouldn't be harder to find than a restaurant or a concert.",
+    "A trail maintained is a story someone chose to keep going.",
+    "The wild doesn't need an invitation, just an audience willing to look up.",
+    "Somewhere near you, something is regrowing — go see it before it's ordinary again.",
+    "The map to a better relationship with the outdoors starts with a single Saturday morning.",
+    "Watersheds don't care about property lines; neither should our sense of responsibility.",
+    "What you plant this year, someone else will stand under in twenty.",
+    "The outdoors isn't a backdrop — it's a neighbor worth getting to know."
+  ];
+
+  function dayOfYear(date){
+    const start = new Date(date.getFullYear(), 0, 0);
+    const diff = date - start;
+    return Math.floor(diff / 86400000);
+  }
+
+  function renderFooterQuote(){
+    const index = dayOfYear(new Date()) % FOOTER_QUOTES.length;
+    document.getElementById('footerMission').textContent = FOOTER_QUOTES[index];
+  }
 
   const TODAY = new Date("2026-09-11T00:00:00");
   const state = {
@@ -1400,12 +1536,35 @@
     state.activeChips.clear();
     state.activeChips.add(tag);
     render();
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
   }
 
-  function fillExample(text){
-    document.getElementById('nlInput').value = text;
-    runNaturalLanguageSearch();
+  // ---------- Home / results view switching (within the Browse tab) ----------
+  // Tracks which top-level tab and which Browse sub-view are current, then
+  // applies both together — this is what fixes results staying visible
+  // underneath other tabs (an inline style was previously fighting the
+  // tab-panel class logic; now there's one source of truth).
+  let currentTab = 'browse';
+  let currentBrowseView = 'home';
+
+  function applyVisibility(){
+    document.querySelectorAll('.tab-panel').forEach(el => {
+      const matchesTab = el.dataset.tab === currentTab;
+      const matchesView = !el.dataset.view || el.dataset.view === currentBrowseView;
+      el.classList.toggle('active', matchesTab && matchesView);
+    });
+    document.querySelectorAll('.nav-tab').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === currentTab);
+    });
+  }
+
+  function showHomeView(){
+    currentBrowseView = 'home';
+    applyVisibility();
+  }
+
+  function showResultsView(){
+    currentBrowseView = 'results';
+    applyVisibility();
   }
 
   // Lightweight local fallback if the API call fails (e.g. offline).
@@ -1460,10 +1619,53 @@ Respond with ONLY minified JSON in exactly this shape and nothing else, no markd
     return { activities, date, distance };
   }
 
-  async function runNaturalLanguageSearch(){
-    const query = document.getElementById('nlInput').value.trim();
+  // Called from the home screen's Search button. Reads the area code + free-text
+  // query, switches to the results view, and (if a query was typed) runs it
+  // through Claude to turn "what and when" into real filters.
+  async function submitHeroSearch(){
+    const area = document.getElementById('areaCodeInput').value.trim();
+    const query = document.getElementById('heroQueryInput').value.trim();
+    const button = document.getElementById('heroSearchBtn');
+
+    if (area) document.getElementById('locationInput').value = area;
+    showResultsView();
+
+    if (!query){
+      render();
+      return;
+    }
+
     const statusEl = document.getElementById('aiStatus');
-    const button = document.getElementById('nlButton');
+    button.disabled = true;
+    statusEl.textContent = 'Reading your request…';
+
+    let result;
+    try {
+      result = await callClaudeForFilters(query);
+      statusEl.textContent = result.activities.length
+        ? `Understood as: ${result.activities.join(', ')}${result.date !== 'any' ? ' · ' + result.date : ''}`
+        : `Didn't find a specific activity match — showing broader results.`;
+    } catch (err){
+      result = localKeywordParse(query);
+      statusEl.textContent = result.activities.length
+        ? `(Offline fallback) Matched: ${result.activities.join(', ')}`
+        : `(Offline fallback) Couldn't parse that — showing all results.`;
+    }
+
+    state.activeChips = new Set(result.activities);
+    state.aiChips = new Set(result.activities);
+    document.getElementById('dateSelect').value = result.date;
+    document.getElementById('distanceSelect').value = result.distance;
+    button.disabled = false;
+    render();
+  }
+
+  // Same idea as submitHeroSearch, but for the search bar at the bottom of the
+  // results page — no view switch needed since we're already there.
+  async function submitBottomSearch(){
+    const query = document.getElementById('bottomQueryInput').value.trim();
+    const statusEl = document.getElementById('bottomAiStatus');
+    const button = document.getElementById('bottomSearchBtn');
     if (!query) return;
 
     button.disabled = true;
@@ -1479,7 +1681,7 @@ Respond with ONLY minified JSON in exactly this shape and nothing else, no markd
       result = localKeywordParse(query);
       statusEl.textContent = result.activities.length
         ? `(Offline fallback) Matched: ${result.activities.join(', ')}`
-        : `(Offline fallback) Couldn't parse that — try one of the examples above.`;
+        : `(Offline fallback) Couldn't parse that — showing all results.`;
     }
 
     state.activeChips = new Set(result.activities);
@@ -1493,12 +1695,9 @@ Respond with ONLY minified JSON in exactly this shape and nothing else, no markd
 
   // ---------- Tab switching ----------
   function showTab(tab){
-    document.querySelectorAll('.tab-panel').forEach(el => {
-      el.classList.toggle('active', el.dataset.tab === tab);
-    });
-    document.querySelectorAll('.nav-tab').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.tab === tab);
-    });
+    currentTab = tab;
+    if (tab === 'browse') currentBrowseView = 'home';
+    applyVisibility();
     if (tab === 'profile') renderProfile();
     if (tab === 'common-ground') renderCommonGround();
     if (tab === 'give') renderGive();
@@ -1645,9 +1844,18 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     `).join('');
   }
 
+  function renderFooterSocials(){
+    document.getElementById('footerSocialRow').innerHTML = SOCIALS.map(s =>
+      `<a href="${s.href}" target="_blank" rel="noopener">${s.label}</a>`
+    ).join('');
+  }
+
   buildChips();
   render();
   updateProfileBar();
+  renderFooterSocials();
+  renderFooterQuote();
+  applyVisibility();
 </script>
 
 <div id="toast"></div>
