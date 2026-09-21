@@ -497,7 +497,9 @@
     margin: 0;
     font-size: 13.5px;
     color: rgba(255,255,255,0.65);
-    text-align: center;
+    text-align: left;
+    width: 620px;
+    max-width: 100%;
   }
   .heroV2-unified-bar{
     display: flex;
@@ -2478,8 +2480,8 @@
     { label: "Newsletter", href: "#" }
   ];
 
-  // Rotates once per calendar day (not on every reload) so it stays consistent
-  // for anyone visiting the same day, then cycles to the next one tomorrow.
+  // Rotates on every page refresh, picked at random. Add new lines to this
+  // list any time — no other code needs to change.
   const FOOTER_QUOTES = [
     "Curiosity is where it starts — the more you notice about the wild right outside your door, the harder it is not to care about it.",
     "People protect what they know. They care for what they love.",
@@ -2498,15 +2500,10 @@
     "Feeling overwhelmed? Try talking to a tree."
   ];
 
-  function dayOfYear(date){
-    const start = new Date(date.getFullYear(), 0, 0);
-    const diff = date - start;
-    return Math.floor(diff / 86400000);
-  }
-
   function renderFooterQuote(){
-    const index = dayOfYear(new Date()) % FOOTER_QUOTES.length;
-    document.getElementById('footerMission').textContent = FOOTER_QUOTES[index];
+    const el = document.getElementById('footerMission');
+    if (!el || !FOOTER_QUOTES.length) return;
+    el.textContent = FOOTER_QUOTES[Math.floor(Math.random() * FOOTER_QUOTES.length)];
   }
 
   const TODAY = new Date("2026-09-11T00:00:00");
@@ -4049,43 +4046,61 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     updateProfileBar();
   });
 
-  // The Identity widget injects its own modal as a new element on
-  // document.body — with our page's own fixed/positioned layers (the liquid
-  // effect, header, banners), it can end up visually buried regardless of
-  // its own z-index. Rather than guess the widget's internal class/id names
-  // (not public API, could change), watch for whatever element it adds and
-  // force it to the very top. This MUST be set up BEFORE init() runs, since
-  // the widget adds its container immediately on init — an observer started
-  // afterward would miss that first (and only) insertion entirely.
+  // The Identity widget injects its own modal into the page — with our own
+  // fixed/positioned layers (the liquid effect, header, banners), it can end
+  // up visually buried regardless of its own z-index. The widget script
+  // (loaded earlier in <head>) may add its container to the DOM before this
+  // script block even runs, so a MutationObserver alone can miss it. Instead,
+  // pin it every time: on first sight via the observer (belt), AND every
+  // time the widget fires its own 'open' event (suspenders) — that covers
+  // the container regardless of when it was actually created.
   let identityWidgetEl = null;
+  const MAX_Z = '2147483647'; // the largest valid CSS z-index — nothing can out-stack this
+
+  function pinIdentityWidgetOnTop(){
+    const el = document.getElementById('netlify-identity-widget')
+      || document.querySelector('.netlify-identity-widget');
+    if (el){
+      el.style.position = 'fixed';
+      el.style.zIndex = MAX_Z;
+      identityWidgetEl = el;
+    }
+    return el;
+  }
+
   new MutationObserver((mutations) => {
     mutations.forEach((m) => {
       m.addedNodes.forEach((node) => {
         if (node.nodeType === 1 && node.parentElement === document.body){
           node.style.position = 'fixed';
-          node.style.zIndex = '999999';
+          node.style.zIndex = MAX_Z;
           identityWidgetEl = node;
         }
       });
     });
-  }).observe(document.body, { childList: true });
+  }).observe(document.body, { childList: true, subtree: true });
 
   // A real modal backdrop: blocks every click to the rest of the page while
   // the widget is open, sitting just behind the widget's own box — which
   // stays fully interactive and, per the widget's own behavior, draggable
   // by its top bar.
   const identityBackdrop = document.createElement('div');
-  identityBackdrop.style.cssText = 'position:fixed; inset:0; background:rgba(10,14,10,0.55); z-index:999998; display:none;';
+  identityBackdrop.style.cssText = `position:fixed; inset:0; background:rgba(10,14,10,0.55); z-index:2147483646; display:none;`;
   document.body.appendChild(identityBackdrop);
 
   netlifyIdentity.on('open', () => {
     identityBackdrop.style.display = 'block';
+    // Re-pin on every open: guarantees correct stacking even if the widget
+    // recreated or re-styled its container since the last time it opened.
+    pinIdentityWidgetOnTop();
+    requestAnimationFrame(pinIdentityWidgetOnTop);
   });
   netlifyIdentity.on('close', () => {
     identityBackdrop.style.display = 'none';
   });
 
   netlifyIdentity.init();
+  pinIdentityWidgetOnTop();
 
   pickHeroTagline();
   startTrySuggestionRotation();
