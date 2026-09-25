@@ -600,73 +600,6 @@
     background: radial-gradient(ellipse 58% 48% at 50% 50%, rgba(18,48,40,0.68) 0%, rgba(18,48,40,0) 75%);
   }
 
-  /* ---------- Animated background details (clouds, birds) ----------
-     The "stage" div is sized to the background image's own natural pixel
-     dimensions (1896x830) so every child below can be positioned with plain
-     left/top in image-pixel coordinates. JS then scales+translates the stage
-     with the exact same math as object-fit:cover, so these details always
-     line up with the actual image content regardless of viewport size. */
-  .hero-animated-layer{
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  .hero-anim-stage{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1896px;
-    height: 1150px;
-    transform-origin: 0 0;
-  }
-
-  /* Soft, heavily-blurred, low-opacity so these read as a faint haze folded
-     into the painted sky rather than distinct cartoon cloud shapes. */
-  .anim-cloud{
-    position: absolute;
-    background: rgba(215, 226, 210, 0.09);
-    filter: blur(22px);
-    animation-name: cloudDrift, cloudMorph;
-    animation-timing-function: linear, ease-in-out;
-    animation-iteration-count: infinite, infinite;
-    animation-direction: normal, alternate;
-  }
-  @keyframes cloudDrift{
-    0%{ transform: translateX(0); }
-    100%{ transform: translateX(2400px); }
-  }
-  /* Slowly reshapes the blob's rounded corners so it reads as a soft mass
-     drifting and re-forming, rather than a fixed ellipse sliding sideways. */
-  @keyframes cloudMorph{
-    0%{ border-radius: 51% 49% 47% 53% / 53% 47% 55% 45%; }
-    50%{ border-radius: 46% 54% 52% 48% / 48% 52% 45% 55%; }
-    100%{ border-radius: 51% 49% 47% 53% / 53% 47% 55% 45%; }
-  }
-
-  /* A single slim silhouette rather than a filled cartoon body, so it reads
-     like a distant gliding bird. Mostly a slow, steady glide with a brief,
-     gentle flap now and then rather than a constant mechanical flutter. */
-  .anim-bird{
-    position: absolute;
-    width: 18px;
-    height: 9px;
-    opacity: 0;
-    filter: blur(0.3px);
-    animation-name: birdGlide;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-  }
-  .anim-bird svg{ width: 100%; height: 100%; display: block; overflow: visible; }
-  @keyframes birdGlide{
-    0%{ transform: translate(0, 0); opacity: 0; }
-    10%{ opacity: 0.5; }
-    50%{ transform: translate(calc(var(--fly-dx) / 2), var(--fly-dy)); }
-    90%{ opacity: 0.5; }
-    100%{ transform: translate(var(--fly-dx), 0); opacity: 0; }
-  }
-
   .nature-objects{ position: absolute; inset: 0; z-index: 0; pointer-events: none; }
   .nature-object{
     position: absolute;
@@ -1770,8 +1703,53 @@
     padding: 16px 18px;
     font-size: 13.5px;
     color: var(--ink-soft);
+    margin: 0 0 16px;
+  }
+  .friends-login-hint{
+    font-size: 13.5px;
+    color: var(--ink-soft);
     margin: 0;
   }
+  .friend-remove-btn{
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  .friend-remove-btn:hover{ color: #A33B2B; background: var(--line-soft); }
+  .friends-invite-box{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 16px 18px;
+  }
+  .friends-invite-box label{
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .friends-invite-row{
+    display: flex;
+    gap: 8px;
+  }
+  .friends-invite-row input{
+    flex: 1;
+    min-width: 0;
+    padding: 9px 10px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+  }
+  .friends-invite-box .invite-link{ margin-top: 10px; display: inline-block; }
   .invite-link{
     display: inline-block;
     margin-top: 14px;
@@ -2190,10 +2168,9 @@
      and the JS (initLiquidCursor(), applyCursorEffectSetting(), and the
      settingCursorEffect toggle row, also commented out below) were all left
      in place untouched — restoring is just uncommenting this block, the
-     settings-row block, and the three init calls at the bottom of the
-     script (positionHeroAnimStage/initLiquidCursor/applyCursorEffectSetting
-     — only the animation one of those three should stay commented if only
-     the cursor effect is being restored).
+     settings-row block, and confirming the initLiquidCursor()/
+     applyCursorEffectSetting() calls at the bottom of the script are
+     still there (they are, left in place as safe no-ops).
 <div class="liquid-overlay" id="liquidOverlay">
   <div class="liquid-circle" style="width:90px; height:90px;"></div>
   <div class="liquid-circle" style="width:50px; height:50px;"></div>
@@ -2311,31 +2288,6 @@
 
   <div class="hero-text-scrim"></div>
 
-  <!-- Cloud/bird hero animation layer — disabled for now at the user's request
-       (2026-09-25). This exact markup (positions, durations, delays) is the
-       version to bring back if asked for it again. The CSS
-       (.hero-animated-layer / .hero-anim-stage / .anim-cloud / .anim-bird,
-       search "Soft, heavily-blurred") and the JS (positionHeroAnimStage(),
-       called at the bottom of the script) were left in place untouched —
-       restoring is just uncommenting this block and its init call.
-  <div class="hero-animated-layer" id="heroAnimatedLayer">
-    <div class="hero-anim-stage" id="heroAnimStage">
-      <!-- Drifting, soft-edged clouds -->
-      <div class="anim-cloud" style="left:-300px; top:200px; width:220px; height:58px; animation-duration:500s, 24s; animation-delay:0s, 0s;"></div>
-      <div class="anim-cloud" style="left:-300px; top:240px; width:190px; height:50px; animation-duration:500s, 30s; animation-delay:-125s, -8s;"></div>
-      <div class="anim-cloud" style="left:-300px; top:195px; width:210px; height:54px; animation-duration:500s, 27s; animation-delay:-250s, -14s;"></div>
-      <div class="anim-cloud" style="left:-300px; top:235px; width:170px; height:46px; animation-duration:500s, 33s; animation-delay:-375s, -5s;"></div>
-
-      <!-- Gliding birds -->
-      <div class="anim-bird" style="left:180px; top:235px; --fly-dx:560px; --fly-dy:-14px; animation-duration:52s; animation-delay:0s;">
-        <svg viewBox="0 0 40 20"><path d="M2 12 Q11 3 20 12 Q29 3 38 12" fill="none" stroke="#132b21" stroke-width="2.4" stroke-linecap="round"/></svg>
-      </div>
-      <div class="anim-bird" style="left:1330px; top:260px; --fly-dx:420px; --fly-dy:18px; animation-duration:60s; animation-delay:14s;">
-        <svg viewBox="0 0 40 20"><path d="M2 12 Q11 3 20 12 Q29 3 38 12" fill="none" stroke="#132b21" stroke-width="2.4" stroke-linecap="round"/></svg>
-      </div>
-    </div>
-  </div>
-  -->
 
 
   <div class="cursor-glow" id="cursorGlow"></div>
@@ -2633,11 +2585,19 @@
     </div>
 
     <h3 class="section-title">Friends</h3>
-    <p class="section-sub">Inviting a friend sends them an email to join &mdash; it doesn't yet connect your accounts or add them here automatically, since following/friends isn't built yet.</p>
+    <p class="section-sub">Share your invite link &mdash; anyone who opens it and signs in gets added to your leaderboard automatically, both ways.</p>
     <div class="friends-panel">
       <table class="friends-table" id="friendsTable"></table>
-      <p class="friends-empty" id="friendsEmpty" style="display:none;">It's just you for now &mdash; invite a friend below to start comparing hours together.</p>
-      <a class="invite-link" id="inviteLink" href="#">Invite a friend</a>
+      <p class="friends-empty" id="friendsEmpty" style="display:none;">It's just you for now &mdash; share your invite link below to start comparing hours together.</p>
+      <p class="friends-login-hint" id="friendsLoginHint" style="display:none;">Log in to invite friends and build your leaderboard.</p>
+      <div class="friends-invite-box" id="friendsInviteBox" style="display:none;">
+        <label for="friendsInviteInput">Your invite link</label>
+        <div class="friends-invite-row">
+          <input type="text" id="friendsInviteInput" readonly onclick="this.select()">
+          <button type="button" class="copy-btn" onclick="copyInviteLink()">Copy link</button>
+        </div>
+        <a class="invite-link" id="inviteLink" href="#">or invite by email instead</a>
+      </div>
     </div>
   </div>
 </section>
@@ -2824,12 +2784,6 @@
     { id: "tree-planter", icon: "🌲", name: "Tree Planter", desc: "Be the RSVP that crosses a community tree milestone", check: s => s.helpedPlantTree }
   ];
 
-  // No real friends/following system exists yet (see the note in the
-  // Friends section) — "Invite a friend" is just a mailto: link for now.
-  // This starts empty rather than sample names so the leaderboard doesn't
-  // look like it's tracking real people it isn't.
-  const FRIENDS = [];
-
   const ARTICLES = [
     { tag: "Coming soon", title: "Why we started The Common Ground Project", teaser: "The story behind aggregating a fragmented volunteer ecosystem into one search." },
     { tag: "Coming soon", title: "Meet the first 20 partner organizations", teaser: "Profiles of the groups whose events populate the very first data pool." },
@@ -2969,7 +2923,8 @@
     globalTreesPlanted: 0,   // fetched from the server — total real trees funded, site-wide
     helpedPlantTree: false,  // true if THIS visitor's own RSVP happened to be the one that crossed a milestone
     searchLat: null,         // geocoded from whatever zip/location the visitor searched
-    searchLng: null
+    searchLng: null,
+    friends: []              // [{id, name, hours, events}] — loaded from the account, see loadFriends()
   };
 
   function totalHours(s){
@@ -3781,28 +3736,203 @@ Respond with ONLY minified JSON in exactly this shape and nothing else, no markd
       `;
     }).join('');
 
+    renderFriendsSection();
+    paintInviteLink();
+  }
+
+  // ---------- Friends ----------
+  // A real friends system, backed by three small serverless functions and
+  // a Netlify Blobs store (see netlify/functions/*-friend*.js): each
+  // person has a stable invite link; whoever opens it and signs in gets
+  // added to both people's friends lists automatically. This function only
+  // paints from the cached state.friends — the actual fetch is
+  // loadFriends(), called separately (login/init/after accepting/removing)
+  // so a plain render() doesn't refetch over the network every time.
+  function renderFriendsSection(){
+    const user = (typeof netlifyIdentity !== 'undefined') ? netlifyIdentity.currentUser() : null;
     const table = document.getElementById('friendsTable');
     const emptyMsg = document.getElementById('friendsEmpty');
-    if (FRIENDS.length === 0){
-      table.innerHTML = '';
+    const inviteBox = document.getElementById('friendsInviteBox');
+    const loginHint = document.getElementById('friendsLoginHint');
+    if (!table || !emptyMsg || !inviteBox || !loginHint) return;
+
+    if (!user){
       table.style.display = 'none';
+      table.innerHTML = '';
+      emptyMsg.style.display = 'none';
+      inviteBox.style.display = 'none';
+      loginHint.style.display = 'block';
+      return;
+    }
+    loginHint.style.display = 'none';
+    inviteBox.style.display = 'block';
+
+    const hours = totalHours(state);
+    const friends = state.friends || [];
+    if (friends.length === 0){
+      table.style.display = 'none';
+      table.innerHTML = '';
       emptyMsg.style.display = 'block';
     } else {
-      const combined = [...FRIENDS, { name: "You", hours, events: state.rsvpEvents.size, you: true }]
+      const combined = [...friends, { id: null, name: "You", hours, events: state.rsvpEvents.size, you: true }]
         .sort((a, b) => b.hours - a.hours);
       table.style.display = '';
       emptyMsg.style.display = 'none';
       table.innerHTML = `
-        <tr><th>Rank</th><th>Name</th><th>Hours</th><th>Events</th></tr>
+        <tr><th>Rank</th><th>Name</th><th>Hours</th><th>Events</th><th></th></tr>
         ${combined.map((f, i) => `
           <tr class="${f.you ? 'you' : ''}">
             <td>${i + 1}</td><td>${f.name}</td><td>${f.hours}</td><td>${f.events}</td>
+            <td>${f.you ? '' : `<button type="button" class="friend-remove-btn" onclick="removeFriend('${f.id}')" aria-label="Remove ${f.name}">&times;</button>`}</td>
           </tr>
         `).join('')}
       `;
     }
-    document.getElementById('inviteLink').href =
-      `mailto:?subject=${encodeURIComponent("Join me on The Commons")}&body=${encodeURIComponent("I've been finding environmental volunteer events near me on The Commons — thought you'd like it too.")}`;
+  }
+
+  // Fetches the actual friends list + each friend's live hours/events, then
+  // repaints. Each friend's stats come from the same public get-rsvps
+  // endpoint the site already uses for your own — friends never needed
+  // their own copy of that data, just the connection itself.
+  async function loadFriends(){
+    const user = (typeof netlifyIdentity !== 'undefined') ? netlifyIdentity.currentUser() : null;
+    if (!user){ state.friends = []; renderFriendsSection(); return; }
+    try {
+      const jwt = await user.jwt();
+      const res = await fetch('/.netlify/functions/get-friends', {
+        headers: { 'Authorization': `Bearer ${jwt}` }
+      });
+      const data = await res.json();
+      const list = Array.isArray(data.friends) ? data.friends : [];
+      state.friends = await Promise.all(list.map(async (f) => {
+        try {
+          const r = await fetch(`/.netlify/functions/get-rsvps?userId=${encodeURIComponent(f.id)}`);
+          const rd = await r.json();
+          const records = Array.isArray(rd.records) ? rd.records : [];
+          return {
+            id: f.id,
+            name: f.name,
+            hours: records.reduce((sum, rec) => sum + (rec.hours || 0), 0),
+            events: new Set(records.map(rec => rec.title)).size
+          };
+        } catch (err) {
+          return { id: f.id, name: f.name, hours: 0, events: 0 };
+        }
+      }));
+    } catch (err) {
+      state.friends = [];
+    }
+    renderFriendsSection();
+  }
+
+  async function removeFriend(friendId){
+    const user = (typeof netlifyIdentity !== 'undefined') ? netlifyIdentity.currentUser() : null;
+    if (!user || !friendId) return;
+    try {
+      const jwt = await user.jwt();
+      await fetch('/.netlify/functions/remove-friend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
+        body: JSON.stringify({ friendId })
+      });
+      showToast('Friend removed.');
+      loadFriends();
+    } catch (err) {
+      showToast("Couldn't remove that friend — try again.");
+    }
+  }
+
+  // Invite links are stable per person: create-friend-invite hands back the
+  // same token every time it's already been generated, rather than minting
+  // a new one on every visit to the Friends tab.
+  let currentInviteLink = null;
+
+  async function refreshInviteUI(force){
+    const user = (typeof netlifyIdentity !== 'undefined') ? netlifyIdentity.currentUser() : null;
+    if (!user){ currentInviteLink = null; paintInviteLink(); return; }
+    if (currentInviteLink && !force){ paintInviteLink(); return; }
+    try {
+      const jwt = await user.jwt();
+      const res = await fetch('/.netlify/functions/create-friend-invite', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${jwt}` }
+      });
+      const data = await res.json();
+      currentInviteLink = data.token
+        ? `${location.origin}${location.pathname}?invite=${data.token}`
+        : null;
+    } catch (err) {
+      currentInviteLink = null;
+    }
+    paintInviteLink();
+  }
+
+  function paintInviteLink(){
+    const input = document.getElementById('friendsInviteInput');
+    const mailto = document.getElementById('inviteLink');
+    if (input) input.value = currentInviteLink || 'Log in to get your invite link';
+    if (mailto){
+      const bodyText = currentInviteLink
+        ? `I've been finding environmental volunteer events near me on The Commons — thought you'd like it too. Join with my invite link and we'll be connected automatically: ${currentInviteLink}`
+        : "I've been finding environmental volunteer events near me on The Commons — thought you'd like it too.";
+      mailto.href = `mailto:?subject=${encodeURIComponent("Join me on The Commons")}&body=${encodeURIComponent(bodyText)}`;
+    }
+  }
+
+  function copyInviteLink(){
+    const input = document.getElementById('friendsInviteInput');
+    if (!input || !currentInviteLink) return;
+    input.select();
+    input.setSelectionRange(0, 99999);
+    const done = () => showToast('Invite link copied.');
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(currentInviteLink).then(done).catch(() => {
+        document.execCommand('copy');
+        done();
+      });
+    } else {
+      document.execCommand('copy');
+      done();
+    }
+  }
+
+  // Captures ?invite=<token> from the URL (works whether or not the
+  // visitor is logged in yet) and stashes it for checkPendingInvite() to
+  // redeem once they are — then strips it from the address bar so it
+  // doesn't linger or get re-processed on a later reload/share.
+  function capturePendingInviteFromUrl(){
+    const params = new URLSearchParams(location.search);
+    const token = params.get('invite');
+    if (!token) return;
+    try { sessionStorage.setItem('pendingInviteToken', token); } catch (e) {}
+    params.delete('invite');
+    const rest = params.toString();
+    history.replaceState({}, '', location.pathname + (rest ? '?' + rest : '') + location.hash);
+  }
+
+  async function checkPendingInvite(user){
+    if (!user) return;
+    let token = null;
+    try { token = sessionStorage.getItem('pendingInviteToken'); } catch (e) {}
+    if (!token) return;
+    try { sessionStorage.removeItem('pendingInviteToken'); } catch (e) {}
+    try {
+      const jwt = await user.jwt();
+      const res = await fetch('/.netlify/functions/accept-friend-invite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
+        body: JSON.stringify({ token })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.friendName){
+        showToast(`🌿 You're now friends with ${data.friendName}!`);
+        loadFriends();
+      } else if (data.error){
+        showToast(data.error);
+      }
+    } catch (err) {
+      // Best-effort — nothing to recover here beyond leaving the toast unsent.
+    }
   }
 
   function downloadVolunteerPDF(){
@@ -4164,32 +4294,6 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
   // applyVisibility) — the header is a hard floor it can't cross into, so it
   // never overlaps the nav even though the real cursor moves freely there.
   //
-  // Keeps the animated-detail stage (clouds, birds) pixel-aligned
-  // with the background image's own content, using the exact same math the
-  // browser uses for object-fit:cover. Without this, the overlay would only
-  // line up at one specific viewport size.
-  function positionHeroAnimStage(){
-    const bg = document.querySelector('.hero-landscape-bg');
-    const img = document.querySelector('.hero-landscape-img');
-    const stage = document.getElementById('heroAnimStage');
-    if (!bg || !img || !stage) return;
-    const imgNaturalW = 1896, imgNaturalH = 1150;
-    // Reads the *live* computed object-position rather than a hardcoded value,
-    // so this stays correct automatically even though object-position now
-    // changes per breakpoint (see the .hero-landscape-img media queries).
-    const computedPos = getComputedStyle(img).objectPosition.split(' ');
-    const objPosX = (parseFloat(computedPos[0]) || 0) / 100;
-    const objPosY = (parseFloat(computedPos[1]) || 0) / 100;
-    const cw = bg.clientWidth, ch = bg.clientHeight;
-    if (!cw || !ch) return;
-    const s = Math.max(cw / imgNaturalW, ch / imgNaturalH);
-    const scaledW = imgNaturalW * s, scaledH = imgNaturalH * s;
-    const offsetX = (scaledW - cw) * objPosX;
-    const offsetY = (scaledH - ch) * objPosY;
-    stage.style.transform = `translate(${-offsetX}px, ${-offsetY}px) scale(${s})`;
-  }
-  window.addEventListener('resize', positionHeroAnimStage);
-
   // Color and motion are both animated per-circle (not just static), so the
   // whole chain shifts hue/brightness and drifts on its own independent
   // rhythm rather than moving/coloring in lockstep — that variation is what
@@ -4739,6 +4843,12 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     sessionStorage.setItem('birthdayDismissed', 'true');
   }
 
+  // Grabs any ?invite=<token> off the URL immediately — this doesn't
+  // depend on Identity being loaded at all, so it runs unconditionally
+  // rather than inside the guarded block below, in case that widget script
+  // ever fails to load (see the comment on that guard).
+  capturePendingInviteFromUrl();
+
   // Everything netlifyIdentity.* below is wrapped in this guard because it
   // used to be called unconditionally: if the Identity widget script ever
   // fails to load (a network hiccup, an ad-blocker or privacy extension —
@@ -4757,6 +4867,9 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
       await loadAvatar(user.id);
       await loadRsvpsForUser(user.id);
       loadSettingsFromAccount(user);
+      await checkPendingInvite(user);
+      loadFriends();
+      refreshInviteUI();
     } else {
       // Not signed in. localStorage's "themePreference" is only ever meant
       // to hold a signed-in account's saved choice — if it's set here
@@ -4774,22 +4887,74 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     updateProfileBar();
     if (user) checkBirthday();
   });
-  netlifyIdentity.on('login', async (user) => {
+  // 2026-09-25: every earlier fix here lived INSIDE the 'login' callback —
+  // which assumes 'login' actually fires. It was reported as still frozen
+  // after Google login even with those fixes in place, which points at a
+  // different, more fundamental problem: modern browsers increasingly
+  // default to a strict Cross-Origin-Opener-Policy that severs
+  // window.opener between an OAuth popup and the tab that opened it. That's
+  // exactly the channel a Google/GitHub login popup uses to tell the main
+  // page "I'm done, here's the session" — if the browser blocks it, the
+  // popup can complete Google's login just fine, but the widget in THIS tab
+  // never learns about it, so 'login' never fires, and every fix living
+  // inside that handler (this one included, until now) never gets a chance
+  // to run. That would explain "nothing I fixed worked" far better than any
+  // bug in the fixes themselves.
+  //
+  // Rather than trust 'login' to fire, this now also runs its own watchdog
+  // (started below, in 'open') that polls netlifyIdentity.currentUser()
+  // directly while our blocking backdrop is up — currentUser() reflects the
+  // widget's actual stored session, which the popup can still leave behind
+  // via localStorage even when the postMessage/opener channel is blocked.
+  // The instant it sees a user, it runs this same cleanup itself, whether
+  // or not 'login' ever fires. finishIdentityLogin() below is shared by
+  // both paths and guarded so it only ever runs once per login.
+  let identityLoginHandled = false;
+  let identityWatchdogInterval = null;
+
+  async function finishIdentityLogin(user){
+    if (identityLoginHandled) return;
+    identityLoginHandled = true;
+    if (identityWatchdogInterval){ clearInterval(identityWatchdogInterval); identityWatchdogInterval = null; }
     await loadAvatar(user.id);
     await loadRsvpsForUser(user.id);
     loadSettingsFromAccount(user);
+    await checkPendingInvite(user);
+    loadFriends();
+    refreshInviteUI();
     updateAuthUI(user);
-    netlifyIdentity.close();
-    // A Google/GitHub-style login goes through its own popup window before
-    // firing 'login' — that popup can resolve without the widget cleanly
-    // firing its own 'close' first (or before netlifyIdentity.close() above
-    // has taken effect), which previously left our full-page click-blocking
-    // backdrop stuck visible, making the whole site unresponsive until a
-    // reload. Force everything closed directly here as a backstop,
-    // regardless of what the widget's own event did or didn't do.
+    try { netlifyIdentity.close(); } catch (e) {}
+    // Force everything closed directly, regardless of what the widget's own
+    // events did or didn't do — this no longer waits on 'close' either.
     identityBackdrop.style.display = 'none';
     hideIdentityDragHandle();
     if (identityPinInterval) clearInterval(identityPinInterval);
+    // The widget may also leave a separate overlay of its own (a common
+    // pattern for OAuth-popup modal libraries) stuck visible. We don't know
+    // its selector, so this sweeps every direct child of <body> for
+    // anything that LOOKS like a full-screen blocking layer (fixed
+    // position, covering almost the whole viewport, stacked above ordinary
+    // page content) and force-hides it, skipping elements we know are ours
+    // or are the widget's own root.
+    (function nukeStrayFullscreenOverlays(){
+      const vw = window.innerWidth, vh = window.innerHeight;
+      Array.from(document.body.children).forEach((node) => {
+        if (node === identityBackdrop) return;
+        if (node === identityDragHandle) return;
+        if (node.id === 'toast') return;
+        if (node.id === 'netlify-identity-widget') return;
+        if (typeof node.className === 'string' && node.className.indexOf('netlify-identity-widget') !== -1) return;
+        let cs;
+        try { cs = getComputedStyle(node); } catch (e) { return; }
+        if (cs.position !== 'fixed') return;
+        const r = node.getBoundingClientRect();
+        const z = parseInt(cs.zIndex, 10) || 0;
+        if (r.width >= vw * 0.9 && r.height >= vh * 0.9 && z > 1000){
+          node.style.setProperty('display', 'none', 'important');
+          node.style.setProperty('pointer-events', 'none', 'important');
+        }
+      });
+    })();
     if (!user.user_metadata || !user.user_metadata.full_name){
       openProfileModal();
     }
@@ -4797,11 +4962,15 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     renderProfile();
     render();
     updateProfileBar();
-  });
+  }
+
+  netlifyIdentity.on('login', (user) => { finishIdentityLogin(user); });
   netlifyIdentity.on('logout', () => {
     currentAvatarUrl = null;
     state.rsvpRecords = [];
     state.rsvpEvents = new Set();
+    state.friends = [];
+    currentInviteLink = null;
     // Don't let the account's dark-mode choice leak into guest browsing
     // on this same browser — back to the light default until they sign
     // back in (or flip the switch again just for this session).
@@ -4836,6 +5005,37 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
   let identityWidgetEl = null;
   const MAX_Z = '2147483647'; // the largest valid CSS z-index — nothing can out-stack this
 
+  // 2026-09-25: dragging the popup, the login freeze, and the branding swap
+  // were all reported as still broken live despite fixes below that passed
+  // every synthetic test here — the real widget (Preact-based, confirmed by
+  // fetching its bundled JS directly: no iframe) most likely re-renders its
+  // own container's inline style on internal state changes (a keystroke, a
+  // view switch) and resets position/top/left/transform to its own centering
+  // in the process, silently undoing a plain `el.style.left = ...` write a
+  // moment later. A same-tier fix (more JS writes) can't outlast that. A
+  // stylesheet rule marked !important can: it beats a plain (non-!important)
+  // inline style regardless of how many times that inline style gets
+  // rewritten, as long as the winning declaration's own values live
+  // somewhere the widget's re-render won't touch — CSS custom properties on
+  // the element are exactly that, since Preact's per-property style diffing
+  // only resets properties it itself manages (position/top/left/etc.), never
+  // custom properties it never set. So this rule is installed once, up
+  // front, and dragging (below) only ever writes to these custom properties
+  // — never to el.style.left/top/transform directly.
+  const identityPosStyle = document.createElement('style');
+  identityPosStyle.textContent = `
+    #netlify-identity-widget, .netlify-identity-widget {
+      position: fixed !important;
+      top: var(--commons-id-top, 50%) !important;
+      left: var(--commons-id-left, 50%) !important;
+      right: auto !important;
+      bottom: auto !important;
+      margin: 0 !important;
+      transform: var(--commons-id-transform, translate(-50%, -50%)) !important;
+    }
+  `;
+  document.head.appendChild(identityPosStyle);
+
   function pinIdentityWidgetOnTop(){
     const el = document.getElementById('netlify-identity-widget')
       || document.querySelector('.netlify-identity-widget');
@@ -4864,7 +5064,10 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
         el.style.zIndex = MAX_Z;
       }
       relabelNetlifyBranding(el);
-    }).observe(el, { attributes: true, childList: true, subtree: true, attributeFilter: ['style', 'class'] });
+      // characterData catches a re-render that only rewrites the badge's
+      // text node's content (not its attributes and not a whole new node) —
+      // the attributeFilter below alone would silently miss exactly that.
+    }).observe(el, { attributes: true, childList: true, subtree: true, characterData: true, attributeFilter: ['style', 'class'] });
   }
 
   // Lets you drag the popup around the screen. Earlier this listened for
@@ -4920,19 +5123,19 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
       startLeft = r.left; startTop = r.top;
       // Swap whatever centering the widget used (typically left/top:50%
       // plus a translate transform) for an explicit pixel position, so it
-      // can be dragged freely instead of snapping back to center.
-      el.style.transform = 'none';
-      el.style.left = startLeft + 'px';
-      el.style.top = startTop + 'px';
-      el.style.right = 'auto';
-      el.style.bottom = 'auto';
-      el.style.margin = '0';
+      // can be dragged freely instead of snapping back to center. Written
+      // to the custom properties the !important rule above reads — not to
+      // el.style.left/top/transform directly — so a widget re-render can't
+      // silently revert this (see the note above pinIdentityWidgetOnTop).
+      el.style.setProperty('--commons-id-transform', 'none');
+      el.style.setProperty('--commons-id-left', startLeft + 'px');
+      el.style.setProperty('--commons-id-top', startTop + 'px');
       handle.style.cursor = 'grabbing';
     };
     const moveDrag = (x, y) => {
       if (!dragging) return;
-      el.style.left = (startLeft + (x - startX)) + 'px';
-      el.style.top = (startTop + (y - startY)) + 'px';
+      el.style.setProperty('--commons-id-left', (startLeft + (x - startX)) + 'px');
+      el.style.setProperty('--commons-id-top', (startTop + (y - startY)) + 'px');
       syncIdentityDragHandle(el);
     };
     const endDrag = () => { dragging = false; handle.style.cursor = 'grab'; };
@@ -4958,6 +5161,16 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
   // (not a full sentence/error) if the href-based match comes up empty.
   // Relabeled instead of just hidden, per request: plain, slightly
   // transparent white text reading "The Commons" in the same spot.
+  //
+  // 2026-09-25: this used to set a one-shot "already handled" flag on the
+  // badge node and skip it forever after — which meant the very first time
+  // the widget's own re-render put its real "Netlify" text/link back (a
+  // characterData-only text change, which the old observer options below
+  // didn't even listen for), nothing would re-apply the swap, and the
+  // widget's own branding would appear to "win" for good. Self-healing only
+  // works if it can re-heal the same node more than once, so this now
+  // re-enforces the swap every time it's called, unconditionally, rather
+  // than gating on a flag.
   function relabelNetlifyBranding(el){
     let badge = el.querySelector('a[href*="netlify.com"]');
     if (!badge){
@@ -4968,11 +5181,10 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
         node.textContent.trim().length < 40
       );
     }
-    if (badge && !badge.dataset.brandingHandled){
-      badge.dataset.brandingHandled = 'true';
-      badge.textContent = 'The Commons';
-      badge.removeAttribute('href');
-      badge.removeAttribute('target');
+    if (badge){
+      if (badge.textContent !== 'The Commons') badge.textContent = 'The Commons';
+      if (badge.hasAttribute('href')) badge.removeAttribute('href');
+      if (badge.hasAttribute('target')) badge.removeAttribute('target');
       badge.style.color = 'rgba(255,255,255,0.55)';
       badge.style.textDecoration = 'none';
       badge.style.cursor = 'default';
@@ -5007,6 +5219,24 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
   identityBackdrop.style.cssText = `position:fixed; inset:0; background:rgba(10,14,10,0.55); z-index:2147483646; display:none;`;
   document.body.appendChild(identityBackdrop);
 
+  // Manual escape hatches — these don't depend on any theory about WHY a
+  // login can get stuck being right. Clicking the dimmed area outside the
+  // popup, or pressing Escape, always forces everything closed immediately,
+  // so a stuck state is never worse than one extra click instead of a
+  // reload. (A click that lands on the widget's own box never reaches this,
+  // since the widget sits on top and handles its own clicks first.)
+  function forceCloseIdentityUI(){
+    try { netlifyIdentity.close(); } catch (e) {}
+    identityBackdrop.style.display = 'none';
+    hideIdentityDragHandle();
+    if (identityPinInterval) clearInterval(identityPinInterval);
+    if (identityWatchdogInterval){ clearInterval(identityWatchdogInterval); identityWatchdogInterval = null; }
+  }
+  identityBackdrop.addEventListener('click', forceCloseIdentityUI);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && identityBackdrop.style.display !== 'none') forceCloseIdentityUI();
+  });
+
   let identityPinInterval = null;
 
   netlifyIdentity.on('open', () => {
@@ -5026,11 +5256,24 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
       ticks++;
       if (ticks > 20) clearInterval(identityPinInterval); // ~2s at 100ms
     }, 100);
+    // Start the login watchdog described above finishIdentityLogin(): while
+    // this popup is open, poll the widget's own currentUser() directly
+    // rather than waiting on a 'login' event that a strict
+    // Cross-Origin-Opener-Policy may prevent from ever firing after a
+    // Google/GitHub popup completes. The moment a session shows up, finish
+    // the login ourselves.
+    identityLoginHandled = false;
+    if (identityWatchdogInterval) clearInterval(identityWatchdogInterval);
+    identityWatchdogInterval = setInterval(() => {
+      const u = netlifyIdentity.currentUser();
+      if (u && !identityLoginHandled) finishIdentityLogin(u);
+    }, 400);
   });
   netlifyIdentity.on('close', () => {
     identityBackdrop.style.display = 'none';
     hideIdentityDragHandle();
     if (identityPinInterval) clearInterval(identityPinInterval);
+    if (identityWatchdogInterval){ clearInterval(identityWatchdogInterval); identityWatchdogInterval = null; }
   });
 
   netlifyIdentity.init();
@@ -5041,12 +5284,14 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
   startTrySuggestionRotation();
   scrollPastHeaderIfHome();
   loadEvents();
-  // positionHeroAnimStage() / initLiquidCursor() / applyCursorEffectSetting():
-  // left in the call list on purpose. Both features' markup is commented out
-  // above (search "disabled for now"), so each of these three now just finds
-  // no matching elements and returns immediately — safe no-ops, not bugs.
-  // Restoring the markup makes them do real work again with zero JS changes.
-  positionHeroAnimStage();
+  // initLiquidCursor() / applyCursorEffectSetting(): left in the call list on
+  // purpose. That feature's markup is commented out above (search "disabled
+  // for now"), so these just find no matching elements and return
+  // immediately — safe no-ops, not bugs. Restoring the markup makes them do
+  // real work again with zero JS changes. (The cloud/bird animation this
+  // comment used to also cover was fully removed on 2026-09-25, not just
+  // disabled — see the project's backup doc for its old markup if it's ever
+  // wanted back.)
   initLiquidCursor();
   applyCursorEffectSetting();
   applyBirthdayBannerSetting();
