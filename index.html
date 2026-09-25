@@ -1763,6 +1763,15 @@
     border-bottom: 1px solid var(--line-soft);
   }
   .friends-table tr.you td{ font-weight: 700; background: var(--moss-tint); }
+  .friends-empty{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 16px 18px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin: 0;
+  }
   .invite-link{
     display: inline-block;
     margin-top: 14px;
@@ -2624,9 +2633,10 @@
     </div>
 
     <h3 class="section-title">Friends</h3>
-    <p class="section-sub">Sample data for now &mdash; real friends and following require accounts, which aren't built yet.</p>
+    <p class="section-sub">Inviting a friend sends them an email to join &mdash; it doesn't yet connect your accounts or add them here automatically, since following/friends isn't built yet.</p>
     <div class="friends-panel">
       <table class="friends-table" id="friendsTable"></table>
+      <p class="friends-empty" id="friendsEmpty" style="display:none;">It's just you for now &mdash; invite a friend below to start comparing hours together.</p>
       <a class="invite-link" id="inviteLink" href="#">Invite a friend</a>
     </div>
   </div>
@@ -2814,12 +2824,11 @@
     { id: "tree-planter", icon: "🌲", name: "Tree Planter", desc: "Be the RSVP that crosses a community tree milestone", check: s => s.helpedPlantTree }
   ];
 
-  const FRIENDS = [
-    { name: "Maya R.", hours: 34, events: 9 },
-    { name: "Theo K.", hours: 12, events: 4 },
-    { name: "Priya S.", hours: 58, events: 14 },
-    { name: "Sam O.", hours: 6, events: 2 }
-  ];
+  // No real friends/following system exists yet (see the note in the
+  // Friends section) — "Invite a friend" is just a mailto: link for now.
+  // This starts empty rather than sample names so the leaderboard doesn't
+  // look like it's tracking real people it isn't.
+  const FRIENDS = [];
 
   const ARTICLES = [
     { tag: "Coming soon", title: "Why we started The Common Ground Project", teaser: "The story behind aggregating a fragmented volunteer ecosystem into one search." },
@@ -3772,17 +3781,26 @@ Respond with ONLY minified JSON in exactly this shape and nothing else, no markd
       `;
     }).join('');
 
-    const combined = [...FRIENDS, { name: "You", hours, events: state.rsvpEvents.size, you: true }]
-      .sort((a, b) => b.hours - a.hours);
     const table = document.getElementById('friendsTable');
-    table.innerHTML = `
-      <tr><th>Rank</th><th>Name</th><th>Hours</th><th>Events</th></tr>
-      ${combined.map((f, i) => `
-        <tr class="${f.you ? 'you' : ''}">
-          <td>${i + 1}</td><td>${f.name}</td><td>${f.hours}</td><td>${f.events}</td>
-        </tr>
-      `).join('')}
-    `;
+    const emptyMsg = document.getElementById('friendsEmpty');
+    if (FRIENDS.length === 0){
+      table.innerHTML = '';
+      table.style.display = 'none';
+      emptyMsg.style.display = 'block';
+    } else {
+      const combined = [...FRIENDS, { name: "You", hours, events: state.rsvpEvents.size, you: true }]
+        .sort((a, b) => b.hours - a.hours);
+      table.style.display = '';
+      emptyMsg.style.display = 'none';
+      table.innerHTML = `
+        <tr><th>Rank</th><th>Name</th><th>Hours</th><th>Events</th></tr>
+        ${combined.map((f, i) => `
+          <tr class="${f.you ? 'you' : ''}">
+            <td>${i + 1}</td><td>${f.name}</td><td>${f.hours}</td><td>${f.events}</td>
+          </tr>
+        `).join('')}
+      `;
+    }
     document.getElementById('inviteLink').href =
       `mailto:?subject=${encodeURIComponent("Join me on The Commons")}&body=${encodeURIComponent("I've been finding environmental volunteer events near me on The Commons — thought you'd like it too.")}`;
   }
@@ -4762,6 +4780,16 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     loadSettingsFromAccount(user);
     updateAuthUI(user);
     netlifyIdentity.close();
+    // A Google/GitHub-style login goes through its own popup window before
+    // firing 'login' — that popup can resolve without the widget cleanly
+    // firing its own 'close' first (or before netlifyIdentity.close() above
+    // has taken effect), which previously left our full-page click-blocking
+    // backdrop stuck visible, making the whole site unresponsive until a
+    // reload. Force everything closed directly here as a backstop,
+    // regardless of what the widget's own event did or didn't do.
+    identityBackdrop.style.display = 'none';
+    hideIdentityDragHandle();
+    if (identityPinInterval) clearInterval(identityPinInterval);
     if (!user.user_metadata || !user.user_metadata.full_name){
       openProfileModal();
     }
@@ -4816,7 +4844,7 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
       el.style.zIndex = MAX_Z;
       identityWidgetEl = el;
       watchIdentityWidgetSelfHealing(el);
-      makeIdentityWidgetDraggable(el);
+      ensureIdentityDragHandle(el);
       relabelNetlifyBranding(el);
     }
     return el;
@@ -4839,58 +4867,107 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     }).observe(el, { attributes: true, childList: true, subtree: true, attributeFilter: ['style', 'class'] });
   }
 
-  // Lets you click-and-drag the popup anywhere on its own background (not on
-  // an actual input/button/link inside it, so typing and clicking still work
-  // normally) to move it around the screen. Only becomes an explicit
-  // left/top-positioned drag once the mouse has actually moved a few pixels
-  // past the click point — a plain click that never moves is left alone, so
-  // this can't interfere with clicking "Log In" or focusing a field.
-  function makeIdentityWidgetDraggable(el){
-    if (el.dataset.dragAttached) return;
-    el.dataset.dragAttached = 'true';
-    const DRAG_THRESHOLD = 4;
-    let dragging = false, moved = false;
-    let startX = 0, startY = 0, startLeft = 0, startTop = 0;
+  // Lets you drag the popup around the screen. Earlier this listened for
+  // mousedown directly on the widget's own box, skipping anything that
+  // looked like an input/button/link — but the widget's real markup left
+  // little to no plain background to grab (most of the box is form
+  // controls or text), so in practice there was rarely anywhere a mousedown
+  // could land and start a drag. Rather than keep guessing at the widget's
+  // internal layout, this now adds a small handle bar of our own, floating
+  // just above the widget box, that's guaranteed to always be there and
+  // never covered by the widget's own content.
+  let identityDragHandle = null;
 
-    el.addEventListener('mousedown', (e) => {
-      if (e.target.closest('input, button, a, textarea, select, label')) return;
-      dragging = true;
-      moved = false;
-      const r = el.getBoundingClientRect();
-      startX = e.clientX; startY = e.clientY;
-      startLeft = r.left; startTop = r.top;
-    });
-    window.addEventListener('mousemove', (e) => {
-      if (!dragging) return;
-      const dx = e.clientX - startX, dy = e.clientY - startY;
-      if (!moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
-      if (!moved){
-        // First real movement: swap whatever centering the widget used
-        // (typically left/top:50% plus a translate transform) for an
-        // explicit pixel position, so it can be dragged freely instead of
-        // snapping back to center.
-        el.style.transform = 'none';
-        el.style.left = startLeft + 'px';
-        el.style.top = startTop + 'px';
-        el.style.right = 'auto';
-        el.style.bottom = 'auto';
-        el.style.margin = '0';
-        moved = true;
-      }
-      el.style.left = (startLeft + dx) + 'px';
-      el.style.top = (startTop + dy) + 'px';
-    });
-    window.addEventListener('mouseup', () => { dragging = false; });
+  function ensureIdentityDragHandle(el){
+    if (!identityDragHandle){
+      identityDragHandle = document.createElement('div');
+      identityDragHandle.title = 'Drag to move';
+      identityDragHandle.textContent = '⋯  Drag to move  ⋯';
+      identityDragHandle.style.cssText = [
+        'position:fixed', 'height:24px', 'display:flex', 'align-items:center',
+        'justify-content:center', 'background:#123028', 'color:rgba(255,255,255,0.75)',
+        'font-size:11px', 'font-weight:600', 'letter-spacing:0.04em',
+        'border-radius:6px 6px 0 0', 'cursor:grab', 'user-select:none',
+        'font-family:Inter, sans-serif', 'z-index:' + MAX_Z
+      ].join(';');
+      document.body.appendChild(identityDragHandle);
+      attachIdentityDragHandlers(identityDragHandle, el);
+    }
+    identityDragHandle.style.display = 'flex';
+    syncIdentityDragHandle(el);
+    return identityDragHandle;
   }
 
-  // The widget's own "Netlify" footer/badge is a link to netlify.com —
-  // matched by that href rather than by its text, so this can never
-  // mistake an actual error message (e.g. one that happens to mention
-  // "netlify.com/identity" in a URL) for the badge. Relabeled instead of
-  // just hidden, per request: plain, slightly-transparent white text
-  // reading "The Commons" in the same spot.
+  function syncIdentityDragHandle(el){
+    if (!identityDragHandle || !el) return;
+    const r = el.getBoundingClientRect();
+    identityDragHandle.style.left = r.left + 'px';
+    identityDragHandle.style.width = r.width + 'px';
+    identityDragHandle.style.top = (r.top - 24) + 'px';
+  }
+
+  function hideIdentityDragHandle(){
+    if (identityDragHandle) identityDragHandle.style.display = 'none';
+  }
+
+  function attachIdentityDragHandlers(handle, el){
+    let dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+
+    const startDrag = (x, y) => {
+      dragging = true;
+      const r = el.getBoundingClientRect();
+      startX = x; startY = y;
+      startLeft = r.left; startTop = r.top;
+      // Swap whatever centering the widget used (typically left/top:50%
+      // plus a translate transform) for an explicit pixel position, so it
+      // can be dragged freely instead of snapping back to center.
+      el.style.transform = 'none';
+      el.style.left = startLeft + 'px';
+      el.style.top = startTop + 'px';
+      el.style.right = 'auto';
+      el.style.bottom = 'auto';
+      el.style.margin = '0';
+      handle.style.cursor = 'grabbing';
+    };
+    const moveDrag = (x, y) => {
+      if (!dragging) return;
+      el.style.left = (startLeft + (x - startX)) + 'px';
+      el.style.top = (startTop + (y - startY)) + 'px';
+      syncIdentityDragHandle(el);
+    };
+    const endDrag = () => { dragging = false; handle.style.cursor = 'grab'; };
+
+    handle.addEventListener('mousedown', (e) => { startDrag(e.clientX, e.clientY); e.preventDefault(); });
+    window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
+    window.addEventListener('mouseup', endDrag);
+    handle.addEventListener('touchstart', (e) => {
+      const t = e.touches[0]; startDrag(t.clientX, t.clientY);
+    }, { passive: true });
+    window.addEventListener('touchmove', (e) => {
+      if (!dragging) return;
+      const t = e.touches[0]; moveDrag(t.clientX, t.clientY);
+    }, { passive: true });
+    window.addEventListener('touchend', endDrag);
+  }
+
+  // The widget's own "Netlify" footer/badge is normally a link to
+  // netlify.com, matched by that href rather than by its text so this can
+  // never mistake an actual error message for the badge. Widget versions
+  // have varied in whether that link keeps its href, so this also falls
+  // back to matching a short, standalone bit of text mentioning "Netlify"
+  // (not a full sentence/error) if the href-based match comes up empty.
+  // Relabeled instead of just hidden, per request: plain, slightly
+  // transparent white text reading "The Commons" in the same spot.
   function relabelNetlifyBranding(el){
-    const badge = el.querySelector('a[href*="netlify.com"]');
+    let badge = el.querySelector('a[href*="netlify.com"]');
+    if (!badge){
+      badge = [...el.querySelectorAll('a, span, div, p, small')].find(node =>
+        node.children.length === 0 &&
+        /netlify/i.test(node.textContent || '') &&
+        node.textContent.trim().length > 0 &&
+        node.textContent.trim().length < 40
+      );
+    }
     if (badge && !badge.dataset.brandingHandled){
       badge.dataset.brandingHandled = 'true';
       badge.textContent = 'The Commons';
@@ -4952,6 +5029,7 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
   });
   netlifyIdentity.on('close', () => {
     identityBackdrop.style.display = 'none';
+    hideIdentityDragHandle();
     if (identityPinInterval) clearInterval(identityPinInterval);
   });
 
