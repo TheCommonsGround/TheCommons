@@ -908,6 +908,40 @@
     align-self: center;
   }
 
+  /* A plain-language "what is this" blurb, right below the stats bar — so
+     anyone who lands on the page and scrolls past the hero immediately gets
+     a clear, unambiguous sentence about the campaign and what the site does,
+     rather than only the more atmospheric/poetic hero tagline above. */
+  .campaign-blurb{
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  .campaign-blurb-inner{
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 52px 40px;
+    text-align: center;
+  }
+  .campaign-blurb-inner h2{
+    margin: 0 0 14px;
+    font-size: 26px;
+    color: var(--forest);
+  }
+  .campaign-blurb-inner p{
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .campaign-blurb-inner p strong{
+    color: var(--forest);
+  }
+  @media (max-width: 700px){
+    .campaign-blurb-inner{ padding: 40px 24px; }
+    .campaign-blurb-inner h2{ font-size: 22px; }
+    .campaign-blurb-inner p{ font-size: 15px; }
+  }
+
   .cta-banner{
     background: var(--forest);
     padding: 36px 40px;
@@ -1976,6 +2010,16 @@
     </filter>
   </defs>
 </svg>
+<!-- Water-drop cursor effect — disabled for now at the user's request (2026-09-25).
+     This exact markup is the version to bring back if asked for it again; the
+     CSS (.liquid-overlay / .liquid-circle, search "Water drop cursor effect")
+     and the JS (initLiquidCursor(), applyCursorEffectSetting(), and the
+     settingCursorEffect toggle row, also commented out below) were all left
+     in place untouched — restoring is just uncommenting this block, the
+     settings-row block, and the three init calls at the bottom of the
+     script (positionHeroAnimStage/initLiquidCursor/applyCursorEffectSetting
+     — only the animation one of those three should stay commented if only
+     the cursor effect is being restored).
 <div class="liquid-overlay" id="liquidOverlay">
   <div class="liquid-circle" style="width:90px; height:90px;"></div>
   <div class="liquid-circle" style="width:50px; height:50px;"></div>
@@ -1986,6 +2030,8 @@
   <div class="liquid-circle" style="width:55px; height:55px;"></div>
   <div class="liquid-circle" style="width:32px; height:32px;"></div>
 </div>
+-->
+
 
 <div class="birthday-banner" id="birthdayBanner">
   <button class="birthday-close" onclick="dismissBirthdayBanner()" aria-label="Close">&times;</button>
@@ -2076,6 +2122,13 @@
 
   <div class="hero-text-scrim"></div>
 
+  <!-- Cloud/bird hero animation layer — disabled for now at the user's request
+       (2026-09-25). This exact markup (positions, durations, delays) is the
+       version to bring back if asked for it again. The CSS
+       (.hero-animated-layer / .hero-anim-stage / .anim-cloud / .anim-bird,
+       search "Soft, heavily-blurred") and the JS (positionHeroAnimStage(),
+       called at the bottom of the script) were left in place untouched —
+       restoring is just uncommenting this block and its init call.
   <div class="hero-animated-layer" id="heroAnimatedLayer">
     <div class="hero-anim-stage" id="heroAnimStage">
       <!-- Drifting, soft-edged clouds -->
@@ -2093,6 +2146,8 @@
       </div>
     </div>
   </div>
+  -->
+
 
   <div class="cursor-glow" id="cursorGlow"></div>
   <div class="nature-objects" id="natureObjects">
@@ -2202,6 +2257,21 @@
 <div class="stats-strip tab-panel active" data-tab="browse" data-view="home">
   <div class="stats-strip-inner" id="statsStripInner"></div>
 </div>
+
+<section class="campaign-blurb tab-panel active" data-tab="browse" data-view="home">
+  <div class="campaign-blurb-inner">
+    <h2>What is The Common Ground Project?</h2>
+    <p>
+      The forests of the Northeast have quietly staged one of the great ecological comebacks
+      in the world &mdash; regrown from land that was once nearly 80% cleared. Most of us were
+      never told. <strong>The Common Ground Project</strong> is a grassroots campaign helping
+      people see the wild, extraordinary place they actually live, and find real ways to get
+      outside and help protect it. <strong>The Commons</strong> is where that starts: search
+      for hikes, cleanups, tree plantings, and other local events, RSVP in a click, and build
+      your own record of time spent outside.
+    </p>
+  </div>
+</section>
 
 <div class="tab-panel" data-tab="browse" data-view="migratory" id="browseMigratory">
   <button class="new-search-link" style="display:block; margin:24px 40px 0;" onclick="showHomeView()">&larr; Back</button>
@@ -2325,6 +2395,10 @@
 
     <h3 class="section-title">Settings</h3>
     <div class="settings-panel">
+      <!-- Cursor-effect settings row — hidden while the effect itself is
+           disabled (2026-09-25); see the liquid-overlay comment near the top
+           of <body> for the full restore note. Uncomment together with that
+           block and the three JS bits it references.
       <div class="settings-row">
         <div>
           <strong>Cursor effect on the landing page</strong>
@@ -2335,6 +2409,7 @@
           <span></span>
         </label>
       </div>
+      -->
       <div class="settings-row">
         <div>
           <strong>Birthday banner &amp; confetti</strong>
@@ -3804,7 +3879,12 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     "The place you call home is wilder than you know.",
     "Every backyard has a story. Come discover yours.",
     "Your next adventure is closer than you think.",
-    "Get outside!"
+    "Get outside!",
+    "Search by zip code to find hikes, cleanups, and volunteer days near you.",
+    "Find local outdoor events, RSVP, and start building your own trail record.",
+    "Your local guide to hikes, cleanups, tree plantings, and more.",
+    "One search — every way to get outside and give back near you.",
+    "Find it. RSVP. Go outside. It's that simple."
   ];
 
   function pickHeroTagline(){
@@ -4386,6 +4466,11 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
   startTrySuggestionRotation();
   scrollPastHeaderIfHome();
   loadEvents();
+  // positionHeroAnimStage() / initLiquidCursor() / applyCursorEffectSetting():
+  // left in the call list on purpose. Both features' markup is commented out
+  // above (search "disabled for now"), so each of these three now just finds
+  // no matching elements and returns immediately — safe no-ops, not bugs.
+  // Restoring the markup makes them do real work again with zero JS changes.
   positionHeroAnimStage();
   initLiquidCursor();
   applyCursorEffectSetting();
