@@ -9,11 +9,16 @@
   // there's no flash of the wrong theme on load. Mirrors applyThemeSetting()
   // further down in the main script — kept in sync manually since this one
   // has to run standalone, before any of the rest of the page's JS exists.
+  // Light is always the default: localStorage's "themePreference" is only
+  // ever written when the visitor is signed in (see updateThemeSetting()),
+  // so it's safe to trust here as "this account chose dark." Signed-out
+  // visitors fall back to sessionStorage, which resets to light on the
+  // next fresh visit.
   (function(){
     try {
       var pref = localStorage.getItem('themePreference');
-      var dark = pref === 'dark' || (pref !== 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-      if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+      if (!pref) { try { pref = sessionStorage.getItem('themePreferenceSession'); } catch (e) {} }
+      if (pref === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
     } catch (e) {}
   })();
 </script>
@@ -159,6 +164,7 @@
   }
   .profile-modal-backdrop.active{ display: flex; }
   .profile-modal{
+    position: relative;
     background: var(--paper);
     border-radius: 6px;
     padding: 32px;
@@ -167,6 +173,24 @@
     max-height: 90vh;
     overflow-y: auto;
   }
+  .profile-modal-close{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: none;
+    border-radius: 50%;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .profile-modal-close:hover{ background: var(--line-soft); color: var(--ink); }
   .profile-modal h2{ margin: 0 0 4px; font-size: 19px; }
   .profile-modal-sub{ margin: 0 0 20px; font-size: 13px; color: var(--ink-soft); }
   .profile-modal .field{ margin-bottom: 14px; }
@@ -178,20 +202,80 @@
     margin-bottom: 5px;
   }
   .profile-modal .field input[type="text"],
-  .profile-modal .field input[type="date"]{
+  .profile-modal .field input[type="date"],
+  .profile-modal .field input[type="password"]{
     width: 100%;
     padding: 9px 10px;
+    background: var(--paper);
+    color: var(--ink);
     border: 1px solid var(--line);
     border-radius: 3px;
     font-family: 'Inter', sans-serif;
     font-size: 14px;
+  }
+  .pm-photo-row{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
   }
   .pm-photo-preview{
     width: 64px;
     height: 64px;
     border-radius: 50%;
     object-fit: cover;
-    margin-top: 8px;
+    flex-shrink: 0;
+  }
+  .pm-adjust-btn{
+    background: none;
+    border: none;
+    color: var(--accent-text);
+    font-size: 13px;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
+  .pm-crop-wrap{ margin-top: 8px; }
+  .pm-crop-viewport{
+    width: 220px;
+    height: 220px;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    cursor: grab;
+    touch-action: none;
+  }
+  .pm-crop-viewport:active{ cursor: grabbing; }
+  .pm-crop-viewport img{
+    position: absolute;
+    left: 0;
+    top: 0;
+    max-width: none;
+    user-select: none;
+    pointer-events: none;
+  }
+  .pm-crop-zoom-row{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 220px;
+    margin: 12px auto 0;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .pm-crop-zoom-row input[type="range"]{ flex: 1; }
+  .pm-crop-hint{
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin: 8px 0 0;
+  }
+  .pm-crop-done-btn{
+    display: block;
+    margin: 10px auto 0;
   }
   .profile-modal .primary-btn{
     background: var(--forest);
@@ -313,6 +397,7 @@
     font-size: 22px;
     font-weight: 600;
     letter-spacing: 0.01em;
+    color: var(--ink);
   }
   .wordmark .tag{
     font-size: 13px;
@@ -1304,6 +1389,7 @@
     font-size: 16px;
     margin: 0 0 4px;
     font-weight: 600;
+    color: var(--ink);
   }
   .discovery p{
     font-size: 13.5px;
@@ -1317,6 +1403,7 @@
   }
   .rec-pills button{
     background: var(--card-bg);
+    color: var(--ink);
     border: 1px solid var(--line);
     border-radius: 2px;
     padding: 8px 14px;
@@ -1327,19 +1414,28 @@
   }
   .rec-pills button:hover{ border-color: var(--gold); }
 
-  /* ---------- Roadmap note ---------- */
-  .bottom-search{
+  /* ---------- "Search again" — now up in the filters row, next to
+     Distance, rather than its own section at the bottom of the page ---------- */
+  .filters-search-field{
+    flex: 1 1 260px;
+    min-width: 220px;
+  }
+  .filters-nl-search{
+    max-width: 360px;
+    padding: 4px;
+  }
+  .filters-nl-search input{
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+  .filters-nl-search button{
+    padding: 0 18px;
+  }
+  #bottomAiStatus{
     max-width: 1100px;
-    margin: 0 auto;
-    padding: 24px 40px;
-    border-top: 1px solid var(--line);
+    margin-top: -8px;
+    margin-bottom: 8px;
   }
-  .bottom-search h3{
-    font-size: 16px;
-    margin: 0 0 12px;
-    font-weight: 600;
-  }
-  .bottom-search .nl-search{ max-width: 620px; }
 
   .roadmap{
     max-width: 1100px;
@@ -1509,6 +1605,7 @@
   .copy-btn{
     margin-left: auto;
     background: var(--card-bg);
+    color: var(--ink);
     border: 1px solid var(--line);
     border-radius: 3px;
     padding: 9px 14px;
@@ -1808,6 +1905,7 @@
   .amount-pill{
     border: 1px solid var(--line);
     background: var(--paper);
+    color: var(--ink);
     padding: 10px 18px;
     border-radius: 2px;
     font-size: 14px;
@@ -1828,6 +1926,7 @@
   .custom-amount input{
     border: none;
     background: transparent;
+    color: var(--ink);
     font-size: 14px;
     width: 100%;
     font-family: 'Inter', sans-serif;
@@ -2106,6 +2205,7 @@
 
 <div class="profile-modal-backdrop" id="profileModalBackdrop">
   <div class="profile-modal">
+    <button class="profile-modal-close" onclick="closeProfileModal()" aria-label="Close">&times;</button>
     <h2>Complete your profile</h2>
     <p class="profile-modal-sub">This is saved to your account, not just this browser.</p>
 
@@ -2120,11 +2220,25 @@
     <div class="field">
       <label for="pmPhoto">Profile photo</label>
       <input type="file" id="pmPhoto" accept="image/*">
-      <img id="pmPhotoPreview" class="pm-photo-preview" style="display:none;">
+      <div class="pm-photo-row" id="pmPhotoRow" style="display:none;">
+        <img id="pmPhotoPreview" class="pm-photo-preview" alt="">
+        <button type="button" class="pm-adjust-btn" onclick="openPhotoCropper(currentAvatarUrl)">Adjust crop</button>
+      </div>
+      <div class="pm-crop-wrap" id="pmCropWrap" style="display:none;">
+        <div class="pm-crop-viewport" id="pmCropViewport">
+          <img id="pmCropImg" alt="" draggable="false">
+        </div>
+        <div class="pm-crop-zoom-row">
+          <span aria-hidden="true">&#8722;</span>
+          <input type="range" id="pmZoom" min="1" max="3" step="0.01" value="1">
+          <span aria-hidden="true">+</span>
+        </div>
+        <p class="pm-crop-hint">Drag to reposition &middot; use the slider to zoom</p>
+        <button type="button" class="text-btn pm-crop-done-btn" onclick="closePhotoCropper()">Done</button>
+      </div>
     </div>
 
     <button class="primary-btn" onclick="saveProfileDetails()">Save profile</button>
-    <button class="text-btn" onclick="closeProfileModal()">Skip for now</button>
     <div class="status-line" id="profileModalStatus"></div>
   </div>
 </div>
@@ -2378,7 +2492,15 @@
           <option value="50">Within 50 miles</option>
         </select>
       </div>
+      <div class="field filters-search-field">
+        <label for="bottomQueryInput">Search again</label>
+        <div class="nl-search filters-nl-search">
+          <input type="text" id="bottomQueryInput" placeholder="Try “hawk migration near me”" onkeydown="if(event.key==='Enter') submitBottomSearch()">
+          <button id="bottomSearchBtn" onclick="submitBottomSearch()">Search</button>
+        </div>
+      </div>
     </div>
+    <div class="ai-status" id="bottomAiStatus"></div>
 
     <div class="chip-panel">
       <div class="chip-label">Filter by activity</div>
@@ -2405,15 +2527,6 @@
       <button onclick="applyRecommendation('Habitat Restoration')">Native plant restoration</button>
       <button onclick="applyRecommendation('Citizen Science')">Citizen science</button>
     </div>
-  </section>
-
-  <section class="bottom-search">
-    <h3>Search again</h3>
-    <div class="nl-search">
-      <input type="text" id="bottomQueryInput" placeholder="Try “hawk migration near me”" onkeydown="if(event.key==='Enter') submitBottomSearch()">
-      <button id="bottomSearchBtn" onclick="submitBottomSearch()">Search</button>
-    </div>
-    <div class="ai-status" id="bottomAiStatus"></div>
   </section>
 
   <section class="cta-banner">
@@ -3691,11 +3804,24 @@ Respond with ONLY minified JSON in exactly this shape and nothing else, no markd
     let y = 64;
     const forest = [18, 48, 40]; // matches the site's --forest color, as RGB
 
+    const pdfUser = (typeof netlifyIdentity !== 'undefined') ? netlifyIdentity.currentUser() : null;
+    const volunteerName = (pdfUser && pdfUser.user_metadata && pdfUser.user_metadata.full_name)
+      ? pdfUser.user_metadata.full_name.trim()
+      : (pdfUser && pdfUser.email) ? pdfUser.email : '';
+
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(20);
     doc.setTextColor(...forest);
     doc.text('Volunteer Summary', marginX, y);
     y += 18;
+
+    if (volunteerName){
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(13);
+      doc.setTextColor(40, 40, 35);
+      doc.text(volunteerName, marginX, y);
+      y += 18;
+    }
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10.5);
@@ -3767,7 +3893,10 @@ Respond with ONLY minified JSON in exactly this shape and nothing else, no markd
       });
     }
 
-    doc.save('volunteer-summary.pdf');
+    const fileSlug = volunteerName
+      ? '-' + volunteerName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+      : '';
+    doc.save(`volunteer-summary${fileSlug}.pdf`);
     showToast('Downloading your volunteer summary as a PDF.');
   }
 
@@ -4253,15 +4382,20 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
   // stored value. See the small standalone copy of this logic in <head>,
   // which sets the theme before first paint to avoid a flash of the wrong
   // theme; keep both in sync if this logic ever changes.
-  function systemPrefersDark(){
-    return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  }
-
+  // Light is the site default for everyone, regardless of the visitor's OS
+  // setting — dark mode only ever comes on because someone flips the
+  // switch. Whether that choice sticks around depends on being signed in:
+  //  - signed in: saved to the account, and mirrored into localStorage so
+  //    it's there instantly on the next visit, before Identity loads
+  //  - signed out: kept in sessionStorage only, so a fresh visit (new tab
+  //    or after closing the browser) always starts back on light
   function isDarkModeActive(){
-    const pref = localStorage.getItem('themePreference');
-    if (pref === 'dark') return true;
-    if (pref === 'light') return false;
-    return systemPrefersDark();
+    let pref = null;
+    try { pref = localStorage.getItem('themePreference'); } catch (e) {}
+    if (!pref){
+      try { pref = sessionStorage.getItem('themePreferenceSession'); } catch (e) {}
+    }
+    return pref === 'dark';
   }
 
   function applyThemeSetting(){
@@ -4273,17 +4407,15 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
 
   function updateThemeSetting(){
     const checked = document.getElementById('settingDarkMode').checked;
-    localStorage.setItem('themePreference', checked ? 'dark' : 'light');
+    const value = checked ? 'dark' : 'light';
+    const user = (typeof netlifyIdentity !== 'undefined') ? netlifyIdentity.currentUser() : null;
+    if (user){
+      try { localStorage.setItem('themePreference', value); } catch (e) {}
+      syncSettingToAccount('themePreference', value);
+    } else {
+      try { sessionStorage.setItem('themePreferenceSession', value); } catch (e) {}
+    }
     applyThemeSetting();
-    syncSettingToAccount('themePreference', checked ? 'dark' : 'light');
-  }
-
-  // Keeps following the OS live if the person changes it system-wide,
-  // for as long as they haven't explicitly overridden it here.
-  if (window.matchMedia){
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-      if (!localStorage.getItem('themePreference')) applyThemeSetting();
-    });
   }
 
   function applyBirthdayBannerSetting(){
@@ -4329,6 +4461,10 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     }
     if (typeof md.themePreference === 'string'){
       localStorage.setItem('themePreference', md.themePreference);
+    } else {
+      // This account has never saved a preference — don't let a stale
+      // value from a previous account on this browser carry over.
+      localStorage.removeItem('themePreference');
     }
     applyCursorEffectSetting();
     applyBirthdayBannerSetting();
@@ -4392,28 +4528,137 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     if (user && user.user_metadata){
       document.getElementById('pmName').value = user.user_metadata.full_name || '';
       document.getElementById('pmBirthday').value = user.user_metadata.birthday || '';
-      if (currentAvatarUrl){
-        const preview = document.getElementById('pmPhotoPreview');
-        preview.src = currentAvatarUrl;
-        preview.style.display = 'block';
-      }
+    }
+    pmCrop.pendingDataUrl = null;
+    document.getElementById('pmCropWrap').style.display = 'none';
+    const photoRow = document.getElementById('pmPhotoRow');
+    if (currentAvatarUrl){
+      document.getElementById('pmPhotoPreview').src = currentAvatarUrl;
+      photoRow.style.display = 'flex';
+    } else {
+      photoRow.style.display = 'none';
     }
     document.getElementById('profileModalBackdrop').classList.add('active');
   }
 
   function closeProfileModal(){
     document.getElementById('profileModalBackdrop').classList.remove('active');
+    document.getElementById('pmCropWrap').style.display = 'none';
+  }
+
+  // ---------- Profile photo cropper ----------
+  // A small drag-to-reposition, slider-to-zoom cropper built on a plain
+  // <canvas> — no external library, so it works the same offline as it
+  // will once deployed. "Adjust crop" re-opens it on the photo already
+  // saved to the account, and picking a new file opens it on that instead;
+  // either way, nothing is actually saved until "Save profile" is pressed.
+  const PM_CROP_VP = 220;   // px — matches .pm-crop-viewport in the CSS
+  const PM_CROP_OUT = 480;  // px — resolution of the exported photo
+  const pmCrop = {
+    scale: 1, baseScale: 1, offsetX: 0, offsetY: 0,
+    naturalW: 0, naturalH: 0,
+    dragging: false, startX: 0, startY: 0, startOffX: 0, startOffY: 0,
+    pendingDataUrl: null
+  };
+
+  function openPhotoCropper(srcUrl){
+    if (!srcUrl) return;
+    const img = document.getElementById('pmCropImg');
+    img.onload = () => {
+      pmCrop.naturalW = img.naturalWidth;
+      pmCrop.naturalH = img.naturalHeight;
+      pmCrop.baseScale = Math.max(PM_CROP_VP / pmCrop.naturalW, PM_CROP_VP / pmCrop.naturalH);
+      pmCrop.scale = pmCrop.baseScale;
+      document.getElementById('pmZoom').value = '1';
+      pmCrop.offsetX = (PM_CROP_VP - pmCrop.naturalW * pmCrop.scale) / 2;
+      pmCrop.offsetY = (PM_CROP_VP - pmCrop.naturalH * pmCrop.scale) / 2;
+      applyCropTransform();
+    };
+    img.src = srcUrl;
+    document.getElementById('pmCropWrap').style.display = 'block';
+    document.getElementById('pmPhotoRow').style.display = 'none';
+  }
+
+  function closePhotoCropper(){
+    const dataUrl = renderCroppedPhoto();
+    pmCrop.pendingDataUrl = dataUrl;
+    const preview = document.getElementById('pmPhotoPreview');
+    preview.src = dataUrl;
+    document.getElementById('pmCropWrap').style.display = 'none';
+    document.getElementById('pmPhotoRow').style.display = 'flex';
+  }
+
+  function clampCropOffsets(){
+    const dispW = pmCrop.naturalW * pmCrop.scale;
+    const dispH = pmCrop.naturalH * pmCrop.scale;
+    pmCrop.offsetX = Math.min(0, Math.max(PM_CROP_VP - dispW, pmCrop.offsetX));
+    pmCrop.offsetY = Math.min(0, Math.max(PM_CROP_VP - dispH, pmCrop.offsetY));
+  }
+
+  function applyCropTransform(){
+    const img = document.getElementById('pmCropImg');
+    img.style.width = (pmCrop.naturalW * pmCrop.scale) + 'px';
+    img.style.height = (pmCrop.naturalH * pmCrop.scale) + 'px';
+    img.style.left = pmCrop.offsetX + 'px';
+    img.style.top = pmCrop.offsetY + 'px';
+  }
+
+  function renderCroppedPhoto(){
+    const img = document.getElementById('pmCropImg');
+    const canvas = document.createElement('canvas');
+    canvas.width = PM_CROP_OUT;
+    canvas.height = PM_CROP_OUT;
+    const ctx = canvas.getContext('2d');
+    const sSize = PM_CROP_VP / pmCrop.scale;
+    const sx = -pmCrop.offsetX / pmCrop.scale;
+    const sy = -pmCrop.offsetY / pmCrop.scale;
+    ctx.drawImage(img, sx, sy, sSize, sSize, 0, 0, PM_CROP_OUT, PM_CROP_OUT);
+    return canvas.toDataURL('image/jpeg', 0.92);
+  }
+
+  const pmZoomEl = document.getElementById('pmZoom');
+  if (pmZoomEl){
+    pmZoomEl.addEventListener('input', (e) => {
+      const zoomFactor = parseFloat(e.target.value) || 1;
+      pmCrop.scale = pmCrop.baseScale * zoomFactor;
+      clampCropOffsets();
+      applyCropTransform();
+    });
+  }
+
+  const pmCropViewport = document.getElementById('pmCropViewport');
+  if (pmCropViewport){
+    const startDrag = (x, y) => {
+      pmCrop.dragging = true;
+      pmCrop.startX = x; pmCrop.startY = y;
+      pmCrop.startOffX = pmCrop.offsetX; pmCrop.startOffY = pmCrop.offsetY;
+    };
+    const moveDrag = (x, y) => {
+      if (!pmCrop.dragging) return;
+      pmCrop.offsetX = pmCrop.startOffX + (x - pmCrop.startX);
+      pmCrop.offsetY = pmCrop.startOffY + (y - pmCrop.startY);
+      clampCropOffsets();
+      applyCropTransform();
+    };
+    const endDrag = () => { pmCrop.dragging = false; };
+
+    pmCropViewport.addEventListener('mousedown', (e) => { startDrag(e.clientX, e.clientY); e.preventDefault(); });
+    window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
+    window.addEventListener('mouseup', endDrag);
+    pmCropViewport.addEventListener('touchstart', (e) => {
+      const t = e.touches[0]; startDrag(t.clientX, t.clientY);
+    }, { passive: true });
+    pmCropViewport.addEventListener('touchmove', (e) => {
+      const t = e.touches[0]; moveDrag(t.clientX, t.clientY);
+    }, { passive: true });
+    pmCropViewport.addEventListener('touchend', endDrag);
   }
 
   document.getElementById('pmPhoto') && document.getElementById('pmPhoto').addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
-      const preview = document.getElementById('pmPhotoPreview');
-      preview.src = reader.result;
-      preview.style.display = 'block';
-    };
+    reader.onload = () => openPhotoCropper(reader.result);
     reader.readAsDataURL(file);
   });
 
@@ -4427,9 +4672,7 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
 
     const fullName = document.getElementById('pmName').value.trim();
     const birthday = document.getElementById('pmBirthday').value;
-    const photoDataUrl = document.getElementById('pmPhotoPreview').style.display !== 'none'
-      ? document.getElementById('pmPhotoPreview').src
-      : null;
+    const photoDataUrl = pmCrop.pendingDataUrl;
 
     status.textContent = 'Saving…';
     try {
@@ -4443,6 +4686,7 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
           body: JSON.stringify({ image: photoDataUrl })
         });
         currentAvatarUrl = photoDataUrl;
+        pmCrop.pendingDataUrl = null;
       }
 
       status.textContent = 'Saved.';
@@ -4495,6 +4739,16 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
       await loadAvatar(user.id);
       await loadRsvpsForUser(user.id);
       loadSettingsFromAccount(user);
+    } else {
+      // Not signed in. localStorage's "themePreference" is only ever meant
+      // to hold a signed-in account's saved choice — if it's set here
+      // anyway (an older version of this code saved it regardless of
+      // sign-in state, or someone signed out without the 'logout' handler
+      // running), it would otherwise make dark mode look like the default
+      // for every guest on this browser instead of light. Clear it and
+      // fall back to sessionStorage / light, same as any other guest.
+      localStorage.removeItem('themePreference');
+      applyThemeSetting();
     }
     updateAuthUI(user);
     renderProfile();
@@ -4520,6 +4774,11 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     currentAvatarUrl = null;
     state.rsvpRecords = [];
     state.rsvpEvents = new Set();
+    // Don't let the account's dark-mode choice leak into guest browsing
+    // on this same browser — back to the light default until they sign
+    // back in (or flip the switch again just for this session).
+    localStorage.removeItem('themePreference');
+    applyThemeSetting();
     updateAuthUI(null);
     renderProfile();
     render();
