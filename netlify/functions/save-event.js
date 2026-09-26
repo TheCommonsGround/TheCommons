@@ -73,6 +73,14 @@ export default async function handler(req) {
     lng: coords ? coords.lng : null,
     date: String(body.date),   // expected format: "YYYY-MM-DD"
     time: String(body.time),
+    // Optional — the site is meant to be a directory pointing people at the
+    // real event listing, not the source of truth for it, so every event
+    // should ideally carry a link back to wherever it was actually posted
+    // (or, if that org doesn't have one, a phone/email so people aren't
+    // stuck). Not required, since some real events genuinely have neither.
+    link: (body.link !== undefined && body.link !== null && String(body.link).trim() !== "")
+      ? String(body.link).trim()
+      : null,
     hours: Number(body.hours) || 0,
     tags: Array.isArray(body.tags)
       ? body.tags
