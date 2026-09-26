@@ -172,6 +172,10 @@
         <input type="number" id="fHours" min="0" step="0.5" required style="max-width: 160px;">
       </div>
       <div class="field">
+        <label for="fLink">Link to the original event listing (or contact info, if no page exists)</label>
+        <input type="text" id="fLink" placeholder="https://... or a phone number / email if there's no page">
+      </div>
+      <div class="field">
         <label>Activity tags</label>
         <div class="tag-grid" id="tagGrid"></div>
       </div>
@@ -219,6 +223,7 @@
             <strong>${ev.title}</strong>
             <span>${ev.org} — ${ev.address || ev.town} · ${ev.date} ${ev.time} · ${ev.tags.join(', ')}</span>
             <span>${ev.lat != null ? '&#128205; Geocoded' : '&#9888; Not geocoded — distance will not show until the address is fixed'}</span>
+            <span>${ev.link ? `&#128279; <a href="${ev.link}" target="_blank" rel="noopener">${ev.link}</a>` : '&#9888; No link saved — the site can\'t point people anywhere for more info'}</span>
           </div>
           <button class="delete" onclick="deleteEvent('${ev.id}')">Delete</button>
         </div>
@@ -260,6 +265,7 @@
       date: document.getElementById('fDate').value,
       time: document.getElementById('fTime').value,
       hours: document.getElementById('fHours').value,
+      link: document.getElementById('fLink').value,
       tags: tags
     };
 
