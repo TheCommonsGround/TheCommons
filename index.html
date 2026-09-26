@@ -1207,6 +1207,27 @@
     box-shadow: 0 8px 20px rgba(20,20,15,0.1), 0 2px 6px rgba(20,20,15,0.08);
     transform: translateY(-1px);
   }
+  .event-card.has-link{ cursor: pointer; }
+  .event-link-missing{
+    display: inline-block;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .event-address{
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: -2px;
+    margin-bottom: 4px;
+  }
+  .event-note{
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
   .event-main{ flex: 1; min-width: 240px; }
   .event-eyebrow{
     font-size: 11px;
@@ -1225,6 +1246,14 @@
   .event-org{
     font-size: 13.5px;
     color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .event-link{
+    display: inline-block;
+    font-size: 12.5px;
+    color: var(--sky);
+    text-decoration: underline;
+    text-underline-offset: 2px;
     margin-bottom: 8px;
   }
   .event-tags{
@@ -2208,7 +2237,7 @@
       <input type="file" id="pmPhoto" accept="image/*">
       <div class="pm-photo-row" id="pmPhotoRow" style="display:none;">
         <img id="pmPhotoPreview" class="pm-photo-preview" alt="">
-        <button type="button" class="pm-adjust-btn" onclick="openPhotoCropper(currentAvatarUrl)">Adjust crop</button>
+        <button type="button" class="pm-adjust-btn" onclick="openPhotoCropper(document.getElementById('pmPhotoPreview').src)">Adjust crop</button>
       </div>
       <div class="pm-crop-wrap" id="pmCropWrap" style="display:none;">
         <div class="pm-crop-viewport" id="pmCropViewport">
@@ -2769,6 +2798,778 @@
   // here on load — this array starts empty and gets filled by loadEvents().
   let EVENTS = [];
 
+  // Seed events: 33 real, verified Vermont environmental/outdoor events for
+  // Oct-Nov 2026, researched with confirmed source links. These act as a
+  // starting dataset so the site isn't empty before the admin adds more —
+  // any real event added via admin.html with a matching title takes
+  // priority over its seed twin (see loadEvents() below).
+  const SEED_EVENTS = [
+  {
+    "id": "seed-01",
+    "title": "Dead Creek Wildlife Day",
+    "org": "Vermont Fish & Wildlife Dept.",
+    "town": "Addison, VT",
+    "address": "966 VT Route 17",
+    "lat": 44.17,
+    "lng": -73.298,
+    "date": "2026-10-03",
+    "time": "09:00",
+    "hours": 6.0,
+    "link": "https://www.vtfishandwildlife.com/press-releases/enjoy-dead-creek-wildlife-day-oct-3",
+    "tags": [
+      "Wildlife Surveys",
+      "Birding",
+      "Family-friendly",
+      "Community"
+    ],
+    "note": "Address is the public viewing area on Rte 17."
+  },
+  {
+    "id": "seed-02",
+    "title": "Native Plant Seed Saving Walk",
+    "org": "Vermont Land Trust",
+    "town": "Vermont",
+    "address": "Exact location provided at registration — see event link",
+    "lat": null,
+    "lng": null,
+    "date": "2026-10-01",
+    "time": "17:30",
+    "hours": 1.5,
+    "link": "https://vlt.org/events/native-plant-seed-saving-walk/",
+    "tags": [
+      "Gardening",
+      "Habitat Restoration",
+      "Beginner Friendly"
+    ],
+    "note": "Exact meeting spot given only after you register at the link."
+  },
+  {
+    "id": "seed-03",
+    "title": "Veteran Ventures at The Pratt Refuge",
+    "org": "Vermont Land Trust",
+    "town": "Duxbury, VT",
+    "address": "Pratt Refuge (approximate — Duxbury Rd area)",
+    "lat": 44.279,
+    "lng": -72.867,
+    "date": "2026-10-03",
+    "time": "09:00",
+    "hours": 2.0,
+    "link": "https://vlt.org/events/veteran-ventures-at-the-pratt-refuge/",
+    "tags": [
+      "Hiking",
+      "Conservation",
+      "Community"
+    ],
+    "note": "No street address published; register at the link for exact trailhead."
+  },
+  {
+    "id": "seed-04",
+    "title": "Monthly Wildlife Walk",
+    "org": "Otter Creek Audubon Society",
+    "town": "Middlebury area, VT",
+    "address": "Exact location provided at registration — near Middlebury area, VT",
+    "lat": 44.0153,
+    "lng": -73.1673,
+    "date": "2026-10-10",
+    "time": "07:00",
+    "hours": 2.0,
+    "link": "https://ottercreek.wordpress.com/calander-of-events/",
+    "tags": [
+      "Wildlife Surveys",
+      "Birding",
+      "Citizen Science"
+    ],
+    "note": "Meeting spot rotates monthly — this links to their general calendar, not a single-event page. Join their email list (linked on that page) for the exact spot."
+  },
+  {
+    "id": "seed-05-d1",
+    "title": "Women's Game of Logging Levels 3 & 4",
+    "org": "Vermont Land Trust",
+    "town": "Vermont",
+    "address": "Exact location provided at registration — see event link",
+    "lat": null,
+    "lng": null,
+    "date": "2026-10-10",
+    "time": "08:00",
+    "hours": 8.0,
+    "link": "https://vlt.org/events/womens-game-of-logging-levels-3-4/",
+    "tags": [
+      "Trail Work",
+      "Habitat Restoration",
+      "Conservation"
+    ],
+    "note": "Date 1 of 2 for this two-day event (Oct 10–11). No address published — register at link."
+  },
+  {
+    "id": "seed-05-d2",
+    "title": "Women's Game of Logging Levels 3 & 4",
+    "org": "Vermont Land Trust",
+    "town": "Vermont",
+    "address": "Exact location provided at registration — see event link",
+    "lat": null,
+    "lng": null,
+    "date": "2026-10-11",
+    "time": "08:00",
+    "hours": 8.0,
+    "link": "https://vlt.org/events/womens-game-of-logging-levels-3-4/",
+    "tags": [
+      "Trail Work",
+      "Habitat Restoration",
+      "Conservation"
+    ],
+    "note": "Date 2 of 2 for this two-day event (Oct 10–11). No address published — register at link."
+  },
+  {
+    "id": "seed-06",
+    "title": "Brewster Ramble 2026",
+    "org": "Vermont Land Trust",
+    "town": "Addison County, VT",
+    "address": "Exact location provided at registration — near Addison County, VT",
+    "lat": null,
+    "lng": null,
+    "date": "2026-10-11",
+    "time": "08:30",
+    "hours": 3.5,
+    "link": "https://vlt.org/events/brewster-ramble-2026/",
+    "tags": [
+      "Community",
+      "Family-friendly",
+      "Hiking"
+    ],
+    "note": "No address published — register at link for exact farm location."
+  },
+  {
+    "id": "seed-07",
+    "title": "VTPBRN: Upper Waits River Strategic Wood Addition",
+    "org": "Vermont Land Trust / VT Rivers Program",
+    "town": "Topsham/West Fairlee, VT",
+    "address": "Waits River (approximate)",
+    "lat": 43.928,
+    "lng": -72.242,
+    "date": "2026-10-13",
+    "time": "12:30",
+    "hours": 3.5,
+    "link": "https://vlt.org/events/vtpbrn-upper-waits-river-strategic-wood-addition-swa/",
+    "tags": [
+      "River Cleanup",
+      "Habitat Restoration",
+      "Volunteer"
+    ],
+    "note": "No street address published — register at link."
+  },
+  {
+    "id": "seed-08-d1",
+    "title": "Tier 2 River & Roads Workshop (session 1)",
+    "org": "VT DEC Rivers Program",
+    "town": "Berlin, VT",
+    "address": "2178 Airport Rd",
+    "lat": 44.204,
+    "lng": -72.598,
+    "date": "2026-10-07",
+    "time": "08:30",
+    "hours": 7.5,
+    "link": "https://dec.vermont.gov/event/vermont-rivers-roads-tier-2-and-tier-3-training",
+    "tags": [
+      "Environmental Education",
+      "Conservation"
+    ],
+    "note": "Date 1 of 2 for this two-day workshop (Oct 7–8). Registration: https://anronline.vermont.gov/?formtag=RiversAndRoads"
+  },
+  {
+    "id": "seed-08-d2",
+    "title": "Tier 2 River & Roads Workshop (session 1)",
+    "org": "VT DEC Rivers Program",
+    "town": "Berlin, VT",
+    "address": "2178 Airport Rd",
+    "lat": 44.204,
+    "lng": -72.598,
+    "date": "2026-10-08",
+    "time": "08:30",
+    "hours": 7.5,
+    "link": "https://dec.vermont.gov/event/vermont-rivers-roads-tier-2-and-tier-3-training",
+    "tags": [
+      "Environmental Education",
+      "Conservation"
+    ],
+    "note": "Date 2 of 2 for this two-day workshop (Oct 7–8). Registration: https://anronline.vermont.gov/?formtag=RiversAndRoads"
+  },
+  {
+    "id": "seed-09-d1",
+    "title": "Tier 2 River & Roads Workshop (session 2)",
+    "org": "VT DEC Rivers Program",
+    "town": "Colchester, VT",
+    "address": "189 Troy Ave",
+    "lat": 44.542,
+    "lng": -73.167,
+    "date": "2026-10-14",
+    "time": "08:30",
+    "hours": 7.5,
+    "link": "https://dec.vermont.gov/event/vermont-rivers-roads-tier-2-and-tier-3-training",
+    "tags": [
+      "Environmental Education",
+      "Conservation"
+    ],
+    "note": "Date 1 of 2 for this two-day workshop (Oct 14–15). Registration: https://anronline.vermont.gov/?formtag=RiversAndRoads"
+  },
+  {
+    "id": "seed-09-d2",
+    "title": "Tier 2 River & Roads Workshop (session 2)",
+    "org": "VT DEC Rivers Program",
+    "town": "Colchester, VT",
+    "address": "189 Troy Ave",
+    "lat": 44.542,
+    "lng": -73.167,
+    "date": "2026-10-15",
+    "time": "08:30",
+    "hours": 7.5,
+    "link": "https://dec.vermont.gov/event/vermont-rivers-roads-tier-2-and-tier-3-training",
+    "tags": [
+      "Environmental Education",
+      "Conservation"
+    ],
+    "note": "Date 2 of 2 for this two-day workshop (Oct 14–15). Registration: https://anronline.vermont.gov/?formtag=RiversAndRoads"
+  },
+  {
+    "id": "seed-10",
+    "title": "Fall Birding at Catamount Community Forest",
+    "org": "Green Mountain Bird Alliance",
+    "town": "Williston, VT",
+    "address": "Governor Chittenden Rd (approximate trailhead)",
+    "lat": 44.435,
+    "lng": -73.087,
+    "date": "2026-10-18",
+    "time": "08:00",
+    "hours": 3.0,
+    "link": "https://www.gmbirdalliance.org/events/fall-birding-at-catamount-community-forest",
+    "tags": [
+      "Birding",
+      "Hiking",
+      "Beginner Friendly"
+    ],
+    "note": "Registration opens Oct 10; limited to 20 participants."
+  },
+  {
+    "id": "seed-11",
+    "title": "Full Moon Hike with Middlebury Area Land Trust",
+    "org": "Middlebury Area Land Trust / Vermont Land Trust",
+    "town": "Salisbury, VT",
+    "address": "Salisbury Mills Preserve",
+    "lat": 43.933,
+    "lng": -73.123,
+    "date": "2026-10-24",
+    "time": "17:30",
+    "hours": 1.0,
+    "link": "https://vlt.org/events/full-moon-hike-with-middlebury-area-land-trust/",
+    "tags": [
+      "Hiking",
+      "Family-friendly",
+      "Beginner Friendly"
+    ],
+    "note": "Exact trailhead given after registration."
+  },
+  {
+    "id": "seed-12",
+    "title": "Halloween Morning Bird Outing",
+    "org": "Green Mountain Bird Alliance",
+    "town": "Colchester, VT",
+    "address": "St. Michael's College Natural Area (approximate)",
+    "lat": 44.548,
+    "lng": -73.173,
+    "date": "2026-10-31",
+    "time": "08:00",
+    "hours": 2.0,
+    "link": "https://www.gmbirdalliance.org/events/halloween-morning-bird-outing-at-st-michaels-college-natural-area",
+    "tags": [
+      "Birding",
+      "Family-friendly"
+    ],
+    "note": "Registration opens Oct 24; limited to 20 participants."
+  },
+  {
+    "id": "seed-13",
+    "title": "Elder Grove Hike",
+    "org": "Standing Trees",
+    "town": "Charlemont, MA",
+    "address": "Mohawk Trail State Forest",
+    "lat": 42.647,
+    "lng": -72.888,
+    "date": "2026-10-03",
+    "time": "11:00",
+    "hours": 2.5,
+    "link": "https://act.sierraclub.org/events/details?formcampaignid=701Po0000246eSWIAY",
+    "tags": [
+      "Hiking",
+      "Conservation",
+      "Beginner Friendly"
+    ],
+    "note": "Out of state (MA) — real event from your actual partner org. Rain date Oct 4. Main events page: https://www.standingtrees.org/upcoming-events"
+  },
+  {
+    "id": "seed-14",
+    "title": "The People's Seeds: Seed Stories, Seed Sovereignty, and Seed Saving",
+    "org": "NOFA Vermont",
+    "town": "Burlington, VT",
+    "address": "180 Intervale Rd",
+    "lat": 44.5,
+    "lng": -73.204,
+    "date": "2026-10-02",
+    "time": "17:00",
+    "hours": 3.0,
+    "link": "https://www.nofavt.org/events/peoples-seeds-seeds-stories-seed-sovereignty-and-seed-saving",
+    "tags": [
+      "Gardening",
+      "Environmental Education",
+      "Community"
+    ]
+  },
+  {
+    "id": "seed-15",
+    "title": "Shabbat Dinner for Vermont Jewish Farmers",
+    "org": "NOFA Vermont",
+    "town": "Swanton, VT",
+    "address": "Exact location provided at registration — near Swanton, VT",
+    "lat": 44.918,
+    "lng": -73.128,
+    "date": "2026-10-16",
+    "time": "17:45",
+    "hours": 2.0,
+    "link": "https://www.nofavt.org/events/shabbat-dinner-vermont-jewish-farmers",
+    "tags": [
+      "Community",
+      "Gardening"
+    ],
+    "note": "Exact address given to registrants at the link."
+  },
+  {
+    "id": "seed-16",
+    "title": "Conservation Reading Circle: Birding to Change the World",
+    "org": "Vermont Land Trust",
+    "town": "Vermont",
+    "address": "Exact location provided at registration — see event link",
+    "lat": null,
+    "lng": null,
+    "date": "2026-11-04",
+    "time": "16:00",
+    "hours": 2.0,
+    "link": "https://vlt.org/events/conservation-reading-circle-birding-to-change-the-world/",
+    "tags": [
+      "Birding",
+      "Environmental Education",
+      "Community"
+    ],
+    "note": "Register at link for location (may be VLT office or virtual)."
+  },
+  {
+    "id": "seed-17",
+    "title": "Monthly Monitoring at the Green Mountain Audubon Center",
+    "org": "Green Mountain Bird Alliance",
+    "town": "Huntington, VT",
+    "address": "255 Sherman Hollow Rd",
+    "lat": 44.317,
+    "lng": -72.965,
+    "date": "2026-11-12",
+    "time": "08:00",
+    "hours": 2.0,
+    "link": "https://www.gmbirdalliance.org/events/monthly-monitoring-at-the-green-mountain-audubon-center-november",
+    "tags": [
+      "Birding",
+      "Citizen Science"
+    ],
+    "note": "No registration required."
+  },
+  {
+    "id": "seed-18",
+    "title": "Winter Preview: How and Where to Recreate This Winter",
+    "org": "Vermont Land Trust",
+    "town": "Virtual",
+    "address": "Online / virtual event",
+    "lat": null,
+    "lng": null,
+    "date": "2026-11-17",
+    "time": "18:00",
+    "hours": 1.0,
+    "link": "https://vlt.org/events/winter-preview-how-and-where-to-recreate-this-winter/",
+    "tags": [
+      "Environmental Education",
+      "Community"
+    ],
+    "note": "Virtual event — enter \"Online\" as the address."
+  },
+  {
+    "id": "seed-19",
+    "title": "Black Friday Birding on the Colchester Causeway",
+    "org": "Green Mountain Bird Alliance",
+    "town": "Colchester, VT",
+    "address": "Colchester Causeway Park",
+    "lat": 44.578,
+    "lng": -73.196,
+    "date": "2026-11-27",
+    "time": "08:00",
+    "hours": 2.0,
+    "link": "https://www.gmbirdalliance.org/events/black-friday-birding-colchester-causeway",
+    "tags": [
+      "Birding",
+      "Family-friendly"
+    ],
+    "note": "Registration opens Nov 21; limited to 20 participants."
+  },
+  {
+    "id": "seed-20",
+    "title": "Foraging Club Walk and Nibble",
+    "org": "North Branch Nature Center",
+    "town": "Montpelier, VT",
+    "address": "713 Elm St",
+    "lat": 44.2716,
+    "lng": -72.5615,
+    "date": "2026-10-03",
+    "time": "09:00",
+    "hours": 2.0,
+    "link": "https://northbranchnaturecenter.org/event/foraging-club-walk-and-nibble-4",
+    "tags": [
+      "Environmental Education",
+      "Beginner Friendly",
+      "Family-friendly"
+    ]
+  },
+  {
+    "id": "seed-21",
+    "title": "Monthly Birding Outing (Berlin Pond South End)",
+    "org": "North Branch Nature Center",
+    "town": "Berlin Pond, VT",
+    "address": "Berlin Pond, south end — park along Mirror Lake Road",
+    "lat": 44.1911,
+    "lng": -72.5877,
+    "date": "2026-10-03",
+    "time": "08:00",
+    "hours": 1.5,
+    "link": "https://northbranchnaturecenter.org/event/monthly-birding-bp-oct",
+    "tags": [
+      "Birding",
+      "Wildlife Surveys"
+    ],
+    "note": "Meet at the south end of Berlin Pond; park along Mirror Lake Road."
+  },
+  {
+    "id": "seed-22",
+    "title": "Garden Potluck and Tree Planting",
+    "org": "North Branch Nature Center",
+    "town": "Montpelier, VT",
+    "address": "713 Elm St",
+    "lat": 44.2716,
+    "lng": -72.5615,
+    "date": "2026-10-10",
+    "time": "16:00",
+    "hours": 2.5,
+    "link": "https://northbranchnaturecenter.org/event/garden-party-2026",
+    "tags": [
+      "Tree Planting",
+      "Gardening",
+      "Community",
+      "Family-friendly"
+    ]
+  },
+  {
+    "id": "seed-23-d1",
+    "title": "Public Owl Banding Demonstration",
+    "org": "North Branch Nature Center",
+    "town": "Montpelier, VT",
+    "address": "713 Elm St",
+    "lat": 44.2716,
+    "lng": -72.5615,
+    "date": "2026-10-16",
+    "time": "20:00",
+    "hours": 1.5,
+    "link": "https://northbranchnaturecenter.org/event/owl-banding-2026",
+    "tags": [
+      "Wildlife Surveys",
+      "Citizen Science",
+      "Environmental Education"
+    ],
+    "note": "Date 1 of 3 for this repeating event (Oct 16, Oct 17 & Oct 26)."
+  },
+  {
+    "id": "seed-23-d2",
+    "title": "Public Owl Banding Demonstration",
+    "org": "North Branch Nature Center",
+    "town": "Montpelier, VT",
+    "address": "713 Elm St",
+    "lat": 44.2716,
+    "lng": -72.5615,
+    "date": "2026-10-17",
+    "time": "20:00",
+    "hours": 1.5,
+    "link": "https://northbranchnaturecenter.org/event/owl-banding-2026",
+    "tags": [
+      "Wildlife Surveys",
+      "Citizen Science",
+      "Environmental Education"
+    ],
+    "note": "Date 2 of 3 for this repeating event (Oct 16, Oct 17 & Oct 26)."
+  },
+  {
+    "id": "seed-23-d3",
+    "title": "Public Owl Banding Demonstration",
+    "org": "North Branch Nature Center",
+    "town": "Montpelier, VT",
+    "address": "713 Elm St",
+    "lat": 44.2716,
+    "lng": -72.5615,
+    "date": "2026-10-26",
+    "time": "20:00",
+    "hours": 1.5,
+    "link": "https://northbranchnaturecenter.org/event/owl-banding-2026",
+    "tags": [
+      "Wildlife Surveys",
+      "Citizen Science",
+      "Environmental Education"
+    ],
+    "note": "Date 3 of 3 for this repeating event (Oct 16, Oct 17 & Oct 26)."
+  },
+  {
+    "id": "seed-24",
+    "title": "Accessible Birding — Birdability Week",
+    "org": "North Branch Nature Center",
+    "town": "Montpelier, VT",
+    "address": "713 Elm St",
+    "lat": 44.2716,
+    "lng": -72.5615,
+    "date": "2026-10-24",
+    "time": "13:00",
+    "hours": 3.0,
+    "link": "https://northbranchnaturecenter.org/event/birdability-event-2026",
+    "tags": [
+      "Birding",
+      "Disabilities Accessible",
+      "Community"
+    ]
+  },
+  {
+    "id": "seed-25",
+    "title": "Hide Tanning Demonstration",
+    "org": "North Branch Nature Center",
+    "town": "Montpelier, VT",
+    "address": "713 Elm St",
+    "lat": 44.2716,
+    "lng": -72.5615,
+    "date": "2026-11-10",
+    "time": "18:00",
+    "hours": 2.5,
+    "link": "https://northbranchnaturecenter.org/event/hide-tanning-2026",
+    "tags": [
+      "Environmental Education",
+      "Community"
+    ],
+    "note": "$25 cost to attend."
+  },
+  {
+    "id": "seed-26",
+    "title": "Biking the Poultney River Tour",
+    "org": "Vermont River Conservancy",
+    "town": "Poultney-Mettawee watershed, VT",
+    "address": "Exact location provided at registration — near Poultney-Mettawee watershed, VT",
+    "lat": 43.514,
+    "lng": -73.23,
+    "date": "2026-10-08",
+    "time": "12:00",
+    "hours": 3.0,
+    "link": "https://vermontriverconservancy.org/biking-the-poultney-river-tour",
+    "tags": [
+      "River Cleanup",
+      "Conservation",
+      "Hiking"
+    ],
+    "note": "No street address — contact the org via the link for the exact meeting point."
+  },
+  {
+    "id": "seed-27",
+    "title": "Through the Floodplain Forest: A Barton River Paddle",
+    "org": "Vermont River Conservancy",
+    "town": "Barton River / Lake Memphremagog, VT",
+    "address": "Exact location provided at registration — near Barton River / Lake Memphremagog, VT",
+    "lat": 44.936,
+    "lng": -72.206,
+    "date": "2026-10-10",
+    "time": "13:00",
+    "hours": 4.0,
+    "link": "https://vermontriverconservancy.org/through-the-floodplain-forest-a-barton-river-paddle",
+    "tags": [
+      "River Cleanup",
+      "Conservation",
+      "Wildlife Surveys"
+    ],
+    "note": "Put-in at Lower Barton River, take-out at South Bay of Lake Memphremagog — no street address given."
+  },
+  {
+    "id": "seed-28-d1",
+    "title": "2026 Spirits of Rokeby: The Impending Crisis",
+    "org": "Rokeby Museum",
+    "town": "Ferrisburgh, VT",
+    "address": "4334 Route 7",
+    "lat": 44.2075,
+    "lng": -73.2481,
+    "date": "2026-10-16",
+    "time": "17:00",
+    "hours": 4.5,
+    "link": "https://rokeby.org/event/2026-spirits-of-rokeby-the-impending-crisis/",
+    "tags": [
+      "Community",
+      "Environmental Education"
+    ],
+    "note": "Date 1 of 3 for this repeating event (Oct 16, Oct 17 & Oct 23). Not a volunteer/outdoor event, but a real event on conserved historic land."
+  },
+  {
+    "id": "seed-28-d2",
+    "title": "2026 Spirits of Rokeby: The Impending Crisis",
+    "org": "Rokeby Museum",
+    "town": "Ferrisburgh, VT",
+    "address": "4334 Route 7",
+    "lat": 44.2075,
+    "lng": -73.2481,
+    "date": "2026-10-17",
+    "time": "17:00",
+    "hours": 4.5,
+    "link": "https://rokeby.org/event/2026-spirits-of-rokeby-the-impending-crisis/",
+    "tags": [
+      "Community",
+      "Environmental Education"
+    ],
+    "note": "Date 2 of 3 for this repeating event (Oct 16, Oct 17 & Oct 23). Not a volunteer/outdoor event, but a real event on conserved historic land."
+  },
+  {
+    "id": "seed-28-d3",
+    "title": "2026 Spirits of Rokeby: The Impending Crisis",
+    "org": "Rokeby Museum",
+    "town": "Ferrisburgh, VT",
+    "address": "4334 Route 7",
+    "lat": 44.2075,
+    "lng": -73.2481,
+    "date": "2026-10-23",
+    "time": "17:00",
+    "hours": 4.5,
+    "link": "https://rokeby.org/event/2026-spirits-of-rokeby-the-impending-crisis/",
+    "tags": [
+      "Community",
+      "Environmental Education"
+    ],
+    "note": "Date 3 of 3 for this repeating event (Oct 16, Oct 17 & Oct 23). Not a volunteer/outdoor event, but a real event on conserved historic land."
+  },
+  {
+    "id": "seed-29",
+    "title": "Fall Trail Work Day — Lloyd's/BC Zone",
+    "org": "Catamount Trail Association",
+    "town": "Vermont",
+    "address": "Exact location provided at registration — see event link",
+    "lat": null,
+    "lng": null,
+    "date": "2026-10-03",
+    "time": "09:00",
+    "hours": 4.0,
+    "link": "https://catamounttrail.org/ski-the-trail/trail-work/fall-work-schedule/",
+    "tags": [
+      "Trail Work",
+      "Volunteer",
+      "Conservation"
+    ],
+    "note": "No address — contact the listed trail host (Andy Mathey) via the link before attending."
+  },
+  {
+    "id": "seed-30",
+    "title": "Fall Trail Work Day — ROC Brandon Gap",
+    "org": "Catamount Trail Association",
+    "town": "Brandon Gap, VT",
+    "address": "Brandon Gap (Long Trail lot)",
+    "lat": 43.858,
+    "lng": -72.936,
+    "date": "2026-10-24",
+    "time": "09:00",
+    "hours": 6.0,
+    "link": "https://catamounttrail.org/ski-the-trail/trail-work/fall-work-schedule/",
+    "tags": [
+      "Trail Work",
+      "Volunteer",
+      "Conservation"
+    ],
+    "note": "Contact Karl Fjeld via the link before attending."
+  },
+  {
+    "id": "seed-31-d1",
+    "title": "Fall Trail Work Day — ROC Braintree Mountain Forest",
+    "org": "Catamount Trail Association",
+    "town": "Braintree, VT",
+    "address": "Exact location provided at registration — near Braintree, VT",
+    "lat": 43.983,
+    "lng": -72.657,
+    "date": "2026-10-25",
+    "time": "09:00",
+    "hours": 6.0,
+    "link": "https://catamounttrail.org/ski-the-trail/trail-work/fall-work-schedule/",
+    "tags": [
+      "Trail Work",
+      "Volunteer",
+      "Conservation"
+    ],
+    "note": "Date 1 of 2 for this repeating event (Oct 25 & Nov 8). Contact Hannah Wilson via the link."
+  },
+  {
+    "id": "seed-31-d2",
+    "title": "Fall Trail Work Day — ROC Braintree Mountain Forest",
+    "org": "Catamount Trail Association",
+    "town": "Braintree, VT",
+    "address": "Exact location provided at registration — near Braintree, VT",
+    "lat": 43.983,
+    "lng": -72.657,
+    "date": "2026-11-08",
+    "time": "09:00",
+    "hours": 6.0,
+    "link": "https://catamounttrail.org/ski-the-trail/trail-work/fall-work-schedule/",
+    "tags": [
+      "Trail Work",
+      "Volunteer",
+      "Conservation"
+    ],
+    "note": "Date 2 of 2 for this repeating event (Oct 25 & Nov 8). Contact Hannah Wilson via the link."
+  },
+  {
+    "id": "seed-32",
+    "title": "Fall Trail Work Day — CT Section 1 (MA border to Harriman Dam)",
+    "org": "Catamount Trail Association",
+    "town": "Vermont",
+    "address": "Exact location provided at registration — see event link",
+    "lat": null,
+    "lng": null,
+    "date": "2026-11-07",
+    "time": "09:00",
+    "hours": 4.0,
+    "link": "https://catamounttrail.org/ski-the-trail/trail-work/fall-work-schedule/",
+    "tags": [
+      "Trail Work",
+      "Volunteer",
+      "Conservation"
+    ],
+    "note": "Contact Sam Bartlett via the link before attending."
+  },
+  {
+    "id": "seed-33",
+    "title": "Fall Trail Work Day — CT Section 11B (Burnt Mountain)",
+    "org": "Catamount Trail Association",
+    "town": "Plymouth, VT",
+    "address": "Burnt Mountain",
+    "lat": 43.502,
+    "lng": -72.685,
+    "date": "2026-11-14",
+    "time": "09:00",
+    "hours": 4.0,
+    "link": "https://catamounttrail.org/ski-the-trail/trail-work/fall-work-schedule/",
+    "tags": [
+      "Trail Work",
+      "Volunteer",
+      "Conservation"
+    ],
+    "note": "Contact Lynn Fisher via the link before attending. Time approximate — confirm at link."
+  }
+];
+
+
   // Sample data seeding the new features below (badges, friends, articles, video,
   // partners, socials). All clearly placeholder — swap for real content/data later.
   const BADGES = [
@@ -2796,18 +3597,23 @@
     { title: "Why small orgs struggle with outreach", note: "Placeholder — replace with a real video card." }
   ];
 
+  // Real org names swapped for a numbered placeholder label (2026-09-25),
+  // per request, so this tab can be demoed before any partnership is
+  // actually confirmed — descriptions kept as realistic examples of the
+  // KIND of org that would fill each slot, to show a supervisor what the
+  // finished grid will look like once real partners are swapped in.
   const PARTNER_ORGS = [
     { name: "Standing Trees", desc: "Partner nonprofit running the Panel and Education programming that feeds content into this campaign." },
-    { name: "Audubon Vermont", desc: "Bird conservation, habitat protection, and environmental education across the state." },
-    { name: "Green Mountain Club", desc: "Maintains and protects the Long Trail and Vermont's hiking trail network." },
-    { name: "Lake Champlain Committee", desc: "Water quality advocacy and cleanup work on and around Lake Champlain." },
-    { name: "Vermont Land Trust", desc: "Conserves farmland, forests, and community land throughout Vermont." },
-    { name: "Vermont River Conservancy", desc: "Protects rivers, streams, and the land alongside them." },
-    { name: "VPIRG", desc: "Statewide advocacy on climate, consumer protection, and environmental policy." },
-    { name: "NOFA Vermont", desc: "Supports organic farming and sustainable agriculture across the state." },
-    { name: "Catamount Trail Association", desc: "Maintains Vermont's 300-mile cross-country ski trail." },
-    { name: "Sierra Club", desc: "National grassroots environmental organization with local chapters." },
-    { name: "The Nature Conservancy", desc: "Global land and water conservation, with active regional chapters." }
+    { name: "Placeholder Partner 2", desc: "Bird conservation, habitat protection, and environmental education across the state." },
+    { name: "Placeholder Partner 3", desc: "Maintains and protects hiking trails and the regional trail network." },
+    { name: "Placeholder Partner 4", desc: "Water quality advocacy and cleanup work on and around a major lake." },
+    { name: "Placeholder Partner 5", desc: "Conserves farmland, forests, and community land throughout the region." },
+    { name: "Placeholder Partner 6", desc: "Protects rivers, streams, and the land alongside them." },
+    { name: "Placeholder Partner 7", desc: "Statewide advocacy on climate, consumer protection, and environmental policy." },
+    { name: "Placeholder Partner 8", desc: "Supports organic farming and sustainable agriculture across the state." },
+    { name: "Placeholder Partner 9", desc: "Maintains a long-distance cross-country ski trail." },
+    { name: "Placeholder Partner 10", desc: "National grassroots environmental organization with local chapters." },
+    { name: "Placeholder Partner 11", desc: "Global land and water conservation, with active regional chapters." }
   ];
 
   // Real, documented raptor migration watch sites near Vermont (sourced from
@@ -3115,23 +3921,45 @@
 
     events.forEach(ev => {
       const card = document.createElement('div');
-      card.className = 'event-card';
+      const hasLink = !!ev.link;
+      card.className = 'event-card' + (hasLink ? ' has-link' : '');
       card.innerHTML = `
         <div class="event-main">
           <div class="event-eyebrow">${primaryCategory(ev.tags)}</div>
           <div class="event-title">${ev.title}</div>
           <div class="event-org">${ev.org} &mdash; ${ev.town}</div>
+          <div class="event-address">${ev.address || ''}</div>
+          ${hasLink
+            ? `<a class="event-link" href="${ev.link}" target="_blank" rel="noopener">View original listing &#8599;</a>`
+            : `<span class="event-link-missing">No listing link provided &mdash; contact ${ev.org} directly for details</span>`}
+          ${ev.note ? `<div class="event-note">${ev.note}</div>` : ''}
           <div class="event-tags">${ev.tags.map(t => `<span>${t}</span>`).join('')}</div>
         </div>
         <div class="event-meta">
           <div class="when">${formatDate(ev.date)}</div>
           <div>${ev.time}</div>
           ${ev._distanceMiles != null ? `<div>${ev._distanceMiles.toFixed(1)} mi away</div>` : (ev._distanceMiles === null ? `<div class="dist-unknown">distance unknown</div>` : '')}
-          <button class="rsvp-btn ${state.rsvpEvents.has(ev.title) ? 'going' : ''}" onclick="toggleRSVP('${ev.title.replace(/'/g, "\\'")}')">
+          <button class="rsvp-btn ${state.rsvpEvents.has(ev.title) ? 'going' : ''}" onclick="event.stopPropagation(); toggleRSVP('${ev.title.replace(/'/g, "\\'")}')">
             ${state.rsvpEvents.has(ev.title) ? "You're going" : "I'll be there"}
           </button>
         </div>
       `;
+      if (hasLink){
+        const linkEl = card.querySelector('.event-link');
+        if (linkEl) linkEl.addEventListener('click', (e) => e.stopPropagation());
+        card.addEventListener('click', () => {
+          window.open(ev.link, '_blank', 'noopener');
+        });
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'link');
+        card.setAttribute('aria-label', `Open original listing for ${ev.title}`);
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            window.open(ev.link, '_blank', 'noopener');
+          }
+        });
+      }
       list.appendChild(card);
     });
   }
@@ -3373,15 +4201,24 @@
   // replaces the (initially empty) EVENTS array with them, then re-renders
   // whatever's currently on screen so real data shows up without a reload.
   async function loadEvents(){
+    let liveEvents = [];
     try {
       const res = await fetch('/.netlify/functions/get-events');
       const data = await res.json();
-      EVENTS = Array.isArray(data) ? data : [];
+      liveEvents = Array.isArray(data) ? data : [];
     } catch (err) {
-      // Function not deployed yet, or offline — EVENTS just stays empty,
-      // and the empty-state messaging below explains why.
-      EVENTS = [];
+      // Function not deployed yet, or offline — just fall back to the seed
+      // list below instead of leaving the page empty.
+      liveEvents = [];
     }
+    // Layer the seed events in underneath whatever's really in Blobs. A
+    // real admin-added event with the same title as a seed event replaces
+    // it, so re-entering one of these through admin.html (e.g. once it has
+    // a confirmed address) just supersedes the seed copy rather than
+    // duplicating it.
+    const liveTitles = new Set(liveEvents.map(e => e.title));
+    const seedToAdd = SEED_EVENTS.filter(e => !liveTitles.has(e.title));
+    EVENTS = [...liveEvents, ...seedToAdd];
     renderStatsStrip();
     render();
   }
@@ -4792,6 +5629,16 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
       return;
     }
 
+    // If the crop editor is still open when Save is pressed, the photo was
+    // never "confirmed" (that's what the Done button does), so pendingDataUrl
+    // would still be null and the photo would silently be skipped below even
+    // though the user picked one. Finalize whatever crop is currently shown
+    // first, so Save always saves the photo that's visibly on screen.
+    const cropWrap = document.getElementById('pmCropWrap');
+    if (cropWrap && cropWrap.style.display !== 'none'){
+      closePhotoCropper();
+    }
+
     const fullName = document.getElementById('pmName').value.trim();
     const birthday = document.getElementById('pmBirthday').value;
     const photoDataUrl = pmCrop.pendingDataUrl;
@@ -4802,11 +5649,23 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
 
       if (photoDataUrl && photoDataUrl.startsWith('data:')){
         const jwt = await user.jwt();
-        await fetch('/.netlify/functions/save-avatar', {
+        const avatarRes = await fetch('/.netlify/functions/save-avatar', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
           body: JSON.stringify({ image: photoDataUrl })
         });
+        // This used to be un-checked: a failed save (bad JWT, function error,
+        // the image-too-large guard in save-avatar.js, etc.) would silently
+        // fall through to "Saved." below with the photo updated only in this
+        // tab's local variable — looking saved right up until the next
+        // reload or login re-fetched the (never-actually-stored) avatar from
+        // the server and it was simply gone. Throwing here routes a real
+        // failure into the catch block below instead of hiding it.
+        if (!avatarRes.ok){
+          let detail = '';
+          try { detail = (await avatarRes.json()).error || ''; } catch (e) {}
+          throw new Error(detail || `Photo upload failed (${avatarRes.status})`);
+        }
         currentAvatarUrl = photoDataUrl;
         pmCrop.pendingDataUrl = null;
       }
@@ -4816,7 +5675,8 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
       renderProfile();
       setTimeout(closeProfileModal, 700);
     } catch (err) {
-      status.textContent = "Couldn't save — this only works once the site is live with Identity enabled, not from a local file.";
+      status.textContent = (err && err.message) ? err.message
+        : "Couldn't save — this only works once the site is live with Identity enabled, not from a local file.";
     }
   }
 
