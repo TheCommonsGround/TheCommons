@@ -26,16 +26,41 @@ export default async function handler(req) {
   }
 
   try {
-    const nominatimUrl = `https://nominatim.openstreetmap.org/search?` +
-      `q=${encodeURIComponent(query)}&countrycodes=us&format=json&limit=1`;
+    const headers = {
+      // Required by Nominatim's usage policy — identifies the app, not a browser UA.
+      "User-Agent": "TheCommonsVT/1.0 (thecommonsproject.netlify.app)"
+    };
 
-    const res = await fetch(nominatimUrl, {
-      headers: {
-        // Required by Nominatim's usage policy — identifies the app, not a browser UA.
-        "User-Agent": "TheCommonsVT/1.0 (thecommonsproject.netlify.app)"
+    // A bare 5-digit US zip (optionally with a -1234 extension) is far more
+    // reliable through Nominatim's *structured* search (postalcode= + country=)
+    // than through the free-text q= search: plain "q=05753" frequently comes
+    // back with zero results for real, valid zips because it's being matched
+    // as a keyword rather than looked up as a postal code. City/state text
+    // ("Burlington, VT") still goes through the general q= search below.
+    const isBareZip = /^\d{5}(-\d{4})?$/.test(query.trim());
+
+    let results;
+    if (isBareZip) {
+      const zip5 = query.trim().slice(0, 5);
+      const structuredUrl = `https://nominatim.openstreetmap.org/search?` +
+        `postalcode=${encodeURIComponent(zip5)}&country=us&format=json&limit=1`;
+      const res = await fetch(structuredUrl, { headers });
+      results = await res.json();
+
+      // Structured postal lookups occasionally miss a valid zip too (gaps in
+      // OSM's postcode data) — fall back to the general search before giving up.
+      if (!Array.isArray(results) || results.length === 0) {
+        const fallbackUrl = `https://nominatim.openstreetmap.org/search?` +
+          `q=${encodeURIComponent(zip5)}&countrycodes=us&format=json&limit=1`;
+        const fallbackRes = await fetch(fallbackUrl, { headers });
+        results = await fallbackRes.json();
       }
-    });
-    const results = await res.json();
+    } else {
+      const nominatimUrl = `https://nominatim.openstreetmap.org/search?` +
+        `q=${encodeURIComponent(query)}&countrycodes=us&format=json&limit=1`;
+      const res = await fetch(nominatimUrl, { headers });
+      results = await res.json();
+    }
 
     if (!Array.isArray(results) || results.length === 0) {
       return new Response(JSON.stringify({ error: "Location not found" }), {
