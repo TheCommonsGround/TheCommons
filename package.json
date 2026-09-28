@@ -1,7 +1,8 @@
 {
   "name": "the-commons",
   "private": true,
-  "description": "The Commons — dependencies needed by the Netlify Functions in netlify/functions/. Without this file, Netlify has nothing telling it to install @netlify/blobs before deploying the functions, and every function that imports it (save-event, get-events, save-avatar, get-avatar, RSVPs, friends) fails at runtime with \"Cannot find module '@netlify/blobs'\".",
+  "type": "module",
+  "description": "The Commons — dependencies needed by the Netlify Functions in netlify/functions/. Without this file, Netlify has nothing telling it to install @netlify/blobs before deploying the functions, and every function that imports it (save-event, get-events, save-avatar, get-avatar, RSVPs, friends) fails at runtime with \"Cannot find module '@netlify/blobs'\". \"type\": \"module\" tells Node these are ES modules (import/export, which every function file already uses) instead of guessing at each one — without it, Node still works but prints a harmless \"MODULE_TYPELESS_PACKAGE_JSON\" warning for every function it loads.",
   "dependencies": {
     "@netlify/blobs": "^8.1.0"
   }
