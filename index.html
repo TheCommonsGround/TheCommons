@@ -6563,10 +6563,17 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
   // or didn't do — pinIdentityWidgetOnTop() clears this again the next
   // time the widget is legitimately reopened.
   function forceHideIdentityWidget(){
-    const el = identityWidgetEl
-      || document.getElementById('netlify-identity-widget')
-      || document.querySelector('.netlify-identity-widget');
-    if (el) el.style.setProperty('display', 'none', 'important');
+    // Hides EVERY element matching the widget's id/class, not just the
+    // first. The widget has been observed leaving more than one element
+    // with id="netlify-identity-widget" in the DOM at once (one already
+    // hidden, one still full-viewport and visible) — getElementById only
+    // ever returns the first match, so a single-element version of this
+    // function could hide the wrong one and leave the real blocker in
+    // place. querySelectorAll catches all of them regardless.
+    const seen = new Set();
+    if (identityWidgetEl) seen.add(identityWidgetEl);
+    document.querySelectorAll('#netlify-identity-widget, .netlify-identity-widget').forEach(el => seen.add(el));
+    seen.forEach(el => { if (el) el.style.setProperty('display', 'none', 'important'); });
   }
 
   // Manual escape hatches — these don't depend on any theory about WHY a
@@ -6621,6 +6628,14 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     }, 400);
   });
   netlifyIdentity.on('close', () => {
+    // forceHideIdentityWidget() is the critical line here — without it,
+    // this handler hid our OWN backdrop div but left the widget's real
+    // iframe (fixed, full-viewport, transparent) exactly as visible as it
+    // was while open. The widget's own close animation doesn't reliably
+    // clear that on its own, so simply closing the login popup — even
+    // just opening it and clicking the × — silently left the entire site
+    // unclickable behind an invisible layer until a full page reload.
+    forceHideIdentityWidget();
     identityBackdrop.style.display = 'none';
     hideIdentityDragHandle();
     if (identityPinInterval) clearInterval(identityPinInterval);
@@ -6628,7 +6643,17 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
   });
 
   netlifyIdentity.init();
-  pinIdentityWidgetOnTop();
+  // NOTE: pinIdentityWidgetOnTop() must NOT be called here unconditionally.
+  // It clears the widget's own display:none (see the function's comment
+  // above) so a fresh open() isn't left invisible — but the widget's
+  // full-viewport transparent iframe is present on EVERY page, even when
+  // closed, and calling this right after init() (before the widget has
+  // ever been opened) strips that display:none immediately on every page
+  // load. The iframe then sits on top of the entire site, invisible but
+  // still catching every click, permanently — a real visitor just sees a
+  // page that looks normal but doesn't respond to anything. It's already
+  // called correctly inside the 'open' handler above, which is the only
+  // place it should run.
   } // end of the typeof netlifyIdentity !== 'undefined' guard opened above
 
   pickHeroTagline();
