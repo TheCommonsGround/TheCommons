@@ -696,6 +696,31 @@
   .heroV2-unified-bar:hover, .heroV2-unified-bar:focus-within{
     box-shadow: 0 6px 20px rgba(32,33,36,0.16);
   }
+  /* Spotlight-style reveal: the zip icon/input/divider are wrapped together
+     in this one flex container so they can be collapsed and expanded as a
+     single unit. Collapsed by default (max-width:0, clipped by
+     overflow:hidden) so the landing page shows just the plain search bar;
+     hovering — or focusing anything inside it, e.g. by tabbing in — expands
+     it opens back out. max-width (not width) is what's animated here since
+     the section's natural content width is intrinsic/auto, and only
+     max-width can transition smoothly from a 0 starting point down to
+     "however wide the content actually is" without knowing that width in
+     advance; the 220px target is just comfortably larger than the content
+     so it's never the thing visually limiting the expanded size. */
+  .heroV2-zip-section{
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-width 0.32s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  }
+  .heroV2-unified-bar:hover .heroV2-zip-section,
+  .heroV2-unified-bar:focus-within .heroV2-zip-section{
+    max-width: 220px;
+    opacity: 1;
+  }
   .heroV2-zip-icon{ font-size: 15px; color: var(--ink-soft); flex-shrink: 0; }
   .heroV2-zip-input{
     background: none;
@@ -857,6 +882,13 @@
     }
     .heroV2-zip-input{ width: 64px; font-size: 14px; }
     #heroQueryInput, .search-ghost{ font-size: 14px; }
+    /* Touch devices have no hover to trigger the reveal above, so the zip
+       field would otherwise be permanently stuck collapsed and
+       unreachable on phones/tablets — keep it always expanded here. */
+    .heroV2-zip-section{ max-width: none; opacity: 1; }
+  }
+  @media (hover: none){
+    .heroV2-zip-section{ max-width: none; opacity: 1; }
   }
 
   .migratory-wrap{
@@ -2544,9 +2576,11 @@
 
     <div class="heroV2-inputs">
       <div class="heroV2-unified-bar">
-        <span class="heroV2-zip-icon">&#128205;</span>
-        <input type="text" id="areaCodeInput" class="heroV2-zip-input" placeholder="Zip code" inputmode="numeric" maxlength="10" onkeydown="if(event.key==='Enter') submitHeroSearch()">
-        <div class="heroV2-divider"></div>
+        <div class="heroV2-zip-section" id="heroZipSection">
+          <span class="heroV2-zip-icon">&#128205;</span>
+          <input type="text" id="areaCodeInput" class="heroV2-zip-input" placeholder="Zip code" inputmode="numeric" maxlength="10" onkeydown="if(event.key==='Enter') submitHeroSearch()">
+          <div class="heroV2-divider"></div>
+        </div>
         <div class="search-input-wrap">
           <div class="search-ghost" id="searchGhost"></div>
           <input type="text" id="heroQueryInput" placeholder="What are you looking for, and when?" autocomplete="off" oninput="updateSearchGhost()" onkeydown="handleSearchKeydown(event)">
