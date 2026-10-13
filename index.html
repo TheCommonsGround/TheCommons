@@ -1034,12 +1034,12 @@
     margin: 0 auto;
     padding: 22px 40px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 18px;
+    gap: 18px 64px;
   }
   .stats-strip-inner .stat{
-    text-align: left;
+    text-align: center;
   }
   .stats-strip-inner .stat .num{
     font-family: 'Fraunces', serif;
@@ -1053,11 +1053,6 @@
     color: rgba(255,255,255,0.6);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-  }
-  .stats-strip-note{
-    font-size: 11px;
-    color: rgba(255,255,255,0.4);
-    align-self: center;
   }
 
   /* A plain-language "what is this" blurb, right below the stats bar — so
@@ -1618,13 +1613,12 @@
     max-width: 560px;
     margin: 0 auto;
     padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.12);
     font-size: 11.5px;
     color: rgba(255,255,255,0.4);
   }
 
   /* ---------- Profile tab ---------- */
-  .profile-wrap, .cg-wrap, .give-wrap, .partners-wrap{
+  .profile-wrap, .cg-wrap, .give-wrap, .partners-wrap, .resources-wrap{
     max-width: 1000px;
     margin: 0 auto;
     padding: 40px;
@@ -2188,6 +2182,131 @@
     margin: 0;
   }
 
+
+  /* ---------- Submit-an-event card (Browse) ---------- */
+  .submit-event{
+    width: calc(100% - 80px);
+    max-width: 1100px;
+    margin: 16px auto 0;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 2px rgba(20,20,15,0.04), 0 1px 3px rgba(20,20,15,0.06);
+  }
+  .submit-event-toggle{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: var(--forest);
+    border: none;
+    padding: 16px 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    color: #FFFFFF;
+    text-align: left;
+    cursor: pointer;
+  }
+  .submit-event-toggle:hover{ opacity: 0.92; }
+  .submit-event-toggle strong{ font-weight: 700; }
+  .submit-event-chevron{
+    font-size: 22px;
+    line-height: 1;
+    color: #FFFFFF;
+    flex-shrink: 0;
+  }
+  .submit-event-body{
+    display: block;
+    padding: 4px 20px 22px;
+    border-top: 1px solid var(--line);
+  }
+  .submit-event-body[hidden]{ display: none; }
+  .submit-event-body h3{ font-size: 17px; margin: 18px 0 4px; }
+  .submit-event-sub{ font-size: 13px; color: var(--ink-soft); margin: 0 0 18px; max-width: 620px; }
+  .se-field{ margin-bottom: 14px; }
+  .se-field label, .se-label{
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 5px;
+  }
+  .se-field input[type="text"],
+  .se-field input[type="email"],
+  .se-field input[type="date"],
+  .se-field input[type="time"],
+  .se-field input[type="number"]{
+    width: 100%;
+    padding: 9px 10px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+  }
+  .se-row{ display: flex; gap: 12px; }
+  .se-row .se-field{ flex: 1; min-width: 0; }
+  .se-tag-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .se-tag-grid label{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--ink);
+    cursor: pointer;
+    margin: 0;
+  }
+  .submit-event-btn{
+    background: var(--forest);
+    color: #FFFFFF;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 3px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .submit-event-btn:disabled{ opacity: 0.6; cursor: default; }
+  .submit-event-status{ margin-top: 10px; font-size: 13px; color: var(--ink-soft); min-height: 18px; }
+
+  /* ---------- Recommendations call-to-action (Resources) ---------- */
+  .rec-cta{ margin: 40px 0 8px; }
+  .rec-cta-btn{
+    background: var(--forest);
+    color: #FFFFFF;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 2px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+  }
+  .rec-cta-examples{ margin: 10px 0 0; font-size: 13.5px; color: var(--ink-soft); }
+  .profile-modal textarea{
+    width: 100%;
+    min-height: 130px;
+    padding: 9px 10px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    resize: vertical;
+  }
+  @media (max-width: 640px){
+    .submit-event{ width: calc(100% - 40px); }
+    .se-row{ flex-direction: column; gap: 0; }
+  }
+
   .footer-email-link{
     display: inline-block;
     background: none;
@@ -2240,6 +2359,63 @@
   .partner-card .name{ font-weight: 600; font-size: 14px; margin-bottom: 4px; }
   .partner-card .desc{ font-size: 12.5px; color: var(--ink-soft); margin-bottom: 8px; }
   .partner-card a{ font-size: 12.5px; color: var(--sky); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ---------- Resources tab ---------- */
+  .resources-intro{ font-size: 15px; color: var(--ink-soft); max-width: 640px; margin-bottom: 26px; }
+  .resources-section + .resources-section{ margin-top: 40px; }
+  .book-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .book-card{
+    border: 1px solid var(--line);
+    background: var(--card-bg);
+    box-shadow: 0 1px 2px rgba(20,20,15,0.04), 0 1px 3px rgba(20,20,15,0.06);
+    border-radius: 3px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .book-card .tag{
+    align-self: flex-start;
+    font-size: 11px;
+    background: var(--paper-deep);
+    color: var(--ink-soft);
+    padding: 3px 9px;
+    border-radius: 999px;
+    margin-bottom: 2px;
+  }
+  .book-card .title{ font-weight: 600; font-size: 15px; }
+  .book-card .author{ font-size: 12.5px; color: var(--ink-soft); font-style: italic; }
+  .book-card .desc{ font-size: 13px; color: var(--ink-soft); line-height: 1.5; margin-top: 2px; }
+  .book-card .connection{
+    font-size: 12.5px;
+    color: var(--ink);
+    line-height: 1.5;
+    background: var(--paper-deep);
+    border-left: 2px solid var(--moss);
+    padding: 8px 10px;
+    margin-top: 6px;
+  }
+  .book-card .connection strong{
+    display: block;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    margin-bottom: 3px;
+    font-weight: 600;
+  }
+  .book-card a{ font-size: 12.5px; color: var(--sky); text-decoration: underline; text-underline-offset: 2px; margin-top: 4px; }
+  .resources-empty{
+    border: 1px dashed var(--line);
+    border-radius: 3px;
+    padding: 20px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
 
   /* ---------- Profile / tree counter bar ---------- */
   .profile-bar{
@@ -2452,6 +2628,18 @@
   </div>
 </div>
 
+<div class="profile-modal-backdrop" id="recommendBackdrop" onclick="if(event.target === this) closeRecommend()">
+  <div class="profile-modal">
+    <button class="profile-modal-close" onclick="closeRecommend()" aria-label="Close">&times;</button>
+    <h2 id="recommendTitle">Your Recommendation</h2>
+    <div class="field" style="margin-top: 14px;">
+      <textarea id="recommendText" aria-labelledby="recommendTitle"></textarea>
+    </div>
+    <button class="primary-btn" id="recommendSubmitBtn" onclick="submitRecommendation()">Submit</button>
+    <div class="status-line" id="recommendStatus" role="status"></div>
+  </div>
+</div>
+
 <header class="site">
   <button class="wordmark" onclick="goToHome()">
     <span class="mark">The Commons</span>
@@ -2461,21 +2649,14 @@
     <button class="nav-tab active" data-tab="browse" onclick="goToBrowseEvents()">Browse</button>
     <button class="nav-tab" data-tab="profile" onclick="showTab('profile')">Profile</button>
     <button class="nav-tab" data-tab="common-ground" onclick="showTab('common-ground')">The Common Ground Project</button>
+    <button class="nav-tab" data-tab="partners" onclick="showTab('partners')">Resources</button>
     <button class="nav-tab" data-tab="give" onclick="showTab('give')">Give</button>
-    <button class="nav-tab" data-tab="partners" onclick="showTab('partners')">Partners</button>
     <button class="nav-tab" data-tab="contact" onclick="showTab('contact')">Contact</button>
   </nav>
   <div class="auth-control" id="authControl">
     <button class="login-btn" onclick="netlifyIdentity.open()">Log In</button>
   </div>
 </header>
-
-<div class="profile-bar">
-  <div class="stats">
-    <span><strong id="rsvpCount">0</strong>events attended</span>
-    <span>🌳 <strong id="treeCount">0</strong>trees planted</span>
-  </div>
-</div>
 
 <section class="hero hero-v2 tab-panel active" data-tab="browse" data-view="home" id="browseHome">
   <div class="hero-landscape-bg">
@@ -2601,13 +2782,11 @@
   <div class="campaign-blurb-inner">
     <h2>What is The Common Ground Project?</h2>
     <p>
-      The forests of the Northeast have quietly staged one of the great ecological comebacks
-      in the world &mdash; regrown from land that was once nearly 80% cleared. Most of us were
-      never told. <strong>The Common Ground Project</strong> is a grassroots campaign helping
-      people see the wild, extraordinary place they actually live, and find real ways to get
-      outside and help protect it. <strong>The Commons</strong> is where that starts: search
-      for hikes, cleanups, tree plantings, and other local events, RSVP in a click, and build
-      your own record of time spent outside.
+      <strong>The Common Ground Project</strong> is a campaign to help people see the wild,
+      extraordinary place they live, and find real ways to get outside and protect it.
+      <strong>The Commons</strong> is part of that mission as a place to make connection easier
+      with nature and your community. Search for hikes, cleanups, tree plantings, environmental
+      clubs, migratory paths, local events and more!
     </p>
   </div>
 </section>
@@ -2626,6 +2805,70 @@
     <button class="new-search-link" id="resultsBackLink" onclick="showHomeView()">&larr; New search</button>
     <button class="new-search-link results-migratory-link" onclick="showMigratoryGridView()">Migratory Paths &rarr;</button>
   </div>
+
+  <section class="submit-event" id="submitEvent">
+    <button type="button" class="submit-event-toggle" id="submitEventToggle" onclick="toggleSubmitEvent()" aria-expanded="false" aria-controls="submitEventBody">
+      <span><strong>Know of an event?</strong> Submit it for review</span>
+      <span class="submit-event-chevron" id="submitEventChevron" aria-hidden="true">+</span>
+    </button>
+    <form class="submit-event-body" id="submitEventBody" hidden onsubmit="return submitEventForm(event)">
+      <h3>Submit an event</h3>
+      <p class="submit-event-sub">Fill this out and it goes to our team for review. Once we've checked the details, we'll add it to the site.</p>
+      <div class="se-field">
+        <label for="seTitle">Title</label>
+        <input type="text" id="seTitle" required>
+      </div>
+      <div class="se-field">
+        <label for="seAddress">Address of event</label>
+        <input type="text" id="seAddress" placeholder="e.g. 5192 Herrick Ave, Charlotte, VT 05445" required>
+      </div>
+      <div class="se-row">
+        <div class="se-field">
+          <label for="seOrg">Organization</label>
+          <input type="text" id="seOrg" required>
+        </div>
+        <div class="se-field">
+          <label for="seTown">Town, State</label>
+          <input type="text" id="seTown" required>
+        </div>
+      </div>
+      <div class="se-row">
+        <div class="se-field">
+          <label for="seDate">Date</label>
+          <input type="date" id="seDate" required>
+        </div>
+        <div class="se-field">
+          <label for="seTime">Time</label>
+          <input type="time" id="seTime" required>
+        </div>
+      </div>
+      <div class="se-field">
+        <label for="seHours">Duration (hours)</label>
+        <input type="number" id="seHours" min="0" step="0.5" required style="max-width: 160px;">
+      </div>
+      <div class="se-field">
+        <label for="seLink">Link to the original event listing (or contact info, if no page exists)</label>
+        <input type="text" id="seLink" placeholder="https://... or a phone number / email if there's no page">
+      </div>
+      <div class="se-field">
+        <span class="se-label">Activity tags</span>
+        <div class="se-tag-grid" id="seTagGrid"></div>
+      </div>
+      <div class="se-row">
+        <div class="se-field">
+          <label for="seName">Your name</label>
+          <input type="text" id="seName">
+        </div>
+        <div class="se-field">
+          <label for="seEmail">Your email (so we can follow up)</label>
+          <input type="email" id="seEmail" required>
+        </div>
+      </div>
+      <input type="checkbox" id="seBotcheck" tabindex="-1" autocomplete="off" style="display:none;">
+      <button type="submit" class="submit-event-btn" id="submitEventBtn">Submit event</button>
+      <div class="submit-event-status" id="submitEventStatus" role="status"></div>
+    </form>
+  </section>
 
   <section class="filters-panel">
     <div class="filters-row">
@@ -2649,6 +2892,13 @@
           <option value="10">Within 10 miles</option>
           <option value="25">Within 25 miles</option>
           <option value="50">Within 50 miles</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="sortSelect">Sort by</label>
+        <select id="sortSelect" onchange="state.sortTouched = true; render()">
+          <option value="date">Date (soonest first)</option>
+          <option value="distance">Distance (closest first)</option>
         </select>
       </div>
       <div class="field filters-search-field">
@@ -2679,36 +2929,13 @@
 
   <section class="discovery" id="discovery">
     <h3>You may also like</h3>
-    <p>Because you attended a river cleanup&hellip; (in the real product, this is built from your volunteer history &mdash; here it's a preview of the idea.)</p>
+    <p>Not sure where to start? Try one of these.</p>
     <div class="rec-pills">
       <button onclick="applyRecommendation('Birding')">Bird banding</button>
       <button onclick="applyRecommendation('Wildlife Surveys')">Beaver monitoring</button>
       <button onclick="applyRecommendation('Habitat Restoration')">Native plant restoration</button>
       <button onclick="applyRecommendation('Citizen Science')">Citizen science</button>
     </div>
-  </section>
-
-  <section class="cta-banner">
-    <div class="cta-banner-inner">
-      <div>
-        <h3>Help keep this free for volunteers and small orgs</h3>
-        <p>The Commons runs on support from people who use it. Give whatever feels right &mdash; there's no minimum.</p>
-      </div>
-      <button class="cta-banner-btn" onclick="showTab('give')">Support the campaign</button>
-    </div>
-  </section>
-
-  <section class="roadmap" id="roadmap">
-    <details>
-      <summary>How this prototype maps to the real system</summary>
-      <div class="roadmap-body">
-        <div><strong>1. Collectors</strong>Events are now real, added by hand via the admin page and stored in Netlify Blobs. Automated collectors (APIs, RSS, calendars) are the next step, not yet built.</div>
-        <div><strong>2. Normalization</strong>Each source's format gets converted into the same shape: title, org, date, time, location, tags.</div>
-        <div><strong>3. Dedup + geocoding</strong>Duplicate listings get merged; addresses get turned into coordinates so radius search works for real.</div>
-        <div><strong>4. Search + AI</strong>The search box on the home screen already calls Claude live to turn a sentence into filters &mdash; that part isn't mocked.</div>
-        <div><strong>5. Tree planting</strong>Every RSVP, from every visitor, counts toward one shared total (stored in Netlify Blobs). Every 50th RSVP funds one real tree via the Ecologi API, once <code>ECOLOGI_API_KEY</code> is set.</div>
-      </div>
-    </details>
   </section>
 </div>
 
@@ -2718,7 +2945,7 @@
       <div class="avatar" id="profileAvatar">Y</div>
       <div>
         <h2 id="profileHeading">Your profile</h2>
-        <p class="profile-sub" id="profileSub">Stats reset when you reload this prototype &mdash; there's no login yet, just a preview of what the real feature tracks.</p>
+        <p class="profile-sub" id="profileSub">Your stats and badges.</p>
       </div>
       <button class="copy-btn" id="editProfileBtn" style="display:none;" onclick="openProfileModal()">Edit profile</button>
       <button class="copy-btn" onclick="copyVolunteerSummary()">Copy volunteer summary</button>
@@ -2730,6 +2957,47 @@
     <h3 class="section-title">Badges &amp; milestones</h3>
     <p class="section-sub">Earn badges by attending events and hitting hour milestones. These look great on the volunteer summary above &mdash; handy for scholarship, internship, or college applications.</p>
     <div class="badge-grid" id="badgeGrid"></div>
+
+    <h3 class="section-title">Friends</h3>
+    <p class="section-sub">Share your invite link &mdash; anyone who opens it and signs in gets a chance to accept, and you're added to each other's leaderboard automatically.</p>
+    <div class="friends-panel">
+      <table class="friends-table" id="friendsTable"></table>
+      <p class="friends-empty" id="friendsEmpty" style="display:none;">It's just you for now &mdash; share your invite link below to start comparing hours together.</p>
+      <p class="friends-login-hint" id="friendsLoginHint" style="display:none;">Log in to invite friends and build your leaderboard.</p>
+
+      <div class="friend-requests-box" id="friendRequestsBox" style="display:none;">
+        <label>Friend requests</label>
+        <div id="friendRequestsList"></div>
+      </div>
+
+      <div class="friends-invite-box" id="friendsInviteBox" style="display:none;">
+        <label for="friendsInviteInput">Your invite link</label>
+        <div class="friends-invite-row">
+          <input type="text" id="friendsInviteInput" readonly onclick="this.select()">
+          <button type="button" class="copy-btn" onclick="copyInviteLink()">Copy link</button>
+        </div>
+        <div class="friends-invite-alt-row">
+          <a class="invite-link" id="inviteLink" href="#">Invite by email</a>
+          <a class="invite-link" id="inviteLinkSms" href="#">Invite by text</a>
+        </div>
+
+        <div class="friend-code-row">
+          <div class="friend-code-display">
+            <label>Your friend code</label>
+            <div class="friend-code-value" id="friendCodeValue">&mdash;</div>
+            <p class="friend-code-hint">Share this for people to add you directly, without a link.</p>
+          </div>
+          <div class="friend-code-add">
+            <label for="friendCodeInput">Add a friend by code</label>
+            <div class="friends-invite-row">
+              <input type="text" id="friendCodeInput" placeholder="e.g. 32654" inputmode="numeric">
+              <button type="button" class="copy-btn" onclick="sendFriendRequestByCode()">Send request</button>
+            </div>
+            <div class="status-line" id="friendCodeStatus"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <h3 class="section-title">Settings</h3>
     <div class="settings-panel">
@@ -2781,47 +3049,6 @@
       </div>
       <p class="settings-account-hint" id="settingsLoggedOutHint">Log in to change your password or email, or request account deletion.</p>
     </div>
-
-    <h3 class="section-title">Friends</h3>
-    <p class="section-sub">Share your invite link &mdash; anyone who opens it and signs in gets a chance to accept, and you're added to each other's leaderboard automatically.</p>
-    <div class="friends-panel">
-      <table class="friends-table" id="friendsTable"></table>
-      <p class="friends-empty" id="friendsEmpty" style="display:none;">It's just you for now &mdash; share your invite link below to start comparing hours together.</p>
-      <p class="friends-login-hint" id="friendsLoginHint" style="display:none;">Log in to invite friends and build your leaderboard.</p>
-
-      <div class="friend-requests-box" id="friendRequestsBox" style="display:none;">
-        <label>Friend requests</label>
-        <div id="friendRequestsList"></div>
-      </div>
-
-      <div class="friends-invite-box" id="friendsInviteBox" style="display:none;">
-        <label for="friendsInviteInput">Your invite link</label>
-        <div class="friends-invite-row">
-          <input type="text" id="friendsInviteInput" readonly onclick="this.select()">
-          <button type="button" class="copy-btn" onclick="copyInviteLink()">Copy link</button>
-        </div>
-        <div class="friends-invite-alt-row">
-          <a class="invite-link" id="inviteLink" href="#">Invite by email</a>
-          <a class="invite-link" id="inviteLinkSms" href="#">Invite by text</a>
-        </div>
-
-        <div class="friend-code-row">
-          <div class="friend-code-display">
-            <label>Your friend code</label>
-            <div class="friend-code-value" id="friendCodeValue">&mdash;</div>
-            <p class="friend-code-hint">Share this for people to add you directly, without a link.</p>
-          </div>
-          <div class="friend-code-add">
-            <label for="friendCodeInput">Add a friend by code</label>
-            <div class="friends-invite-row">
-              <input type="text" id="friendCodeInput" placeholder="e.g. 32654" inputmode="numeric">
-              <button type="button" class="copy-btn" onclick="sendFriendRequestByCode()">Send request</button>
-            </div>
-            <div class="status-line" id="friendCodeStatus"></div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -2866,11 +3093,6 @@
     <p class="section-sub">Content from the Media pillar lands here as it's produced &mdash; Instagram, TikTok, and long-form YouTube pieces, plus written stories.</p>
     <div class="cg-grid" id="articleGrid"></div>
     <div class="cg-grid" id="videoGrid"></div>
-
-    <div class="cg-cta">
-      <p>If this mission resonates, the Give tab is where that turns into support.</p>
-      <button class="cg-cta-btn" onclick="showTab('give')">Go to Give</button>
-    </div>
   </div>
 </section>
 
@@ -2890,16 +3112,14 @@
         <label><input type="radio" name="freq" value="monthly"> Monthly</label>
       </div>
       <button class="give-btn" onclick="donateStub()">Continue</button>
-      <p class="give-fineprint" id="giveFineprint">This is a prototype &mdash; no payment will actually be processed.</p>
     </div>
 
     <div class="give-breakdown">
       <h3>Where it would go</h3>
-      <p class="illustrative-note">Illustrative only, until real partner agreements are in place:</p>
       <div class="breakdown-bars">
-        <div class="bbar"><span>Partner orgs &amp; tree planting</span><div class="bar"><div style="width:70%"></div></div><span>70%</span></div>
+        <div class="bbar"><span>Partner orgs</span><div class="bar"><div style="width:70%"></div></div><span>70%</span></div>
         <div class="bbar"><span>Hosting &amp; development</span><div class="bar"><div style="width:20%"></div></div><span>20%</span></div>
-        <div class="bbar"><span>Keeping it free for small orgs</span><div class="bar"><div style="width:10%"></div></div><span>10%</span></div>
+        <div class="bbar"><span>Keeping it free!</span><div class="bar"><div style="width:10%"></div></div><span>10%</span></div>
       </div>
     </div>
   </div>
@@ -2907,13 +3127,31 @@
 
 <section class="tab-panel" data-tab="partners" id="tab-partners">
   <div class="partners-wrap">
-    <h2>Partners &amp; resources</h2>
-    <p class="partners-intro">The organizations doing the actual work, plus where to find us elsewhere. Placeholder links throughout &mdash; swap in real ones as partnerships are confirmed.</p>
+    <h2>Explore further:</h2>
+    <p class="partners-intro">Everything that supports this campaign beyond the campaign itself &mdash; where to follow along, what to read and watch next, and the organizations and people lending their support, whether through funding, partnership, or just showing up.</p>
 
     <h3 class="section-title">Follow along</h3>
     <div class="social-row" id="socialRow"></div>
 
-    <h3 class="section-title">Organizations &amp; resources</h3>
+    <p class="resources-intro">Reading and watching that goes deeper than any one search result can &mdash; books and media that expand on and complement this campaign, drawn from a range of perspectives: Indigenous knowledge, natural science, philosophy, and fiction that's shaped how generations of people think about their place in the natural world.</p>
+
+    <div class="resources-section">
+      <h3 class="section-title">Books</h3>
+      <div class="book-grid" id="bookGrid"></div>
+    </div>
+
+    <div class="resources-section">
+      <h3 class="section-title">More to explore</h3>
+      <div class="resources-empty" id="moreResourcesEmpty">Documentaries, podcasts, articles, and organizations are next on the list &mdash; check back soon.</div>
+    </div>
+
+    <div class="rec-cta">
+      <button type="button" class="rec-cta-btn" onclick="openRecommend()">Send Us Your Recommendations!</button>
+      <p class="rec-cta-examples">Businesses, Books, Movies, Newsletters, etc.</p>
+    </div>
+
+    <h3 class="section-title">Partners</h3>
+    <p class="resources-intro">The organizations and people supporting this campaign &mdash; whether they donate, partner on programming, or just lend their voice.</p>
     <div class="partner-grid" id="partnerGrid"></div>
   </div>
 </section>
@@ -2938,7 +3176,7 @@
         <textarea id="contactMessage" name="message" rows="5" placeholder="What's on your mind?" required></textarea>
       </div>
       <button type="submit" class="contact-send-btn" id="contactSendBtn">Send</button>
-      <p class="contact-fineprint" id="contactFineprint">Sent via Web3Forms &mdash; free, no backend of your own required.</p>
+      <p class="contact-fineprint" id="contactFineprint"></p>
     </form>
   </div>
 </section>
@@ -2963,7 +3201,7 @@
       <h4>Resources</h4>
       <button onclick="goToMigratoryPaths()">&rsaquo; Migratory Paths</button>
       <button onclick="showTab('profile')">&rsaquo; Your Volunteer Profile</button>
-      <button onclick="showTab('partners')">&rsaquo; Partner Organizations</button>
+      <button onclick="showTab('partners')">&rsaquo; Resources</button>
     </div>
     <div class="footer-col footer-contact">
       <h4>Contact Us</h4>
@@ -2973,11 +3211,7 @@
     </div>
   </div>
 
-  <p class="footer-tree-note">🌳 Every 50th RSVP, from all visitors combined, funds a real tree &mdash; see code comments for setup steps.</p>
-
-  <button class="footer-support-link" onclick="showTab('give')">Support this work &rarr;</button>
-
-  <p class="footer-copy">The Commons is the website home of The Common Ground Project &mdash; a campaign to help people see, understand, and take part in the forests around them. Prototype data covers Chittenden, Washington and Addison counties, Vermont.</p>
+  <p class="footer-copy">The Commons is the website home of The Common Ground Project &mdash; a campaign to help people see, understand, and take part in the world around them.</p>
 </footer>
 
 <script>
@@ -3788,8 +4022,7 @@
     { id: "cleanup-crew", icon: "🧤", name: "Cleanup Crew", desc: "2 beach or river cleanups", check: s => countByTag(s, ["Beach Cleanup","River Cleanup"]) >= 2 },
     { id: "habitat-hero", icon: "🐝", name: "Habitat Hero", desc: "2 planting/restoration events", check: s => countByTag(s, ["Tree Planting","Habitat Restoration"]) >= 2 },
     { id: "trail-blazer", icon: "🥾", name: "Trail Blazer", desc: "2 trail work events", check: s => countByTag(s, ["Trail Work"]) >= 2 },
-    { id: "birder", icon: "🐦", name: "Birder", desc: "2 birding events", check: s => countByTag(s, ["Birding"]) >= 2 },
-    { id: "tree-planter", icon: "🌲", name: "Tree Planter", desc: "Be the RSVP that crosses a community tree milestone", check: s => s.helpedPlantTree }
+    { id: "birder", icon: "🐦", name: "Birder", desc: "2 birding events", check: s => countByTag(s, ["Birding"]) >= 2 }
   ];
 
   const ARTICLES = [
@@ -3799,9 +4032,9 @@
   ];
 
   const VIDEOS = [
-    { title: "The mission, in two minutes", note: "Add a real YouTube ID in the code to embed this." },
-    { title: "A day with a trail crew", note: "Placeholder — replace with a real video card." },
-    { title: "Why small orgs struggle with outreach", note: "Placeholder — replace with a real video card." }
+    { title: "The mission, in two minutes", note: "Coming soon" },
+    { title: "A day with a trail crew", note: "Coming soon" },
+    { title: "Why small orgs struggle with outreach", note: "Coming soon" }
   ];
 
   // Real org names swapped for a numbered placeholder label (2026-09-25),
@@ -3809,18 +4042,59 @@
   // actually confirmed — descriptions kept as realistic examples of the
   // KIND of org that would fill each slot, to show a supervisor what the
   // finished grid will look like once real partners are swapped in.
+  // Holds both organizations and individual supporters — anyone lending
+  // support to the campaign, whether they donate, partner on programming,
+  // or just lend their voice, lives in this one list and one grid.
   const PARTNER_ORGS = [
     { name: "Standing Trees", desc: "Partner nonprofit running the Panel and Education programming that feeds content into this campaign." },
+    { name: "Ronan Donovan", desc: "National Geographic Explorer, conservation photographer, and filmmaker known for his long-term documentary work with wolves and other wildlife, including the series \"Kingdom of the White Wolf.\"", href: "https://www.ronandonovan.com/" },
     { name: "Placeholder Partner 2", desc: "Bird conservation, habitat protection, and environmental education across the state." },
     { name: "Placeholder Partner 3", desc: "Maintains and protects hiking trails and the regional trail network." },
     { name: "Placeholder Partner 4", desc: "Water quality advocacy and cleanup work on and around a major lake." },
-    { name: "Placeholder Partner 5", desc: "Conserves farmland, forests, and community land throughout the region." },
-    { name: "Placeholder Partner 6", desc: "Protects rivers, streams, and the land alongside them." },
-    { name: "Placeholder Partner 7", desc: "Statewide advocacy on climate, consumer protection, and environmental policy." },
-    { name: "Placeholder Partner 8", desc: "Supports organic farming and sustainable agriculture across the state." },
-    { name: "Placeholder Partner 9", desc: "Maintains a long-distance cross-country ski trail." },
-    { name: "Placeholder Partner 10", desc: "National grassroots environmental organization with local chapters." },
-    { name: "Placeholder Partner 11", desc: "Global land and water conservation, with active regional chapters." }
+    { name: "Placeholder Partner 5", desc: "Conserves farmland, forests, and community land throughout the region." }
+  ];
+
+  // Books for the Resources tab. "tag" is meant to signal the range of
+  // perspectives on offer (fiction vs. nonfiction, Indigenous knowledge vs.
+  // Western science, philosophy vs. direct action) rather than rank them.
+  // The "find a copy" link points to Bookshop.org's search (funds independent
+  // bookstores instead of a single retailer) rather than any specific store.
+  const RESOURCE_BOOKS = [
+    {
+      title: "Ishmael",
+      author: "Daniel Quinn",
+      tag: "Fiction · Philosophy",
+      desc: "A telepathic gorilla takes on a student willing to learn, challenging the story civilization tells itself about humanity's right to dominate the Earth. A foundational, strange, conversation-starting read.",
+      connection: "A philosophical companion to the campaign's own starting question &mdash; what story are we telling ourselves about our place among the Northeast's regrowing forests, and is it the right one?"
+    },
+    {
+      title: "The Monkey Wrench Gang",
+      author: "Edward Abbey",
+      tag: "Fiction · Direct action",
+      desc: "Four misfits sabotage industrial development across the canyon country of the American Southwest. Rowdy and funny, and widely credited with inspiring the radical environmental movement that followed it.",
+      connection: "One edge of the spectrum of how people have fought for wild places. This campaign works through dialogue, education, and participation rather than confrontation &mdash; but the fierceness behind this book is the same love of land it's trying to grow."
+    },
+    {
+      title: "Sapiens: A Brief History of Humankind",
+      author: "Yuval Noah Harari",
+      tag: "Nonfiction · Human history",
+      desc: "A sweeping account of how Homo sapiens went from one species among many to the force reshaping the planet &mdash; from the cognitive revolution through agriculture, empire, and science.",
+      connection: "Zooms out to the scale of human history behind a very local question: how a region that was once nearly 80% cleared came to regrow, and how culture &mdash; not just ecology &mdash; decides what a landscape becomes next."
+    },
+    {
+      title: "Braiding Sweetgrass",
+      author: "Robin Wall Kimmerer",
+      tag: "Nonfiction · Indigenous knowledge & botany",
+      desc: "A botanist and enrolled member of the Citizen Potawatomi Nation braids Indigenous teachings together with scientific observation into a case for reciprocity with the living world, not just stewardship of it.",
+      connection: "Maybe the closest match to what this campaign is after: redefining our relationship with the wild as one of reciprocity and gratitude, not just ownership or management &mdash; and learning to actually see the place you live in."
+    },
+    {
+      title: "Mother Earth Is Our Elder",
+      author: "Catherine (Katłı̨̀ą) Lafferty",
+      tag: "Nonfiction · Indigenous knowledge & climate",
+      desc: "A Dene writer and activist from Dënéndeh (Canada's Northwest Territories) gathers the voices of Dene Elders and knowledge carriers into what she calls a manifesto for the climate crisis &mdash; generations of Northern stewardship offered as a working model, not just a worldview.",
+      connection: "Widens the campaign's own range of perspectives beyond a single Indigenous voice &mdash; a different nation, a colder landscape, asking the same question this campaign asks about Vermont's forests: what does it look like to actually live in right relationship with a place?"
+    }
   ];
 
   // Real, documented raptor migration watch sites near Vermont (sourced from
@@ -3922,8 +4196,16 @@
     el.textContent = FOOTER_QUOTES[Math.floor(Math.random() * FOOTER_QUOTES.length)];
   }
 
-  const TODAY = new Date("2026-09-11T00:00:00");
+  // Always the REAL current date (midnight). A function, not a constant, so
+  // the Today / This weekend / Next month filters stay correct even if the
+  // page is left open past midnight.
+  function getToday(){
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
   const state = {
+    sortTouched: false,      // true once the visitor picks a sort order themselves
     activeChips: new Set(),
     aiChips: new Set(),
     rsvpEvents: new Set(),   // event titles the user has RSVP'd to — derived from rsvpRecords, kept for quick .has() lookups
@@ -3974,15 +4256,17 @@
 
   function dateInBucket(dateStr, bucket){
     if (bucket === 'any') return true;
+    const TODAY = getToday();
     const d = new Date(dateStr + "T00:00:00");
     if (bucket === 'today'){
       return d.getTime() === TODAY.getTime();
     }
     if (bucket === 'weekend'){
-      // The upcoming Saturday/Sunday from TODAY
-      const day = TODAY.getDay(); // 5 = Friday
-      const satOffset = (6 - day + 7) % 7;
-      const sat = new Date(TODAY); sat.setDate(TODAY.getDate() + satOffset);
+      // This weekend's Saturday/Sunday. On a Sunday, "this weekend" is the
+      // one already underway (yesterday + today), not next week's.
+      const day = TODAY.getDay(); // 0 = Sunday ... 6 = Saturday
+      const sat = new Date(TODAY);
+      sat.setDate(TODAY.getDate() + (day === 0 ? -1 : 6 - day));
       const sun = new Date(sat); sun.setDate(sat.getDate() + 1);
       return d.getTime() === sat.getTime() || d.getTime() === sun.getTime();
     }
@@ -3999,14 +4283,11 @@
     return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
   }
 
-  // Whether an event's date has already fully passed, using the REAL
-  // current date (not the hardcoded TODAY demo constant above, which only
-  // drives the Today/Weekend/Month quick-filter buckets). Compared at
+  // Whether an event's date has already fully passed. Compared at
   // day-granularity so an event stays visible through its entire listed
   // day and only disappears starting the day after.
   function isPastEvent(ev){
-    const realToday = new Date();
-    realToday.setHours(0, 0, 0, 0);
+    const realToday = getToday();
     const eventDay = new Date(ev.date + "T00:00:00");
     return eventDay.getTime() < realToday.getTime();
   }
@@ -4089,14 +4370,22 @@
           ? haversineMiles(state.searchLat, state.searchLng, ev.lat, ev.lng)
           : null
       }));
+    }
+
+    // Sort order: until the visitor picks one themselves, default to
+    // "closest first" once we know where they are, otherwise soonest first.
+    const sortSel = document.getElementById('sortSelect');
+    if (!state.sortTouched) sortSel.value = hasSearchLocation ? 'distance' : 'date';
+    const byDate = (a, b) => (a.date + a.time).localeCompare(b.date + b.time);
+    if (sortSel.value === 'distance' && hasSearchLocation){
       list.sort((a, b) => {
         const da = a._distanceMiles == null ? Infinity : a._distanceMiles;
         const db = b._distanceMiles == null ? Infinity : b._distanceMiles;
         if (da !== db) return da - db; // closest first
-        return (a.date + a.time).localeCompare(b.date + b.time);
+        return byDate(a, b);
       });
     } else {
-      list.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+      list.sort(byDate);
     }
 
     return list;
@@ -4128,12 +4417,15 @@
     const loc = document.getElementById('locationInput').value || 'your area';
 
     document.getElementById('resultsHeading').textContent = `Events near ${loc}`;
-    document.getElementById('resultsCount').textContent = `${events.length} result${events.length === 1 ? '' : 's'}`;
+    const needsZipForDistance = document.getElementById('sortSelect').value === 'distance' && state.searchLat == null;
+    document.getElementById('resultsCount').textContent =
+      `${events.length} result${events.length === 1 ? '' : 's'}` +
+      (needsZipForDistance ? ' · add a zip code to sort by distance' : '');
 
     list.innerHTML = '';
     if (events.length === 0){
       if (EVENTS.length === 0){
-        list.innerHTML = `<div class="empty-state"><strong>No events yet.</strong>Real events are added through the admin page — this list is empty until the first one is added.</div>`;
+        list.innerHTML = `<div class="empty-state"><strong>No events yet.</strong>New events are added regularly — check back soon, or submit one above.</div>`;
       } else {
         list.innerHTML = `<div class="empty-state"><strong>No events match those filters.</strong>Try widening the date range or distance, or clear a few activity filters.</div>`;
       }
@@ -4204,9 +4496,9 @@
     if (migratoryLink) migratoryLink.style.display = 'none';
 
     document.getElementById('resultsHeading').textContent = `Top ${speciesLabel} Migration Watch Sites`;
-    document.getElementById('resultsCount').textContent = `${sites.length} real, documented sites`;
+    document.getElementById('resultsCount').textContent = `${sites.length} site${sites.length === 1 ? '' : 's'}`;
 
-    list.innerHTML = `<div class="migration-note">These are real, named watch sites — not sample data like the events below. Counts and best-season windows are typical/historical patterns; a live version would pull current-season numbers from sources like hawkcount.org, eBird, state fish &amp; wildlife dam counts, or volunteer crossing-brigade logs, depending on species.</div>`;
+    list.innerHTML = '';
 
     sites.forEach((site, i) => {
       const card = document.createElement('div');
@@ -4244,13 +4536,16 @@
     state.migrationSpecies = null;
     document.getElementById('dateSelect').value = 'any';
     document.getElementById('distanceSelect').value = 'any';
+    state.sortTouched = false;
     document.getElementById('aiStatus').textContent = '';
     render();
   }
 
   function updateProfileBar(){
-    document.getElementById('rsvpCount').textContent = state.rsvpEvents.size;
-    document.getElementById('treeCount').textContent = state.globalTreesPlanted;
+    // (The events-attended / trees-planted bar was removed from the site;
+    // guards keep this safe if those elements don't exist.)
+    const rc = document.getElementById('rsvpCount'); if (rc) rc.textContent = state.rsvpEvents.size;
+    const tc = document.getElementById('treeCount'); if (tc) tc.textContent = state.globalTreesPlanted;
   }
 
   function showToast(message){
@@ -4261,31 +4556,14 @@
     showToast._t = setTimeout(() => toast.classList.remove('show'), 4200);
   }
 
-  // --- Tree planting: global, shared counter ----------------------------
-  // Every RSVP from every visitor counts toward one shared total. Every
-  // 50th RSVP (see RSVPS_PER_TREE in netlify/functions/record-rsvp.js)
-  // funds one real tree via the Ecologi API, server-side. This function
-  // just reports the RSVP and reflects back whatever the server says the
-  // new totals are.
-  //
-  // Until record-rsvp.js is deployed with ECOLOGI_API_KEY set, this fails
-  // gracefully — the RSVP still gets recorded locally, it just won't be
-  // reflected in the shared total until the backend exists.
   async function recordGlobalRSVP(){
     try {
       const res = await fetch('/.netlify/functions/record-rsvp', { method: 'POST' });
       const data = await res.json();
       if (res.ok){
         state.globalRSVPs = data.totalRSVPs;
-        state.globalTreesPlanted = data.totalTreesPlanted;
         updateProfileBar();
         renderProfile();
-        if (data.treeJustPlanted){
-          state.helpedPlantTree = true;
-          const modeNote = data.treeUrl ? ` View it: ${data.treeUrl}` : '';
-          showToast(`🌳 That RSVP just crossed the line — a real tree was planted!${modeNote}`);
-          renderProfile();
-        }
       }
     } catch (err) {
       // Function not deployed yet, or offline — the RSVP still worked
@@ -4302,7 +4580,6 @@
       const data = await res.json();
       if (res.ok){
         state.globalRSVPs = data.totalRSVPs;
-        state.globalTreesPlanted = data.totalTreesPlanted;
         updateProfileBar();
       }
     } catch (err) {
@@ -4548,44 +4825,15 @@
     return { activities: [...picked], date: dateBucket, distance: 'any', migrationSpecies };
   }
 
-  async function callClaudeForFilters(query){
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 300,
-        system: `You convert a sentence into search filters for a site called The Commons, which has two kinds of results:
-1. Volunteer/environmental EVENTS — use the "activities", "date", "distance" fields.
-2. WILDLIFE MIGRATION WATCHING queries (e.g. "hawk migration near me", "when do eels run") — set "migrationSpecies" instead and leave "activities" empty.
-Valid activity tags (use exact spelling, choose zero or more): ${JSON.stringify(ACTIVITY_TAGS)}.
-Valid "date" values: "today", "weekend", "month", "any".
-Valid "distance" values: 10, 25, 50, or "any".
-Valid "migrationSpecies" values: "hawk", "salmon", "eel", "monarch", "frog", "newt", "eagle", "osprey", "goose", "loon", "herring", "shad", "bass", "dragonfly", or null. Use null for any other species not in that list, or if the query isn't about migration.
-Respond with ONLY minified JSON in exactly this shape and nothing else, no markdown fences, no preamble:
-{"activities":[],"date":"any","distance":"any","migrationSpecies":null}`,
-        messages: [{ role: "user", content: query }]
-      })
-    });
-    const data = await response.json();
-    const text = (data.content || []).map(b => b.text || '').join('');
-    const clean = text.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
-    const activities = (parsed.activities || []).filter(t => ACTIVITY_TAGS.includes(t));
-    const date = ['today','weekend','month','any'].includes(parsed.date) ? parsed.date : 'any';
-    const distance = [10,25,50].includes(parsed.distance) ? String(parsed.distance) : 'any';
-    const migrationSpecies = MIGRATION_HOTSPOTS[parsed.migrationSpecies] ? parsed.migrationSpecies : null;
-    return { activities, date, distance, migrationSpecies };
-  }
 
   // Called from the home screen's Search button. Reads the area code + free-text
   // query, switches to the results view, and (if a query was typed) runs it
   // through Claude to turn "what and when" into real filters.
   // Shared status line for both search bars, aware of the migration case.
   function describeSearchResult(result, offline){
-    const prefix = offline ? '(Offline fallback) ' : '';
+    const prefix = '';
     if (result.migrationSpecies){
-      return `${prefix}Showing hawk migration watch sites instead of events.`;
+      return `${prefix}Showing ${result.migrationSpecies} migration watch sites instead of events.`;
     }
     if (result.activities.length){
       const suffix = !offline && result.date !== 'any' ? ' · ' + result.date : '';
@@ -4682,13 +4930,8 @@ Respond with ONLY minified JSON in exactly this shape and nothing else, no markd
     button.disabled = true;
     statusEl.textContent = 'Reading your request…';
 
-    let result, offline = false;
-    try {
-      result = await callClaudeForFilters(query);
-    } catch (err){
-      result = localKeywordParse(query);
-      offline = true;
-    }
+    const result = localKeywordParse(query);
+    const offline = true; // wording flag: "Matched: ..." phrasing
     statusEl.textContent = describeSearchResult(result, offline) +
       (area ? (state.searchLat != null ? ` · Sorted by distance from ${area}.` : ` · Couldn't find "${area}".`) : '');
 
@@ -4712,13 +4955,8 @@ Respond with ONLY minified JSON in exactly this shape and nothing else, no markd
     button.disabled = true;
     statusEl.textContent = 'Reading your request…';
 
-    let result, offline = false;
-    try {
-      result = await callClaudeForFilters(query);
-    } catch (err){
-      result = localKeywordParse(query);
-      offline = true;
-    }
+    const result = localKeywordParse(query);
+    const offline = true; // wording flag: "Matched: ..." phrasing
     statusEl.textContent = describeSearchResult(result, offline);
 
     state.activeChips = new Set(result.activities);
@@ -4739,7 +4977,7 @@ Respond with ONLY minified JSON in exactly this shape and nothing else, no markd
     if (tab === 'profile') renderProfile();
     if (tab === 'common-ground') renderCommonGround();
     if (tab === 'give') renderGive();
-    if (tab === 'partners') renderPartners();
+    if (tab === 'partners'){ renderPartners(); renderResources(); }
     window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
   }
 
@@ -4781,7 +5019,6 @@ Respond with ONLY minified JSON in exactly this shape and nothing else, no markd
     const stats = [
       { num: state.rsvpEvents.size, label: "Events attended" },
       { num: hours, label: "Hours volunteered" },
-      { num: state.globalTreesPlanted, label: "Trees planted (all visitors)" },
       { num: countByTag(state, ["Trail Work"]) * 1.5, label: "Approx. miles of trail" },
       { num: new Set(state.rsvpRecords.map(r => r.org)).size, label: "Organizations supported" }
     ];
@@ -5402,7 +5639,7 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
       return;
     }
     const freq = document.querySelector('input[name="freq"]:checked').value;
-    showToast(`This is a prototype — $${amount} (${freq}) was not actually charged. Wire this button to a real checkout to accept it.`);
+    showToast(`Demo only — $${amount} (${freq}) was not actually charged. Thank you for the thought!`);
   }
 
   // ---------- Partners tab ----------
@@ -5414,7 +5651,21 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
       <div class="partner-card">
         <div class="name">${p.name}</div>
         <div class="desc">${p.desc}</div>
-        <a href="#" target="_blank" rel="noopener">Visit (add real link)</a>
+        ${p.href ? `<a href="${p.href}" target="_blank" rel="noopener">Visit &#8599;</a>` : ''}
+      </div>
+    `).join('');
+  }
+
+  // ---------- Resources tab ----------
+  function renderResources(){
+    document.getElementById('bookGrid').innerHTML = RESOURCE_BOOKS.map(b => `
+      <div class="book-card">
+        <span class="tag">${b.tag}</span>
+        <div class="title">${b.title}</div>
+        <div class="author">${b.author}</div>
+        <div class="desc">${b.desc}</div>
+        <div class="connection"><strong>Why it's here</strong>${b.connection}</div>
+        <a href="https://bookshop.org/search?keywords=${encodeURIComponent(b.title + ' ' + b.author)}" target="_blank" rel="noopener">Find a copy &#8599;</a>
       </div>
     `).join('');
   }
@@ -5424,12 +5675,11 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     const stats = [
       { num: EVENTS.length, label: "Live events" },
       { num: towns.size, label: "Vermont towns" },
-      { num: PARTNER_ORGS.length, label: "Partner organizations" },
+      { num: PARTNER_ORGS.length, label: "Partners" },
       { num: ACTIVITY_TAGS.length, label: "Activity types" }
     ];
     document.getElementById('statsStripInner').innerHTML =
-      stats.map(s => `<div class="stat"><span class="num">${s.num}</span><span class="label">${s.label}</span></div>`).join('') +
-      `<div class="stats-strip-note">Live event data &mdash; added via the admin page</div>`;
+      stats.map(s => `<div class="stat"><span class="num">${s.num}</span><span class="label">${s.label}</span></div>`).join('');
   }
 
   // Opens the user's own email client addressed to the campaign inbox.
@@ -5456,7 +5706,8 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     const accessKey = document.getElementById('web3formsKey').value;
 
     if (accessKey === 'PASTE_YOUR_WEB3FORMS_ACCESS_KEY_HERE'){
-      fineprint.textContent = "This form needs a Web3Forms access key before it can send — see the code comment above submitContactForm().";
+      console.warn("Contact form: paste your Web3Forms access key into the hidden #web3formsKey input.");
+      fineprint.textContent = "Couldn't send right now — please email commongroundproj3ct@gmail.com directly.";
       return false;
     }
 
@@ -5483,6 +5734,128 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     }
     btn.disabled = false;
     return false;
+  }
+
+  // ---------- Shared Web3Forms sender ----------
+  // Used by the event-submission form and the recommendations popup. Reads
+  // the same access key as the Contact form (the hidden #web3formsKey input),
+  // so there is only one place to paste it. Resolves true on success.
+  async function sendWeb3Form(fields){
+    const keyEl = document.getElementById('web3formsKey');
+    const accessKey = keyEl ? keyEl.value : '';
+    if (!accessKey || accessKey === 'PASTE_YOUR_WEB3FORMS_ACCESS_KEY_HERE'){
+      console.warn('Web3Forms access key missing: paste it into the hidden #web3formsKey input.');
+      return false;
+    }
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ access_key: accessKey, ...fields })
+      });
+      const result = await res.json();
+      return !!result.success;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  // ---------- Submit an event (Browse page) ----------
+  function buildEventFormTags(){
+    const grid = document.getElementById('seTagGrid');
+    if (!grid || grid.dataset.built) return;
+    grid.innerHTML = ACTIVITY_TAGS.map(tag =>
+      `<label><input type="checkbox" value="${tag}"> ${tag}</label>`
+    ).join('');
+    grid.dataset.built = '1';
+  }
+
+  function toggleSubmitEvent(){
+    const body = document.getElementById('submitEventBody');
+    const btn = document.getElementById('submitEventToggle');
+    const opening = body.hidden;
+    body.hidden = !opening;
+    btn.setAttribute('aria-expanded', String(opening));
+    document.getElementById('submitEventChevron').textContent = opening ? '\u2212' : '+';
+    if (opening){
+      buildEventFormTags();
+      // Can't submit an event in the past
+      const t = getToday();
+      const iso = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
+      document.getElementById('seDate').min = iso;
+    }
+  }
+
+  async function submitEventForm(event){
+    event.preventDefault();
+    if (document.getElementById('seBotcheck').checked) return false; // spam trap
+    const statusEl = document.getElementById('submitEventStatus');
+    const btn = document.getElementById('submitEventBtn');
+    const val = id => document.getElementById(id).value.trim();
+    const tags = [...document.querySelectorAll('#seTagGrid input:checked')].map(i => i.value);
+
+    btn.disabled = true;
+    statusEl.textContent = 'Sending\u2026';
+
+    const ok = await sendWeb3Form({
+      subject: `New event submission: ${val('seTitle')}`,
+      from_name: 'The Commons \u2014 Event Submission',
+      name: val('seName') || '(not given)',
+      email: val('seEmail'),
+      'Event title': val('seTitle'),
+      'Address of event': val('seAddress'),
+      'Organization': val('seOrg'),
+      'Town, State': val('seTown'),
+      'Date': val('seDate'),
+      'Time': val('seTime'),
+      'Duration (hours)': val('seHours'),
+      'Link / contact info': val('seLink') || '(none given)',
+      'Activity tags': tags.length ? tags.join(', ') : '(none selected)'
+    });
+
+    if (ok){
+      statusEl.textContent = "Thanks \u2014 we've got it! We'll review the details and add it to the site.";
+      document.getElementById('submitEventBody').reset();
+    } else {
+      statusEl.textContent = "Couldn't send right now \u2014 please email commongroundproj3ct@gmail.com directly.";
+    }
+    btn.disabled = false;
+    return false;
+  }
+
+  // ---------- Recommendations popup (Resources page) ----------
+  function openRecommend(){
+    document.getElementById('recommendStatus').textContent = '';
+    document.getElementById('recommendBackdrop').classList.add('active');
+    setTimeout(() => document.getElementById('recommendText').focus(), 0);
+  }
+  function closeRecommend(){
+    document.getElementById('recommendBackdrop').classList.remove('active');
+  }
+  async function submitRecommendation(){
+    const textEl = document.getElementById('recommendText');
+    const statusEl = document.getElementById('recommendStatus');
+    const btn = document.getElementById('recommendSubmitBtn');
+    const text = textEl.value.trim();
+    if (!text){
+      statusEl.textContent = 'Please write a recommendation first.';
+      return;
+    }
+    btn.disabled = true;
+    statusEl.textContent = 'Sending\u2026';
+    const ok = await sendWeb3Form({
+      subject: 'New recommendation from The Commons',
+      from_name: 'The Commons \u2014 Recommendations',
+      'Recommendation': text
+    });
+    if (ok){
+      statusEl.textContent = 'Thank you \u2014 we got it!';
+      textEl.value = '';
+      setTimeout(closeRecommend, 1800);
+    } else {
+      statusEl.textContent = "Couldn't send right now \u2014 please email commongroundproj3ct@gmail.com directly.";
+    }
+    btn.disabled = false;
   }
 
   function renderFooterSocials(){
