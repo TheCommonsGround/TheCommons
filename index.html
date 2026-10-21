@@ -1960,6 +1960,23 @@
     margin: 0 0 32px;
   }
 
+  .platform-list{
+    list-style: none;
+    padding: 0;
+    margin: 0 0 22px;
+    max-width: 680px;
+  }
+  .platform-list li{
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .platform-list li:last-child{ border-bottom: 1px solid var(--line); }
+  .platform-list strong{ color: var(--forest); font-size: 16px; }
+  .platform-close{ margin-bottom: 36px; }
+
   .pillar-grid{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -2361,6 +2378,7 @@
   .partner-card a{ font-size: 12.5px; color: var(--sky); text-decoration: underline; text-underline-offset: 2px; }
 
   /* ---------- Resources tab ---------- */
+  .books-label{ font-weight: 700; font-size: 15px; color: var(--ink); margin: 0 0 12px; }
   .resources-intro{ font-size: 15px; color: var(--ink-soft); max-width: 640px; margin-bottom: 26px; }
   .resources-section + .resources-section{ margin-top: 40px; }
   .book-grid{
@@ -2955,7 +2973,7 @@
     <div class="stat-grid" id="statGrid"></div>
 
     <h3 class="section-title">Badges &amp; milestones</h3>
-    <p class="section-sub">Earn badges by attending events and hitting hour milestones. These look great on the volunteer summary above &mdash; handy for scholarship, internship, or college applications.</p>
+    <p class="section-sub">Earn badges by attending events and hitting hour milestones.</p>
     <div class="badge-grid" id="badgeGrid"></div>
 
     <h3 class="section-title">Friends</h3>
@@ -3068,29 +3086,19 @@
 <section class="tab-panel" data-tab="common-ground" id="tab-common-ground">
   <div class="cg-wrap">
     <h2>The Common Ground Project</h2>
-    <p class="cg-intro">The Northeast's forests are one of the great regrowth stories anywhere &mdash; a region that was once 80% deforested is now dense with young forest that sequesters carbon at some of the highest rates in the world. Most people living here don't know that. The Common Ground Project exists to help people see the place they live: how the forest around them works, why it matters, and how to take part in caring for it.</p>
+    <p class="cg-intro">The Common Ground Project is an effort to help people in the Northeast reconnect with forests through education, creativity, local action, and community engagement. It&rsquo;s a campaign to help people &ldquo;see&rdquo; the amazing place they live and the extraordinary, still-young forests they live amongst &mdash; and to build a culture that understands and protects them as they grow back.</p>
 
     <blockquote class="cg-quote">People protect what they know. They care for what they love.</blockquote>
 
-    <h3 class="section-title">Two pillars, one campaign</h3>
-    <p class="section-sub">The Commons &mdash; the site you're using right now &mdash; is the "Website" pillar, alongside "Media." (Panel and Education programming lives under Standing Trees, a partner nonprofit — their work will surface as content here, but sits outside this campaign's own structure.)</p>
-    <div class="pillar-grid">
-      <div class="pillar-card">
-        <span class="pillar-num">01</span>
-        <h4>Media</h4>
-        <p class="pillar-line">Help people see what's around them.</p>
-        <p>A social and YouTube campaign sharing science, stories, and people &mdash; countering confusion and building real investment in this place.</p>
-      </div>
-      <div class="pillar-card active-pillar">
-        <span class="pillar-num">02</span>
-        <h4>Website &mdash; The Commons</h4>
-        <p class="pillar-line">Help people find a way to participate.</p>
-        <p>This site: one search across events, education, media, and eventually jobs, internships, and community gardens &mdash; the pathway from awareness to action.</p>
-      </div>
-    </div>
+    <h3 class="section-title">The Media Campaign</h3>
+    <p class="cg-intro">The Common Ground Project centers around a youth-led social media campaign built on action, creativity, curiosity and a connection to nature. Spanning multiple platforms, the campaign takes the latest science, making it clear, honest and impossible to scroll past. The forests around us are young and still recovering, and the more people understand them, the better they will be cared for.</p>
+    <ul class="platform-list">
+      <li><strong>YouTube</strong> &mdash; Go deeper. Long-form videos focusing on science and storytelling.</li>
+      <li><strong>Instagram &amp; TikTok</strong> &mdash; Spark curiosity. Short content deconstructing misconceptions. Informative science-based videos and emphasizing creativity through a range of voices. Collaborators range from environmental clubs and organizations to artists and youth activists.</li>
+    </ul>
 
-    <h3 class="section-title">Media &amp; articles</h3>
-    <p class="section-sub">Content from the Media pillar lands here as it's produced &mdash; Instagram, TikTok, and long-form YouTube pieces, plus written stories.</p>
+    <h3 class="section-title">Videos &amp; articles</h3>
+    <p class="section-sub">Content from the campaign&rsquo;s channels lands here as it&rsquo;s produced &mdash; YouTube, Instagram and TikTok, plus written stories.</p>
     <div class="cg-grid" id="articleGrid"></div>
     <div class="cg-grid" id="videoGrid"></div>
   </div>
@@ -3099,7 +3107,7 @@
 <section class="tab-panel" data-tab="give" id="tab-give">
   <div class="give-wrap">
     <h2>Pay how much you feel</h2>
-    <p class="give-intro">The Commons stays free for volunteers and free for the small organizations it lists. If it's useful to you, any amount helps keep it running &mdash; there's no suggested "right" number.</p>
+    <p class="give-intro">The Commons stays free for volunteers and free for the small organizations it lists. If it's useful to you, any amount helps keep it running.</p>
 
     <div class="give-card">
       <div class="amount-pills" id="amountPills"></div>
@@ -3114,35 +3122,22 @@
       <button class="give-btn" onclick="donateStub()">Continue</button>
     </div>
 
-    <div class="give-breakdown">
-      <h3>Where it would go</h3>
-      <div class="breakdown-bars">
-        <div class="bbar"><span>Partner orgs</span><div class="bar"><div style="width:70%"></div></div><span>70%</span></div>
-        <div class="bbar"><span>Hosting &amp; development</span><div class="bar"><div style="width:20%"></div></div><span>20%</span></div>
-        <div class="bbar"><span>Keeping it free!</span><div class="bar"><div style="width:10%"></div></div><span>10%</span></div>
-      </div>
-    </div>
   </div>
 </section>
 
 <section class="tab-panel" data-tab="partners" id="tab-partners">
   <div class="partners-wrap">
     <h2>Explore further:</h2>
-    <p class="partners-intro">Everything that supports this campaign beyond the campaign itself &mdash; where to follow along, what to read and watch next, and the organizations and people lending their support, whether through funding, partnership, or just showing up.</p>
+    <p class="partners-intro">Want to go deeper? These resources offer a range of perspectives to explore and encourage your environmental curiosity.</p>
 
     <h3 class="section-title">Follow along</h3>
     <div class="social-row" id="socialRow"></div>
 
-    <p class="resources-intro">Reading and watching that goes deeper than any one search result can &mdash; books and media that expand on and complement this campaign, drawn from a range of perspectives: Indigenous knowledge, natural science, philosophy, and fiction that's shaped how generations of people think about their place in the natural world.</p>
-
     <div class="resources-section">
-      <h3 class="section-title">Books</h3>
+      <h3 class="section-title">Read and Watch</h3>
+      <p class="resources-intro">Books and media that expand on and complement this campaign, drawn from a range of perspectives: Indigenous knowledge, natural science, philosophy, and fiction that has shaped how generations of people think about their place in the natural world.</p>
+      <p class="books-label">Books:</p>
       <div class="book-grid" id="bookGrid"></div>
-    </div>
-
-    <div class="resources-section">
-      <h3 class="section-title">More to explore</h3>
-      <div class="resources-empty" id="moreResourcesEmpty">Documentaries, podcasts, articles, and organizations are next on the list &mdash; check back soon.</div>
     </div>
 
     <div class="rec-cta">
@@ -3151,7 +3146,7 @@
     </div>
 
     <h3 class="section-title">Partners</h3>
-    <p class="resources-intro">The organizations and people supporting this campaign &mdash; whether they donate, partner on programming, or just lend their voice.</p>
+    <p class="resources-intro">The organizations and people supporting this campaign.</p>
     <div class="partner-grid" id="partnerGrid"></div>
   </div>
 </section>
@@ -3182,12 +3177,44 @@
 </section>
 
 <footer class="site">
-  <svg class="footer-leaf" viewBox="0 0 100 130" width="30" height="40">
-    <polygon points="50,5 78,55 22,55" fill="#4F7C46"/>
-    <polygon points="50,35 82,80 18,80" fill="#4F7C46"/>
-    <polygon points="50,65 86,110 14,110" fill="#4F7C46"/>
-    <rect x="44" y="108" width="12" height="18" fill="#8C6B4F"/>
-  </svg>
+  <svg class="footer-leaf" viewBox="293 25 28 59" width="46" height="97" role="img" aria-label="The Common Ground Project eastern white pine logo">
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 304.992188 83 C 305.328125 82.441406 305.382812 81.878906 305.382812 80.761719 L 305.804688 27.558594 L 306.195312 27.558594 L 306.617188 80.761719 C 306.617188 81.878906 306.671875 82.441406 307.007812 83 Z M 304.992188 83 "/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 91.001674 L 2.601842 93.798828 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 86.000279 L -4.401507 88.797433 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 83.998326 L 7.198661 86.802455 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 77.999442 L -7.400949 80.796596 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 75 L 12.597656 77.797154 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 69.001116 L -11.997768 71.79827 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 66.999163 L 10.602679 69.803292 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 61.000279 L 13.197545 63.797433 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 58.000837 L -13.999721 60.797991 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 52.001953 L -8.803013 54.799107 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 50 L 19.601004 52.797154 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 44.998605 L -16.601562 47.802734 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 41.999163 L 10.400391 44.803292 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 38.002232 L -9.598214 40.799386 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 36.000279 L 14.202009 38.797433 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 0 30.001395 L 8.998326 28.501674 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 8.998326 28.501674 L 11.997768 27.001953 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 5.998884 28.996931 L 8.000837 26.499721 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill="none" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M 10.00279 27.999442 L 11.502511 25.502232 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 308.238281 31.753906 L 307.75 31.375 L 307.261719 31.417969 L 306.769531 31 L 306.28125 31.191406 L 305.789062 31.144531 L 305.300781 31.117188 L 304.808594 31.554688 L 304.320312 31.609375 L 303.648438 29.566406 L 304.71875 30.171875 L 305.152344 26.652344 L 305.429688 27.082031 L 306.171875 27.578125 L 306.726562 28.257812 L 307.457031 28.824219 L 307.777344 29.9375 L 308.339844 30.476562 Z M 308.238281 31.753906 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 307.121094 34.515625 L 306.558594 34.386719 L 306 34.152344 L 305.441406 34.203125 L 304.878906 34.085938 L 304.320312 33.90625 L 303.761719 34.382812 L 303.199219 34.15625 L 302.640625 34.601562 L 302.523438 33.191406 L 303.257812 33.257812 L 303.464844 31.179688 L 304.304688 31.933594 L 304.871094 31.046875 L 305.507812 32.828125 L 305.652344 30.742188 L 306.726562 32.71875 L 307.542969 32.386719 Z M 307.121094 34.515625 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 311.039062 35.550781 L 310.480469 35.472656 L 309.921875 35.324219 L 309.359375 35.359375 L 308.800781 35.261719 L 308.238281 35.285156 L 307.679688 35.054688 L 307.121094 35.257812 L 306.558594 35.425781 L 306 35.957031 L 305.625 33.550781 L 306.929688 33.585938 L 307.140625 33.753906 L 307.683594 32.925781 L 308.089844 32.777344 L 308.925781 32.558594 L 309.503906 32.449219 L 309.996094 33.390625 L 310.527344 33.667969 L 311.386719 33.578125 Z M 311.039062 35.550781 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 307.679688 39.054688 L 307.160156 38.753906 L 306.640625 38.96875 L 306.121094 38.921875 L 305.601562 38.558594 L 305.078125 38.5 L 304.558594 38.257812 L 304.039062 38.25 L 303.519531 38.386719 L 303 38.386719 L 302.480469 38.742188 L 301.960938 38.5 L 301.441406 38.554688 L 300.921875 39.171875 L 300.398438 39.136719 L 299.820312 36.976562 L 300.757812 36.378906 L 301.449219 36.667969 L 301.867188 36.988281 L 302.597656 35.40625 L 302.769531 34.621094 L 302.894531 36.46875 L 304.023438 34.960938 L 304.457031 34.285156 L 304.980469 36.898438 L 305.714844 35.601562 L 306.785156 35.402344 L 306.722656 36.652344 L 307.847656 36.558594 L 307.648438 37.773438 Z M 307.679688 39.054688 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 314.960938 40.917969 L 314.429688 40.496094 L 313.902344 40.351562 L 313.375 40.253906 L 312.84375 40.542969 L 312.316406 40.417969 L 311.785156 40.027344 L 311.257812 40.328125 L 310.730469 40.382812 L 310.199219 40.210938 L 309.671875 40.066406 L 309.140625 40.191406 L 308.613281 40.019531 L 308.085938 40.019531 L 307.554688 40.578125 L 307.027344 40.507812 L 306.496094 40.550781 L 305.96875 40.882812 L 305.441406 40.769531 L 305.265625 38.503906 L 305.789062 38.617188 L 306.449219 38.410156 L 307.542969 37.210938 L 307.796875 37.460938 L 308.664062 38.160156 L 308.554688 37.882812 L 309.5 36.816406 L 309.761719 38.328125 L 310.289062 37.660156 L 310.765625 37.960938 L 311.324219 37.867188 L 311.78125 37.933594 L 312.441406 37.753906 L 312.863281 38.753906 L 313.433594 37.234375 L 313.757812 39.175781 L 315.015625 37.972656 L 315.089844 39.578125 Z M 314.960938 40.917969 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 306 44.023438 L 305.476562 44.234375 L 304.949219 43.820312 L 304.425781 43.75 L 303.898438 43.90625 L 303.375 43.753906 L 302.851562 43.363281 L 302.324219 43.46875 L 301.800781 43.5 L 301.273438 43.421875 L 300.75 43.378906 L 300.226562 43.496094 L 299.699219 43.773438 L 299.175781 43.511719 L 298.648438 43.898438 L 298.125 43.976562 L 297.601562 43.921875 L 297.640625 42.84375 L 298.289062 42.878906 L 298.011719 41.082031 L 298.527344 40.945312 L 299.582031 42.039062 L 299.828125 40.769531 L 300.605469 41.441406 L 301.195312 39.65625 L 301.214844 39.308594 L 302.199219 41.710938 L 302.476562 41.339844 L 303.308594 41.792969 L 303.742188 41.226562 L 304.261719 42.238281 L 304.84375 42.117188 L 305.34375 42.226562 L 306 42.792969 Z M 306 44.023438 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 313.28125 45.230469 L 312.761719 45.097656 L 312.246094 45.027344 L 311.730469 45.050781 L 311.210938 44.632812 L 310.695312 44.816406 L 310.179688 44.71875 L 309.660156 44.683594 L 309.144531 44.601562 L 308.628906 44.632812 L 308.109375 44.582031 L 307.59375 44.746094 L 307.078125 44.875 L 306.558594 45.40625 L 306.992188 42.859375 L 307.363281 42.886719 L 308.167969 42.40625 L 308.023438 42.992188 L 308.945312 42.375 L 309.042969 42.707031 L 309.753906 42.707031 L 310.503906 42.511719 L 310.75 42.21875 L 311.394531 40.828125 L 312.332031 41.523438 L 312.324219 43.199219 L 312.769531 43.964844 L 313.382812 43.792969 Z M 313.28125 45.230469 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 316.078125 48.6875 L 315.5625 48.742188 L 315.046875 48.546875 L 314.527344 48.46875 L 314.011719 48.15625 L 313.496094 47.988281 L 312.976562 47.980469 L 312.460938 48.042969 L 311.945312 47.871094 L 311.425781 48.203125 L 310.910156 48.039062 L 310.394531 48.050781 L 309.875 48.039062 L 309.359375 48.0625 L 308.84375 47.96875 L 308.328125 47.738281 L 307.808594 48.15625 L 307.292969 48.160156 L 306.777344 48.074219 L 306.257812 48.132812 L 305.742188 48.246094 L 305.222656 48.007812 L 304.707031 48.414062 L 304.191406 48.246094 L 303.671875 48.238281 L 303.15625 48.425781 L 302.640625 48.757812 L 302.71875 47.386719 L 303.117188 47.238281 L 303.761719 46.792969 L 303.558594 45.875 L 304.457031 46.265625 L 305.289062 46.042969 L 305.746094 46.519531 L 306.128906 46.089844 L 306.9375 46.492188 L 307.277344 46.757812 L 308.371094 43.960938 L 308.9375 45.402344 L 308.949219 46.457031 L 309.800781 43.417969 L 309.710938 46.664062 L 310.621094 45.042969 L 310.742188 44.925781 L 311.300781 45.035156 L 312.410156 44.671875 L 312.765625 44.148438 L 312.84375 46.890625 L 314.023438 45.964844 L 313.96875 46.910156 L 314.632812 46.246094 L 315.195312 46.574219 L 315.410156 47.109375 L 316.164062 47.261719 Z M 316.078125 48.6875 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 304.878906 50.214844 L 304.355469 49.9375 L 303.828125 50.246094 L 303.304688 49.726562 L 302.78125 49.804688 L 302.253906 49.667969 L 301.730469 49.59375 L 301.203125 49.78125 L 300.679688 49.890625 L 300.15625 49.542969 L 299.628906 49.773438 L 299.105469 49.644531 L 298.578125 49.847656 L 298.054688 49.859375 L 297.53125 49.863281 L 297.003906 49.996094 L 296.480469 50.175781 L 295.875 47.414062 L 296.578125 48.246094 L 296.890625 47.835938 L 297.703125 46.699219 L 298.222656 46.746094 L 299.148438 47.570312 L 299.199219 47.230469 L 300.273438 46.210938 L 300.523438 48.34375 L 301.195312 46.367188 L 301.695312 48.441406 L 302.375 46.863281 L 302.1875 47.300781 L 303.378906 47.28125 L 303.816406 48.007812 L 304.007812 47.78125 L 304.285156 48 Z M 304.878906 50.214844 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 308.238281 53.488281 L 307.714844 53.320312 L 307.1875 53.417969 L 306.660156 53.335938 L 306.132812 53.144531 L 305.605469 52.988281 L 305.078125 53.121094 L 304.550781 52.785156 L 304.023438 52.914062 L 303.496094 52.996094 L 302.96875 53.265625 L 302.441406 53.144531 L 301.914062 53.320312 L 301.386719 53.1875 L 300.859375 53.160156 L 300.335938 53.277344 L 299.808594 53.765625 L 299.28125 53.785156 L 299.121094 52.378906 L 299.210938 50.949219 L 299.71875 51.21875 L 300.960938 51.863281 L 301.289062 51.179688 L 301.527344 50.707031 L 302.59375 51.269531 L 302.292969 50.371094 L 303.246094 50.144531 L 303.324219 50.398438 L 304.71875 50.183594 L 304.972656 51.203125 L 305.449219 50.46875 L 306.242188 50.800781 L 306.609375 51.753906 L 307.867188 51.378906 L 308.011719 51.007812 L 308.300781 50.773438 Z M 308.238281 53.488281 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 319.441406 54.757812 L 318.925781 54.855469 L 318.414062 54.734375 L 317.898438 54.277344 L 317.386719 54.195312 L 316.875 54.140625 L 316.359375 54.511719 L 315.847656 54.125 L 315.332031 54.332031 L 314.820312 54.375 L 314.308594 54.070312 L 313.792969 54.023438 L 313.28125 54.363281 L 312.765625 54.195312 L 312.253906 54.03125 L 311.738281 54.28125 L 311.226562 54.113281 L 310.714844 54.136719 L 310.199219 54.050781 L 309.6875 54.488281 L 309.171875 54.640625 L 308.660156 54.578125 L 308.148438 54.820312 L 307.632812 54.457031 L 307.121094 54.667969 L 307.273438 53.410156 L 308.121094 52.554688 L 308.25 53.347656 L 308.75 52.410156 L 309.300781 51.695312 L 309.9375 52.382812 L 310.140625 52.15625 L 311.070312 50.769531 L 311.636719 51.351562 L 311.796875 51.644531 L 312.59375 49.804688 L 312.722656 51.660156 L 313.746094 51.886719 L 314.117188 50.292969 L 314.410156 52.441406 L 314.6875 50.726562 L 315.449219 51.285156 L 316.371094 52.335938 L 316.859375 50.871094 L 316.964844 52.796875 L 317.417969 53.128906 L 318.121094 52.511719 L 318.765625 52.523438 L 319.332031 52.648438 L 319.695312 52.566406 Z M 319.441406 54.757812 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 304.320312 57.675781 L 303.792969 57.257812 L 303.261719 57.167969 L 302.734375 57.328125 L 302.203125 57.09375 L 301.675781 56.957031 L 301.148438 56.910156 L 300.617188 57.195312 L 300.089844 56.84375 L 299.558594 56.964844 L 299.03125 56.867188 L 298.503906 56.921875 L 297.972656 57.191406 L 297.445312 57.316406 L 296.914062 57.070312 L 296.386719 57.078125 L 295.859375 57.453125 L 295.328125 57.3125 L 294.800781 57.355469 L 294.773438 55.957031 L 295.457031 56.136719 L 295.695312 56.050781 L 296.203125 54.1875 L 296.226562 54.234375 L 297.441406 55.664062 L 297.277344 52.429688 L 298.351562 54.734375 L 299.167969 54.882812 L 299.445312 53.792969 L 300.058594 55.242188 L 300.125 53.097656 L 300.460938 53.949219 L 301.695312 55.773438 L 301.917969 54.898438 L 302.324219 54.246094 L 302.8125 55.050781 L 303.703125 56.078125 L 304.105469 55.160156 Z M 304.320312 57.675781 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 313.839844 59.097656 L 313.308594 59.113281 L 312.777344 58.824219 L 312.25 58.898438 L 311.71875 58.84375 L 311.1875 58.53125 L 310.65625 58.773438 L 310.125 58.449219 L 309.597656 58.746094 L 309.066406 58.753906 L 308.535156 58.621094 L 308.003906 58.402344 L 307.472656 58.660156 L 306.941406 58.640625 L 306.414062 58.988281 L 305.882812 58.652344 L 305.351562 59.105469 L 304.820312 59.28125 L 304.289062 59.265625 L 303.761719 59.441406 L 303.921875 58.089844 L 303.855469 56.441406 L 304.769531 57.929688 L 305.269531 56.527344 L 305.640625 56.445312 L 306.832031 56.648438 L 307.28125 55.359375 L 307.921875 55.449219 L 308.570312 55.175781 L 309.046875 55.503906 L 309.644531 56.296875 L 310.300781 56.4375 L 310.347656 56.125 L 311.253906 56.492188 L 311.09375 57.507812 L 311.863281 57.191406 L 312.277344 57.636719 L 312.820312 57.824219 L 313.652344 57.476562 L 313.964844 57.890625 Z M 313.839844 59.097656 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 306 61.472656 L 305.484375 61.214844 L 304.964844 60.929688 L 304.449219 61.121094 L 303.933594 60.984375 L 303.414062 60.8125 L 302.898438 60.929688 L 302.382812 60.828125 L 301.863281 61.109375 L 301.347656 61.070312 L 300.832031 60.921875 L 300.3125 61.378906 L 299.796875 61.101562 L 299.28125 61.539062 L 299.035156 59.128906 L 299.519531 59.367188 L 300.363281 59.683594 L 300.210938 59.347656 L 300.929688 57.578125 L 301.945312 59.175781 L 301.945312 59.027344 L 302.964844 58.59375 L 303.335938 58.746094 L 304.027344 59.339844 L 304.496094 59.730469 L 304.835938 59.285156 L 305.632812 59.863281 L 305.566406 59.644531 Z M 306 61.472656 "/>
+<path fill-rule="evenodd" fill="#A8D5B5" fill-opacity="1" d="M 315.519531 62.710938 L 314.996094 62.574219 L 314.476562 62.417969 L 313.953125 62.457031 L 313.429688 62.101562 L 312.90625 62.21875 L 312.382812 62.097656 L 311.859375 62.15625 L 311.339844 61.941406 L 310.816406 62.113281 L 310.292969 62.082031 L 309.769531 62.023438 L 309.246094 62.070312 L 308.726562 62.394531 L 308.203125 62.265625 L 307.679688 62.851562 L 307.828125 60.1875 L 308.484375 60.292969 L 309.121094 59.609375 L 309.355469 60.074219 L 309.894531 60.949219 L 310.328125 58.753906 L 310.921875 59.347656 L 311.578125 58.785156 L 311.921875 58.640625 L 312.3125 60.492188 L 312.847656 60.386719 L 313.546875 60.308594 L 314.230469 59.964844 L 314.679688 59.355469 L 315.382812 60.292969 L 315.351562 61.078125 Z M 315.519531 62.710938 "/>
+<path fill="none" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="miter" stroke="#A8D5B5" stroke-opacity="1" stroke-miterlimit="10" d="M -5.998884 0.000000000000085265 L 5.998884 0.000000000000085265 " transform="matrix(0.56, 0, 0, -0.56, 306, 83)"/>
+</svg>
   <p class="footer-mission" id="footerMission">Curiosity is where it starts &mdash; the more you notice about the wild right outside your door, the harder it is not to care about it.</p>
 
   <div class="footer-columns">
@@ -3206,7 +3233,7 @@
     <div class="footer-col footer-contact">
       <h4>Contact Us</h4>
       <button class="footer-email-link" onclick="showTab('contact')">&#9993; commongroundproj3ct@gmail.com</button>
-      <span class="footer-socials-label">Follow along (coming soon):</span>
+      <span class="footer-socials-label">Follow along:</span>
       <div class="footer-social-row" id="footerSocialRow"></div>
     </div>
   </div>
@@ -4026,15 +4053,15 @@
   ];
 
   const ARTICLES = [
-    { tag: "Coming soon", title: "Why we started The Common Ground Project", teaser: "The story behind aggregating a fragmented volunteer ecosystem into one search." },
-    { tag: "Coming soon", title: "Meet the first 20 partner organizations", teaser: "Profiles of the groups whose events populate the very first data pool." },
-    { tag: "Coming soon", title: "What counts as environmental action?", teaser: "Where the line sits between volunteering, education, jobs, and activism." }
+    { tag: "Coming soon", title: "Why we started The Common Ground Project", teaser: "The story behind the campaign." },
+    { tag: "Coming soon", title: "Meet the partners", teaser: "Organizations we support and you should know about!" },
+    { tag: "Coming soon", title: "Led by Students", teaser: "Highlighting important environmental work led by youth activists." }
   ];
 
   const VIDEOS = [
-    { title: "The mission, in two minutes", note: "Coming soon" },
-    { title: "A day with a trail crew", note: "Coming soon" },
-    { title: "Why small orgs struggle with outreach", note: "Coming soon" }
+    { title: "Forests and Climate Change Adaption", note: "Coming soon" },
+    { title: "Invasive Species and Where to Find Them", note: "Coming soon" },
+    { title: "Flood Prevention", note: "Coming soon" }
   ];
 
   // Real org names swapped for a numbered placeholder label (2026-09-25),
@@ -4046,7 +4073,7 @@
   // support to the campaign, whether they donate, partner on programming,
   // or just lend their voice, lives in this one list and one grid.
   const PARTNER_ORGS = [
-    { name: "Standing Trees", desc: "Partner nonprofit running the Panel and Education programming that feeds content into this campaign." },
+    { name: "Standing Trees" },
     { name: "Ronan Donovan", desc: "National Geographic Explorer, conservation photographer, and filmmaker known for his long-term documentary work with wolves and other wildlife, including the series \"Kingdom of the White Wolf.\"", href: "https://www.ronandonovan.com/" },
     { name: "Placeholder Partner 2", desc: "Bird conservation, habitat protection, and environmental education across the state." },
     { name: "Placeholder Partner 3", desc: "Maintains and protects hiking trails and the regional trail network." },
@@ -4065,35 +4092,35 @@
       author: "Daniel Quinn",
       tag: "Fiction · Philosophy",
       desc: "A telepathic gorilla takes on a student willing to learn, challenging the story civilization tells itself about humanity's right to dominate the Earth. A foundational, strange, conversation-starting read.",
-      connection: "A philosophical companion to the campaign's own starting question &mdash; what story are we telling ourselves about our place among the Northeast's regrowing forests, and is it the right one?"
+      connection: "A philosophical companion to the campaign's own starting question &mdash; what story are we telling ourselves about our place among the regrowing forests, and is it the right one?"
     },
     {
       title: "The Monkey Wrench Gang",
       author: "Edward Abbey",
       tag: "Fiction · Direct action",
       desc: "Four misfits sabotage industrial development across the canyon country of the American Southwest. Rowdy and funny, and widely credited with inspiring the radical environmental movement that followed it.",
-      connection: "One edge of the spectrum of how people have fought for wild places. This campaign works through dialogue, education, and participation rather than confrontation &mdash; but the fierceness behind this book is the same love of land it's trying to grow."
+      connection: "One edge of the spectrum of how people have fought for wild places."
     },
     {
       title: "Sapiens: A Brief History of Humankind",
       author: "Yuval Noah Harari",
       tag: "Nonfiction · Human history",
       desc: "A sweeping account of how Homo sapiens went from one species among many to the force reshaping the planet &mdash; from the cognitive revolution through agriculture, empire, and science.",
-      connection: "Zooms out to the scale of human history behind a very local question: how a region that was once nearly 80% cleared came to regrow, and how culture &mdash; not just ecology &mdash; decides what a landscape becomes next."
+      connection: "Zooms out to the scale of human history behind the campaign&rsquo;s starting idea: how people came to see the natural world as something apart from them, and what changes when we start seeing the wild, extraordinary place we live as something worth protecting."
     },
     {
       title: "Braiding Sweetgrass",
       author: "Robin Wall Kimmerer",
       tag: "Nonfiction · Indigenous knowledge & botany",
       desc: "A botanist and enrolled member of the Citizen Potawatomi Nation braids Indigenous teachings together with scientific observation into a case for reciprocity with the living world, not just stewardship of it.",
-      connection: "Maybe the closest match to what this campaign is after: redefining our relationship with the wild as one of reciprocity and gratitude, not just ownership or management &mdash; and learning to actually see the place you live in."
+      connection: "Redefining our relationship with the wild as one of reciprocity and gratitude, not just ownership or management &mdash; and learning to actually see the place you live in."
     },
     {
       title: "Mother Earth Is Our Elder",
       author: "Catherine (Katłı̨̀ą) Lafferty",
       tag: "Nonfiction · Indigenous knowledge & climate",
       desc: "A Dene writer and activist from Dënéndeh (Canada's Northwest Territories) gathers the voices of Dene Elders and knowledge carriers into what she calls a manifesto for the climate crisis &mdash; generations of Northern stewardship offered as a working model, not just a worldview.",
-      connection: "Widens the campaign's own range of perspectives beyond a single Indigenous voice &mdash; a different nation, a colder landscape, asking the same question this campaign asks about Vermont's forests: what does it look like to actually live in right relationship with a place?"
+      connection: "Widens the campaign's own range of perspectives, asking the question: what does it look like to live in right relationship with a place?"
     }
   ];
 
@@ -4211,7 +4238,8 @@
     rsvpEvents: new Set(),   // event titles the user has RSVP'd to — derived from rsvpRecords, kept for quick .has() lookups
     rsvpRecords: [],         // {title, org, town, date, time, hours, tags} snapshots — the actual saved/synced record, survives even if the event is later removed
     treesPlanted: 0,
-    earnedBadges: new Set(), // badge ids already earned, so we only toast once each
+    earnedBadges: new Set(), // badge ids already earned (recomputed silently on every load)
+    announceBadges: false,   // true only while a brand-new RSVP is being processed, so a badge toast fires only at the moment it is actually earned
     selectedAmount: null,
     migrationSpecies: null, // set when a search is about wildlife migration watching, not events
     globalRSVPs: 0,          // fetched from the server — total RSVPs across all visitors
@@ -4607,7 +4635,9 @@
     }
     updateProfileBar();
     render();
+    state.announceBadges = true;
     renderProfile();
+    state.announceBadges = false;
     syncRsvpsToAccount();
 
     recordGlobalRSVP();
@@ -5019,7 +5049,6 @@
     const stats = [
       { num: state.rsvpEvents.size, label: "Events attended" },
       { num: hours, label: "Hours volunteered" },
-      { num: countByTag(state, ["Trail Work"]) * 1.5, label: "Approx. miles of trail" },
       { num: new Set(state.rsvpRecords.map(r => r.org)).size, label: "Organizations supported" }
     ];
     document.getElementById('statGrid').innerHTML = stats.map(s => `
@@ -5031,7 +5060,10 @@
       const earned = b.check(state);
       if (earned && !state.earnedBadges.has(b.id)){
         state.earnedBadges.add(b.id);
-        showToast(`🏅 Badge earned: ${b.name}`);
+        // Only announce a badge at the moment it is actually earned (a new
+        // RSVP) — never when badges are just being recomputed from saved
+        // history on a page load / login / profile visit.
+        if (state.announceBadges) showToast(`🏅 Badge earned: ${b.name}`);
       }
       return `
         <div class="badge ${earned ? 'earned' : ''}">
@@ -5453,7 +5485,6 @@
 
     const hours = totalHours(state);
     const orgs = [...new Set(state.rsvpRecords.map(r => r.org))].filter(Boolean);
-    const earned = BADGES.filter(b => state.earnedBadges.has(b.id)).map(b => b.name);
     const attendedEvents = [...state.rsvpRecords].sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
 
     const marginX = 56;
@@ -5496,24 +5527,6 @@
     doc.setLineWidth(1);
     doc.line(marginX, y, 558, y);
     y += 24;
-
-    // Badges
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(13);
-    doc.setTextColor(...forest);
-    doc.text('Badges earned', marginX, y);
-    y += 18;
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(11);
-    doc.setTextColor(40, 40, 35);
-    // splitTextToSize wraps to the same 500pt width jsPDF would use via
-    // maxWidth, but hands back the actual line array so we can advance y by
-    // however many lines it really took — a fixed y bump here (the previous
-    // approach) doesn't grow to fit a long, wrapped list and the heading
-    // below ends up overlapping the wrapped text.
-    const badgesLines = doc.splitTextToSize(earned.length ? earned.join('   •   ') : 'None yet', 500);
-    doc.text(badgesLines, marginX, y);
-    y += badgesLines.length * 14 + 16;
 
     // Organizations
     doc.setFont('helvetica', 'bold');
@@ -5650,7 +5663,7 @@ Badges earned: ${earned.join(', ') || 'None yet'}`;
     document.getElementById('partnerGrid').innerHTML = PARTNER_ORGS.map(p => `
       <div class="partner-card">
         <div class="name">${p.name}</div>
-        <div class="desc">${p.desc}</div>
+        ${p.desc ? `<div class="desc">${p.desc}</div>` : ''}
         ${p.href ? `<a href="${p.href}" target="_blank" rel="noopener">Visit &#8599;</a>` : ''}
       </div>
     `).join('');
